@@ -1,0 +1,365 @@
+* Sea-Bird SBE 9 Data File:
+* FileName = C:\SEASOFT\PIRATA-FR29\data\fr29001.hex
+* Software Version Seasave V 7.26.7.107
+* Temperature SN = 6083
+* Conductivity SN = 4509
+* Number of Bytes Per Scan = 42
+* Number of Voltage Words = 3
+* Number of Scans Averaged by the Deck Unit = 1
+* Append System Time to Every Scan
+* System UpLoad Time = Mar 02 2019 15:20:03
+* NMEA Latitude = 12 29.57 N
+* NMEA Longitude = 023 20.56 W
+* NMEA UTC (Time) = Mar 02 2019 15:20:02
+* Store Lat/Lon Data = Append to Every Scan
+** Cruise: PIRATA-FR29
+** Ship: THALASSA
+** Station: 001
+** Bottom Depth: 4894
+** Barometric pressure : 1013.5
+** Temp Air: 23.8
+** Operator: JG
+** Comments:
+* System UTC = Mar 02 2019 15:20:03
+# nquan = 25
+# nvalues = 8146                        
+# units = specified
+# name 0 = scan: Scan Count
+# name 1 = timeJ: Julian Days
+# name 2 = prDM: Pressure, Digiquartz [db]
+# name 3 = depSM: Depth [salt water, m]
+# name 4 = t090C: Temperature [ITS-90, deg C]
+# name 5 = t190C: Temperature, 2 [ITS-90, deg C]
+# name 6 = c0S/m: Conductivity [S/m]
+# name 7 = c1S/m: Conductivity, 2 [S/m]
+# name 8 = sbeox0V: Oxygen raw, SBE 43 [V]
+# name 9 = sbeox1V: Oxygen raw, SBE 43, 2 [V]
+# name 10 = sbox0dV/dT: Oxygen, SBE 43 [dov/dt]
+# name 11 = sbox1dV/dT: Oxygen, SBE 43, 2 [dov/dt]
+# name 12 = CStarTr0: Beam Transmission, WET Labs C-Star [%]
+# name 13 = flECO-AFL: Fluorescence, WET Labs ECO-AFL/FL [mg/m^3]
+# name 14 = flC: Fluorescence, Chelsea Aqua 3 Chl Con [ug/l]
+# name 15 = sbox0Mm/Kg: Oxygen, SBE 43 [umol/kg], WS = 2
+# name 16 = sbox1Mm/Kg: Oxygen, SBE 43, 2 [umol/kg], WS = 2
+# name 17 = sal00: Salinity, Practical [PSU]
+# name 18 = sal11: Salinity, Practical, 2 [PSU]
+# name 19 = sigma-é00: Density [sigma-theta, kg/m^3]
+# name 20 = sigma-é11: Density, 2 [sigma-theta, kg/m^3]
+# name 21 = svCM: Sound Velocity [Chen-Millero, m/s]
+# name 22 = svCM1: Sound Velocity, 2 [Chen-Millero, m/s]
+# name 23 = nbin: number of scans per bin
+# name 24 = flag: flag
+# span 0 =        -33,     210482       
+# span 1 =  61.638907,  61.740429       
+# span 2 =      2.000,   4075.000       
+# span 3 =      1.957,   4013.084       
+# span 4 =     2.3599,    24.0121       
+# span 5 =     2.3596,    24.0117       
+# span 6 =   3.258928,   5.331661       
+# span 7 =   3.259070,   5.331753       
+# span 8 =     0.8205,     2.6619       
+# span 9 =     0.9518,     3.3668       
+# span 10 =   -0.11106,    0.11432      
+# span 11 =   -0.15532,    0.16516      
+# span 12 =    86.1295,    90.0276      
+# span 13 =     0.0278,     1.7149      
+# span 14 =    -0.0020,     0.4788      
+# span 15 =     41.796,    233.010      
+# span 16 =     42.182,    235.845      
+# span 17 =    34.8167,    35.9775      
+# span 18 =    34.8185,    36.0032      
+# span 19 =    24.3620,    27.8863      
+# span 20 =    24.3628,    27.8881      
+# span 21 =    1489.21,    1533.85      
+# span 22 =    1489.21,    1533.85      
+# span 23 =         10,        118      
+# span 24 = 0.0000e+00, 0.0000e+00      
+# interval = decibars: 1                
+# start_time = Mar 02 2019 15:20:03 [System UTC, first data scan.]
+# bad_flag = -9.990e-29
+# <Sensors count="11" >
+#   <sensor Channel="1" >
+#     <!-- Frequency 0, Temperature -->
+#     <TemperatureSensor SensorID="55" >
+#       <SerialNumber>6083</SerialNumber>
+#       <CalibrationDate>06-Jun-18</CalibrationDate>
+#       <UseG_J>1</UseG_J>
+#       <A>0.00000000e+000</A>
+#       <B>0.00000000e+000</B>
+#       <C>0.00000000e+000</C>
+#       <D>0.00000000e+000</D>
+#       <F0_Old>0.000</F0_Old>
+#       <G>4.35319981e-003</G>
+#       <H>6.68879170e-004</H>
+#       <I>2.68418148e-005</I>
+#       <J>2.12681557e-006</J>
+#       <F0>1000.000</F0>
+#       <Slope>1.00000000</Slope>
+#       <Offset>0.0000</Offset>
+#     </TemperatureSensor>
+#   </sensor>
+#   <sensor Channel="2" >
+#     <!-- Frequency 1, Conductivity -->
+#     <ConductivitySensor SensorID="3" >
+#       <SerialNumber>4509</SerialNumber>
+#       <CalibrationDate>07-Jun-18</CalibrationDate>
+#       <UseG_J>1</UseG_J>
+#       <!-- Cell const and series R are applicable only for wide range sensors. -->
+#       <SeriesR>0.0000</SeriesR>
+#       <CellConst>2000.0000</CellConst>
+#       <ConductivityType>0</ConductivityType>
+#       <Coefficients equation="0" >
+#         <A>0.00000000e+000</A>
+#         <B>0.00000000e+000</B>
+#         <C>0.00000000e+000</C>
+#         <D>0.00000000e+000</D>
+#         <M>0.0</M>
+#         <CPcor>-9.57000000e-008</CPcor>
+#       </Coefficients>
+#       <Coefficients equation="1" >
+#         <G>-1.00364060e+001</G>
+#         <H>1.51500525e+000</H>
+#         <I>-4.43743566e-004</I>
+#         <J>1.14695984e-004</J>
+#         <CPcor>-9.57000000e-008</CPcor>
+#         <CTcor>3.2500e-006</CTcor>
+#         <!-- WBOTC not applicable unless ConductivityType = 1. -->
+#         <WBOTC>0.00000000e+000</WBOTC>
+#       </Coefficients>
+#       <Slope>1.00000000</Slope>
+#       <Offset>0.00000</Offset>
+#     </ConductivitySensor>
+#   </sensor>
+#   <sensor Channel="3" >
+#     <!-- Frequency 2, Pressure, Digiquartz with TC -->
+#     <PressureSensor SensorID="45" >
+#       <SerialNumber>1263</SerialNumber>
+#       <CalibrationDate>15-Dec-15</CalibrationDate>
+#       <C1>-4.023025e+004</C1>
+#       <C2>-4.466859e-001</C2>
+#       <C3>1.240000e-002</C3>
+#       <D1>3.511700e-002</D1>
+#       <D2>0.000000e+000</D2>
+#       <T1>3.023099e+001</T1>
+#       <T2>-4.469710e-004</T2>
+#       <T3>4.128850e-006</T3>
+#       <T4>2.885040e-009</T4>
+#       <Slope>1.00000000</Slope>
+#       <Offset>0.00000</Offset>
+#       <T5>0.000000e+000</T5>
+#       <AD590M>1.279148e-002</AD590M>
+#       <AD590B>-9.405686e+000</AD590B>
+#     </PressureSensor>
+#   </sensor>
+#   <sensor Channel="4" >
+#     <!-- Frequency 3, Temperature, 2 -->
+#     <TemperatureSensor SensorID="55" >
+#       <SerialNumber>6086</SerialNumber>
+#       <CalibrationDate>06-Jun-18</CalibrationDate>
+#       <UseG_J>1</UseG_J>
+#       <A>0.00000000e+000</A>
+#       <B>0.00000000e+000</B>
+#       <C>0.00000000e+000</C>
+#       <D>0.00000000e+000</D>
+#       <F0_Old>0.000</F0_Old>
+#       <G>4.35947792e-003</G>
+#       <H>6.70575828e-004</H>
+#       <I>2.73048438e-005</I>
+#       <J>2.16054153e-006</J>
+#       <F0>1000.000</F0>
+#       <Slope>1.00000000</Slope>
+#       <Offset>0.0000</Offset>
+#     </TemperatureSensor>
+#   </sensor>
+#   <sensor Channel="5" >
+#     <!-- Frequency 4, Conductivity, 2 -->
+#     <ConductivitySensor SensorID="3" >
+#       <SerialNumber>4510</SerialNumber>
+#       <CalibrationDate>07-Jun-18</CalibrationDate>
+#       <UseG_J>1</UseG_J>
+#       <!-- Cell const and series R are applicable only for wide range sensors. -->
+#       <SeriesR>0.0000</SeriesR>
+#       <CellConst>2000.0000</CellConst>
+#       <ConductivityType>0</ConductivityType>
+#       <Coefficients equation="0" >
+#         <A>0.00000000e+000</A>
+#         <B>0.00000000e+000</B>
+#         <C>0.00000000e+000</C>
+#         <D>0.00000000e+000</D>
+#         <M>0.0</M>
+#         <CPcor>-9.57000000e-008</CPcor>
+#       </Coefficients>
+#       <Coefficients equation="1" >
+#         <G>-9.74550860e+000</G>
+#         <H>1.55873621e+000</H>
+#         <I>-1.41241334e-003</I>
+#         <J>1.86472266e-004</J>
+#         <CPcor>-9.57000000e-008</CPcor>
+#         <CTcor>3.2500e-006</CTcor>
+#         <!-- WBOTC not applicable unless ConductivityType = 1. -->
+#         <WBOTC>0.00000000e+000</WBOTC>
+#       </Coefficients>
+#       <Slope>1.00000000</Slope>
+#       <Offset>0.00000</Offset>
+#     </ConductivitySensor>
+#   </sensor>
+#   <sensor Channel="6" >
+#     <!-- A/D voltage 0, Oxygen, SBE 43 -->
+#     <OxygenSensor SensorID="38" >
+#       <SerialNumber>3261</SerialNumber>
+#       <CalibrationDate>13-Jun-18</CalibrationDate>
+#       <Use2007Equation>1</Use2007Equation>
+#       <CalibrationCoefficients equation="0" >
+#         <!-- Coefficients for Owens-Millard equation. -->
+#         <Boc>0.0000</Boc>
+#         <Soc>0.0000e+000</Soc>
+#         <offset>0.0000</offset>
+#         <Pcor>0.00e+000</Pcor>
+#         <Tcor>0.0000</Tcor>
+#         <Tau>0.0</Tau>
+#       </CalibrationCoefficients>
+#       <CalibrationCoefficients equation="1" >
+#         <!-- Coefficients for Sea-Bird equation - SBE calibration in 2007 and later. -->
+#         <Soc>4.6618e-001</Soc>
+#         <offset>-0.4992</offset>
+#         <A>-4.5144e-003</A>
+#         <B> 2.3176e-004</B>
+#         <C>-3.7531e-006</C>
+#         <D0> 2.5826e+000</D0>
+#         <D1> 1.92634e-004</D1>
+#         <D2>-4.64803e-002</D2>
+#         <E> 3.6000e-002</E>
+#         <Tau20> 1.0100</Tau20>
+#         <H1>-3.3000e-002</H1>
+#         <H2> 5.0000e+003</H2>
+#         <H3> 1.4500e+003</H3>
+#       </CalibrationCoefficients>
+#     </OxygenSensor>
+#   </sensor>
+#   <sensor Channel="7" >
+#     <!-- A/D voltage 1, Oxygen, SBE 43, 2 -->
+#     <OxygenSensor SensorID="38" >
+#       <SerialNumber>3265</SerialNumber>
+#       <CalibrationDate>13-Jun-18</CalibrationDate>
+#       <Use2007Equation>1</Use2007Equation>
+#       <CalibrationCoefficients equation="0" >
+#         <!-- Coefficients for Owens-Millard equation. -->
+#         <Boc>0.0000</Boc>
+#         <Soc>0.0000e+000</Soc>
+#         <offset>0.0000</offset>
+#         <Pcor>0.00e+000</Pcor>
+#         <Tcor>0.0000</Tcor>
+#         <Tau>0.0</Tau>
+#       </CalibrationCoefficients>
+#       <CalibrationCoefficients equation="1" >
+#         <!-- Coefficients for Sea-Bird equation - SBE calibration in 2007 and later. -->
+#         <Soc>3.5388e-001</Soc>
+#         <offset>-0.5257</offset>
+#         <A>-4.5824e-003</A>
+#         <B> 2.6664e-004</B>
+#         <C>-4.0298e-006</C>
+#         <D0> 2.5826e+000</D0>
+#         <D1> 1.92634e-004</D1>
+#         <D2>-4.64803e-002</D2>
+#         <E> 3.6000e-002</E>
+#         <Tau20> 1.6600</Tau20>
+#         <H1>-3.3000e-002</H1>
+#         <H2> 5.0000e+003</H2>
+#         <H3> 1.4500e+003</H3>
+#       </CalibrationCoefficients>
+#     </OxygenSensor>
+#   </sensor>
+#   <sensor Channel="8" >
+#     <!-- A/D voltage 2, Transmissometer, WET Labs C-Star -->
+#     <WET_LabsCStar SensorID="71" >
+#       <SerialNumber>CTS1827DR</SerialNumber>
+#       <CalibrationDate>27/07/2017</CalibrationDate>
+#       <M>19.2254</M>
+#       <B>-0.0692</B>
+#       <PathLength>0.250</PathLength>
+#     </WET_LabsCStar>
+#   </sensor>
+#   <sensor Channel="9" >
+#     <!-- A/D voltage 3, Fluorometer, WET Labs ECO-AFL/FL -->
+#     <FluoroWetlabECO_AFL_FL_Sensor SensorID="20" >
+#       <SerialNumber>FLRTD-4707</SerialNumber>
+#       <CalibrationDate>24/04/2017</CalibrationDate>
+#       <ScaleFactor>6.00000000e+000</ScaleFactor>
+#       <!-- Dark output -->
+#       <Vblank>0.0590</Vblank>
+#     </FluoroWetlabECO_AFL_FL_Sensor>
+#   </sensor>
+#   <sensor Channel="10" >
+#     <!-- A/D voltage 4, Fluorometer, Chelsea Aqua 3 -->
+#     <FluoroChelseaAqua3Sensor SensorID="5" >
+#       <SerialNumber>088-081</SerialNumber>
+#       <CalibrationDate>2016/01/29</CalibrationDate>
+#       <VB>0.148700</VB>
+#       <V1>2.094600</V1>
+#       <Vacetone>0.280900</Vacetone>
+#       <ScaleFactor>1.000000</ScaleFactor>
+#       <Slope>1.000000</Slope>
+#       <Offset>0.000000</Offset>
+#     </FluoroChelseaAqua3Sensor>
+#   </sensor>
+#   <sensor Channel="11" >
+#     <!-- A/D voltage 5, Free -->
+#   </sensor>
+# </Sensors>
+# datcnv_date = Mar 02 2019 21:46:24, 7.26.7.114 [datcnv_vars = 15]
+# datcnv_in = m:\PIRATA-FR29\data-processing\CTD\data\raw\fr29001.hex m:\PIRATA-FR29\data-processing\CTD\data\raw\fr29001.XMLCON
+# datcnv_skipover = 0
+# datcnv_ox_hysteresis_correction = yes
+# datcnv_ox_tau_correction = no
+# wildedit_date = Mar 02 2019 21:46:42, 7.26.7.114
+# wildedit_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# wildedit_pass1_nstd = 2.0
+# wildedit_pass2_nstd = 20.0
+# wildedit_pass2_mindelta = 0.000e+000
+# wildedit_npoint = 100
+# wildedit_vars = prDM depSM t090C t190C c0S/m c1S/m sbeox0V sbeox1V sbox0dV/dT sbox1dV/dT CStarTr0 flECO-AFL flC
+# wildedit_excl_bad_scans = yes
+# filter_date = Mar 02 2019 21:46:43, 7.26.7.114
+# filter_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# filter_low_pass_tc_A = 0.030
+# filter_low_pass_tc_B = 0.150
+# filter_low_pass_A_vars = sbox0dV/dT sbox1dV/dT flECO-AFL flC
+# filter_low_pass_B_vars = prDM
+# alignctd_date = Mar 02 2019 21:46:44, 7.26.7.114
+# alignctd_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# alignctd_adv = sbeox0V 2.000, sbeox1V 2.000                                                                                                                                                                                        
+# celltm_date = Mar 02 2019 21:46:45, 7.26.7.114
+# celltm_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# celltm_alpha = 0.0300, 0.0300
+# celltm_tau = 7.0000, 7.0000
+# celltm_temp_sensor_use_for_cond = primary, secondary
+# loopedit_date = Mar 02 2019 21:46:46, 7.26.7.114
+# loopedit_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# loopedit_minVelocity = 0.000                                                                                            
+# loopedit_surfaceSoak: do not remove                                                                                     
+# loopedit_excl_bad_scans = yes
+# wfilter_date = Mar 02 2019 21:46:48, 7.26.7.114
+# wfilter_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# wfilter_excl_bad_scans = yes
+# wfilter_action prDM = median, 24
+# wfilter_action depSM = median, 24
+# wfilter_action t090C = median, 5
+# wfilter_action t190C = median, 5
+# wfilter_action c0S/m = median, 5
+# wfilter_action c1S/m = median, 5
+# Derive_date = Mar 02 2019 21:46:49, 7.26.7.114 [derive_vars = 8]
+# Derive_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv m:\PIRATA-FR29\data-processing\CTD\data\raw\fr29001.xmlcon
+# derive_time_window_docdt = seconds: 2
+# derive_ox_tau_correction = no
+# binavg_date = Mar 02 2019 21:46:51, 7.26.7.114
+# binavg_in = m:\PIRATA-FR29\data-processing\CTD\data\tmp\fr29001.cnv
+# binavg_bintype = decibars
+# binavg_binsize = 1
+# binavg_excl_bad_scans = yes
+# binavg_skipover = 0
+# binavg_omit = 0
+# binavg_min_scans_bin = 1
+# binavg_max_scans_bin = 2147483647
+# binavg_surface_bin = yes, min = 0.000, max = 2.000, value = 0.000
+# file_type = ascii
+*END*
