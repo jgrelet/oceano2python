@@ -9,5 +9,6 @@
 *.btl
 *_btl
 *.nc
+*.xml
 *.stackdump
 
