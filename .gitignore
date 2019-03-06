@@ -1,0 +1,13 @@
+/.vscode
+*.exe
+*.o
+*.a
+*.swp
+*~
+*.ctd
+*_ctd
+*.btl
+*_btl
+*.nc
+*.stackdump
+
