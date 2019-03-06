@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# ctd-fr24.py
+# ctd.py
 # $Id$
 
 """
@@ -8,7 +8,7 @@ Python script for extracting data from SBE-processing files and write out
 in various format used by datagui, ODV, Netcdf.
 
 usage: 
-$ python ctd-fr24.py [options] <files>
+$ python ctd.py [options] <files>
 
 options are:
 
@@ -35,7 +35,7 @@ options are:
   --type=<instrument_type>   
 
 example: 
-$ python ctd-fr24.py --cycle_mesure=PIRATA-FR24 --institut=IRD --plateforme="LE SUROIT" --sn=09P10828 --type=SBE911+ --pi=BOURLES --date_debut=09/04/2014 --date_fin=21/05/2014 data/asc/fr24???.hdr --echo --local --ascii
+$ python ctd.py --cycle_mesure=PIRATA-FR29 --institut=IRD --plateforme="THALASSA" --sn=09P01263 --type=SBE911+ --pi=BOURLES --date_debut=01/03/2019 --date_fin=04/04/2019 data/asc/fr29???.hdr --echo --local --ascii
 """
 
 import sys, re, getopt, string, fileinput
@@ -45,11 +45,10 @@ from datetime import datetime
 seasave_version = "7.21b"
 
 # initialize constants
-# --------------------
 VERSION       = "V1.0  J Grelet - IRD - US191 IMAGO, Plouzane - may 2011"
 DEGREE        = 176
 CODE          = -1
-CONTEXTE      = "AMMA"
+CONTEXTE      = "PIRATA"
 TIMEZONE      = "GMT"
 FORMAT_DATE   = "DMY"
 
@@ -64,15 +63,15 @@ netcdf        = False
 dtd           = True
 debug         = 0
 code_oopc     = '0A'
-cycle_mesure  = 'PIRATA-FR24'
-plateforme    = 'LE SUROIT'
+cycle_mesure  = 'PIRATA-FR29'
+plateforme    = 'THALASSA'
 institut      = 'IRD' 
-sn            = '09P10828' 
+sn            = '09P01263' 
 type          = 'SBE911+' 
 pi            = 'BOURLES' 
-date_debut    = '09/04/2014'
-date_fin      = '21/05/2014'
-output_file   = 'pirata-fr24'
+date_debut    = '01/03/2019'
+date_fin      = '04/04/2019'
+output_file   = 'pirata-fr29'
 latitude      = 0.
 latitude_str  = ''
 longitude     = 0.
@@ -91,7 +90,7 @@ dt = datetime
 
 # extract station number
 # -------------------------------------------------
-re_station_number = re.compile(r"fr24(\d{3})")
+re_station_number = re.compile(r"fr29(\d{3})")
 
 # extract CTD station start date 
 # ------------------------------
@@ -126,7 +125,7 @@ def version():
 #------------------------------------------------------------------------------
 def entete_xml(fd): 
   #my $today = &dateFormat(undef,"%d/%m/%Y");
-  today = '23/03/2012'
+  today = '06/03/2019'
   
   fd.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
   # les commentaires ne sont pas acceptes par XML Toolbox Matlab de Geodise
@@ -406,8 +405,8 @@ for fileName in args:
 
       # extract data
       # ------------
-      (scan,Pres,Depth,T0,T1,C0,C1,FlC,Xmiss,Ox0,Ox1,nbin,S0,S1,sigmateta0, \
-	  sigmateta1,sndvel0,sndvel1,flag) = line.split()
+      (scan,TimeJ,Pres,Depth,T0,T1,C0,C1,v1,v2,v1dt,v2dt,Xmiss,FlC,Aqua,Ox0,Ox1,S0,S1,sigmateta0, \
+	  sigmateta1,sndvel0,sndvel1,nbin,flag) = line.split()
 
       # write data to ascii file
       # ------------------------
