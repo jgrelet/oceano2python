@@ -189,8 +189,12 @@ try:
   # see optparse, a powerful library for parsing command-line options
   # The gnu version of getopt means that option and non-option
   # arguments may be intermixed
+  # The -e is a simple flag, while -d, -o and -r require an argument. 
+  # The option definition string is "ed:r:".
+  # To mix option and non-option arguments on the command line in any order, 
+  # use gnu_getopt() instead getopt
   # ------------------------------------------------------------------
-  options, args = getopt.gnu_getopt(sys.argv[1:], 'ed:qo:hv',
+  options, args = getopt.gnu_getopt(sys.argv[1:], 'ed:qo:hvr:',
       ['echo', 'debug=', 'quiet', 'output=', 'help', 'version', 'roscop=',
        'cycle_mesure=', 'plateforme=', 'date_debut=', 'date_fin=',
        'institut=', 'code_oopc=', 'pi=', 'ascii', 'xml', 'odv', 
@@ -217,7 +221,7 @@ for option, arg in options:
     usage()
   elif option in ('-v', '--version'):
     version()
-  elif option == '--roscop':
+  elif option in ('-r', '--roscop'):
     code_roscop = arg
     codeRoscop(code_roscop)
   elif option == '--cycle_mesure':
