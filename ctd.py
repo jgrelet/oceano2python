@@ -17,6 +17,7 @@ options are:
   -e, --echo		  : display processed file name
   -q, --quiet		  : don't display output
   -o, --output=<file>	  : output file name without extention, default is pirata_fr24
+  -r  --roscop=<file>     : load file for code roscop description 
   --cycle_mesure=<name>   : cycle_mesure name
   --plateforme=<name>     : ship or plateforme name
   --date_debut=JJ/MM/YYYY : starting date from cycle_mesure
@@ -38,14 +39,14 @@ example:
 $ python3 ctd.py --cycle_mesure=PIRATA-FR29 --institut=IRD --plateforme="THALASSA" --sn=09P01263 --type=SBE911+ --pi=BOURLES --date_debut=01/03/2019 --date_fin=04/04/2019 data/asc/fr29???.hdr --echo --local --ascii
 """
 
-import sys, re, getopt, string, fileinput
+import sys, re, getopt, string, fileinput, csv
 from datetime import datetime
 
 # a lire dans la premier fichier
 seasave_version = "7.21b"
 
 # initialize constants
-VERSION       = "V1.0  J Grelet - IRD - US191 IMAGO, Plouzane - may 2011"
+VERSION       = "V1.1  J Grelet - IRD - US191 IMAGO, Plouzane - March 2019"
 DEGREE        = 176
 CODE          = -1
 CONTEXTE      = "PIRATA"
@@ -166,6 +167,13 @@ def entete_xml(fd):
   fd.write("  </ENTETE>\n")  
   fd.write("  <DATA>\n")  
 
+#------------------------------------------------------------------------------
+# read code roscop file
+#------------------------------------------------------------------------------
+def codeRoscop(file):
+  print("Code roscop file: %s" % code_roscop)
+  sys.exit()
+
 # display help with no arg on command-line
 # ----------------------------------------
 if len(sys.argv) == 1:
@@ -175,15 +183,15 @@ if len(sys.argv) == 1:
 # -----------------------
 try:
 
-  # The return value consists of two elements: the first is a list of 
-  # (option, value) pairs; the second is the list of program arguments
+  # The return args consists of two elements: the first is a list of 
+  # (option, arg) pairs; the second is the list of program arguments
   # left after the option list was stripped
   # see optparse, a powerful library for parsing command-line options
   # The gnu version of getopt means that option and non-option
   # arguments may be intermixed
   # ------------------------------------------------------------------
-  options, args = getopt.gnu_getopt(sys.argv[1:], 'ed:qo:hvs',
-      ['echo', 'debug=', 'quiet', 'output=', 'help', 'version',
+  options, args = getopt.gnu_getopt(sys.argv[1:], 'ed:qo:hv',
+      ['echo', 'debug=', 'quiet', 'output=', 'help', 'version', 'roscop=',
        'cycle_mesure=', 'plateforme=', 'date_debut=', 'date_fin=',
        'institut=', 'code_oopc=', 'pi=', 'ascii', 'xml', 'odv', 
        'netcdf', 'all', 'local', 'secondary', 'sn=', 'type='])
@@ -196,33 +204,36 @@ except getopt.GetoptError as err:
 
 # iterate over options list
 # -------------------------
-for option, value in options:
+for option, arg in options:
   if option in ('-e', '--echo'):
     echo = True
   elif option in ('-q', '--quiet'):
     quiet = False
   elif option in ('-d', '--debug'):
-    debug = int(value)
+    debug = int(arg)
   elif option in ('-o', '--output'):
-    outputfile = value
+    outputfile = arg
   elif option in ('-h', '--help'):
-     usage()
+    usage()
   elif option in ('-v', '--version'):
-     version()
+    version()
+  elif option == '--roscop':
+    code_roscop = arg
+    codeRoscop(code_roscop)
   elif option == '--cycle_mesure':
-    cycle_mesure = value
+    cycle_mesure = arg
   elif option == '--plateforme':
-    plateforme = value
+    plateforme = arg
   elif option == '--date_debut':
-    date_debut = value
+    date_debut = arg
   elif option == '--date_fin':
-    date_fin = value
+    date_fin = arg
   elif option == '--institut':
-    institut = value
+    institut = arg
   elif option == '--code_oopc':
-    code_oopc = value
+    code_oopc = arg
   elif option == '--pi':
-    pi = value
+    pi = arg
   elif option == '--ascii':
     ascii = True
   elif option == '--xml':
