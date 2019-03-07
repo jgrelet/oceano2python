@@ -172,6 +172,11 @@ def entete_xml(fd):
 #------------------------------------------------------------------------------
 def codeRoscop(file):
   print("Code roscop file: %s" % code_roscop)
+  with open(code_roscop, 'rt') as f:
+    reader = csv.DictReader(f, delimiter=';')
+    for row in reader:
+        print("%s : %s : %s : %s : %s" % (row['key'],  row['long_name'], 
+        row['standard_name'], row['units'], row['format']))
   sys.exit()
 
 # display help with no arg on command-line
