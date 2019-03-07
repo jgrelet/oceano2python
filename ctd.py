@@ -8,7 +8,7 @@ Python script for extracting data from SBE-processing files and write out
 in various format used by datagui, ODV, Netcdf.
 
 usage: 
-$ python ctd.py [options] <files>
+$ python3 ctd.py [options] <files>
 
 options are:
 
@@ -35,7 +35,7 @@ options are:
   --type=<instrument_type>   
 
 example: 
-$ python ctd.py --cycle_mesure=PIRATA-FR29 --institut=IRD --plateforme="THALASSA" --sn=09P01263 --type=SBE911+ --pi=BOURLES --date_debut=01/03/2019 --date_fin=04/04/2019 data/asc/fr29???.hdr --echo --local --ascii
+$ python3 ctd.py --cycle_mesure=PIRATA-FR29 --institut=IRD --plateforme="THALASSA" --sn=09P01263 --type=SBE911+ --pi=BOURLES --date_debut=01/03/2019 --date_fin=04/04/2019 data/asc/fr29???.hdr --echo --local --ascii
 """
 
 import sys, re, getopt, string, fileinput
@@ -110,14 +110,14 @@ re_longitude = re.compile(r"NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)")
 # script with special attribute __doc__ and quit
 # ---------------------------------------------------------------
 def usage():
-  print __doc__
+  print(__doc__)
   sys.exit()
 
 # ------------------------------------------------
 # display version and quit
 # ------------------------------------------------
 def version():
-  print "%s: %s" % (sys.argv[0], VERSION)
+  print("%s: %s" % (sys.argv[0], VERSION))
   sys.exit()
 
 #------------------------------------------------------------------------------
@@ -190,8 +190,8 @@ try:
 
 # if bad option, display an error message and usage
 # -------------------------------------------------
-except getopt.GetoptError, err:
-  print str(err)
+except getopt.GetoptError as err:
+  print(str(err))
   usage()
 
 # iterate over options list
@@ -237,9 +237,9 @@ for option, value in options:
 # for debug only, display arg list
 # --------------------------------
 if debug == 1:
-  print "Args: %s\t%s\t%s\t%s\t%s\t%s\t%s\n" % \
+  print("Args: %s\t%s\t%s\t%s\t%s\t%s\t%s\n" % \
     (cycle_mesure, plateforme, date_debut, date_fin, institut,
-     code_oopc, pi),
+     code_oopc, pi))
 
 # open ascii files
 # ----------------
@@ -269,16 +269,16 @@ if xml:
 if echo: 
   # display selected output format
   # ------------------------------
-  print "Output: ",
-  if (ascii): print "ASCII ",
-  if (xml)  : print "XML ",
-  if (odv)  : print "ODV ",
+  print("Output: ")
+  if (ascii): print("ASCII ")
+  if (xml)  : print("XML ")
+  if (odv)  : print("ODV ")
 
   # display header
   # --------------
-  print "\n//%s  %s  %s  %s  %s  %s" % \
-      (cycle_mesure, plateforme, institut, type, sn, pi)
-  print "   File          St    Date      Heure    Latitude  Longitude  Profondeur"
+  print("\n//%s  %s  %s  %s  %s  %s" % \
+      (cycle_mesure, plateforme, institut, type, sn, pi))
+  print("   File          St    Date      Heure    Latitude  Longitude  Profondeur", end='')
 
 # iterate over file list getting with getopt.gnu_getopt 
 # ----------------------------------------------------
@@ -287,7 +287,7 @@ for fileName in args:
   # display processed filename
   # suppress '\n' character written at the end with a comma
   # -------------------------------------------------------
-  if echo: print "\n%s" % (fileName),
+  if echo: print("\n%s" % (fileName), end='')
 
   # extract station number from file name using compiled regexp	
   # -----------------------------------------------------------
@@ -297,7 +297,7 @@ for fileName in args:
   # open current file
   # TODOS: add some tests on file existence  
   # ---------------------------------------
-  file = open( fileName, "r")
+  file = open( fileName, "r", encoding = "ISO-8859-1")
 
   # read each line of current file
   # ------------------------------
@@ -365,8 +365,8 @@ for fileName in args:
 
   # display header information in console
   # -------------------------------------
-  if echo: print "%03d %s %s %s %5.0f" % \
-    (station, dateTime, latitude_str, longitude_str, float(Pres)), 
+  if echo: print(" %03d %s %s %s %5.0f" % \
+    (station, dateTime, latitude_str, longitude_str, float(Pres)), end='')
 
   # write station header to ascii files
   # -----------------------------------
@@ -391,7 +391,7 @@ for fileName in args:
   # we don't use __builtin__ readline method of file object that haven't
   # method to get read line number  
   # --------------------------------------------------------------------
-  file = fileinput.input(fileName)
+  file = fileinput.input(fileName, openhook=fileinput.hook_encoded("ISO-8859-1"))
 
   # iterate over the lines of opened file "fileName"
   # ------------------------------------------------
@@ -431,6 +431,8 @@ for fileName in args:
 
 # end of loop over files
 # ----------------------
+if echo:
+  print("\n")
 
 # close files
 # -----------
