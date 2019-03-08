@@ -1,0 +1,44 @@
+[global]
+author         = "jgrelet IRD jmarch 2019 PIRATA-FR29 cruise"
+debug          = false
+echo           = true
+
+[cruise]
+cycleMesure    = "PIRATA-FR29"
+plateforme     = "THALASSA"
+callsign       = "FNFP"
+institute      = "IRD"
+timezone       = "GMT"
+beginDate      = "01/03/2019"
+endDate        = "04/04/2019"
+pi             = "BOURLES"
+creator        = "Jacques.Grelet@ird.fr"
+
+[ctd]
+cruisePrefix   = "fr29"
+# profile name : fr29xxx
+station = 'Station\s*:\s*\D*(\d*)'
+stationPrefixLength  = 3
+titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
+typeInstrument   = "SBE911+"
+instrumentNumber  = "09P1263"
+isHeader = '^[*#]'
+isDevice       = [ '^\*\s+(Sea-Bird)','(\*END\*)' ]
+latitude = ['Latitude\s*:\s*(\d+)\s+(\d+.\d+)\s+(\w)','NMEA Latitude\s*=\s*(\d+\s+\d+.\d+\s+\w)']
+longitude = ['Longitude\s*:\s*(\d+)\s+(\d+.\d+)\s+(\w)','NMEA Longitude\s*=\s*(\d+\s+\d+.\d+\s+\w)']
+date = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
+hour = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
+bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+operator = 'Operator\s*:\s*(.*)'
+type = 'Type\s*:\s*(.*)'
+split          = "ETDD,2,PRES,3,DEPTH,4,TEMP,5,PSAL,18,DENS,20,SVEL,22,DOX2,16,FLU2,14,FLU3,15,TUR3,13,NAVG,24"
+splitAll       = "ETDD,2,PRES,3,DEPH,4,TE01,5,TE02,6,CND1,7,CND2,8,DOV1,9,DOV2,10,DVT1,11,DVT2,12,TUR3,13,FLU2,14,FLU3,15,DO12,16,DO22,17,PSA1,18,PSA2,19,DEN1,20,DEN2,21,SVEL,22,NAVG,24"
+
+[btl]
+typeInstrument           = "SBE32 standard 24 Niskin bottles"
+instrumentNumber             = "unknown"
+titleSummary   = "Water sample during PIRATA-FR29 cruise with 20 levels"
+comment        = "CTD bottles water sampling with temperature, salinity and oxygen from primary and secondary sensors"
+split = ' BOTL,1,month,2,day,3,year,4,PSA1,5,PSA2,6,DO11,7,DO12,8,DO21,9,DO22,10,Potemp090C,11,Potemp190C,12,ETDD,13,PRES,14,DEPH,15,TE01,16,TE02,17,CND1,18,CND2,19,DOV1,20,DOV2,21,DVT1,22,DVT2,23,TUR3,24,FLU2,25'
+
+
