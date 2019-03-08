@@ -80,6 +80,7 @@ longitude_str = ''
 julian        = 0
 epic_date     = ''
 Pres          = 0
+bottom_depth  = 0
 
 # initialize datetime object
 # --------------------------
@@ -105,6 +106,10 @@ re_latitude = re.compile(r"NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)")
 # extract CTD station longitude
 # -----------------------------
 re_longitude = re.compile(r"NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)")
+
+# extract bottom depth at station position from echo sounder
+# ------------------------------------------------------------
+re_bottom_depth = re.compile(r"Bottom\sDepth\s*[:=]\s*(\d+)")
 
 # ---------------------------------------------------------------
 # display help using text inside """ """" at the beginning of the
@@ -271,7 +276,7 @@ if ascii:
   # ---------------------------------
   hdr_file.write("//%s  %s  %s  %s  %s  %s\n" % \
       (cycle_mesure, plateforme, institut, type, sn, pi))
-  hdr_file.write("St    Date      Heure    Latitude  Longitude  Profondeur\n")
+  hdr_file.write("St    Date      Time    Latitude  Longitude  Depth\n")
   ascii_file.write("//%s  %s  %s  %s  %s  %s\n" % \
       (cycle_mesure, plateforme, institut, type, sn, pi))
   ascii_file.write("PRFL  PRES  TEMP    PSAL    DENS     SVEL     DOX2    FLU2    TUR3    NAVG\n")
@@ -298,7 +303,7 @@ if echo:
   # --------------
   print("\n//%s  %s  %s  %s  %s  %s" % \
       (cycle_mesure, plateforme, institut, type, sn, pi))
-  print("   File          St    Date      Heure    Latitude  Longitude  Profondeur", end='')
+  print("   File              St    Date      Time    Latitude  Longitude    Depth Bottom", end='')
 
 # iterate over file list getting with getopt.gnu_getopt 
 # ----------------------------------------------------
@@ -379,14 +384,20 @@ for fileName in args:
       longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' \
 	  else (float(lon_deg) + (float(lon_min) / 60.)) * -1
 
+    # extract bottom depth 
+    # --------------------------------------------
+    if re_bottom_depth.search(line):
+      bottom_depth = re_bottom_depth.search(line).group(1) 
+
   # close header file
   # -----------------
   file.close()
 
   # display header information in console
   # -------------------------------------
-  if echo: print(" %03d %s %s %s %5.0f" % \
-    (station, dateTime, latitude_str, longitude_str, float(Pres)), end='')
+  if echo: print(" %03d %s %s %s %5.0f %5.0f" % \
+    (station, dateTime, latitude_str, longitude_str, float(Pres), 
+    float(bottom_depth)), end = '')
 
   # write station header to ascii files
   # -----------------------------------
