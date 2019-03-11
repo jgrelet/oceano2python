@@ -21,9 +21,11 @@ class Roscop:
 		print("Code roscop file: %s" % self.file)
 		with open(self.file, 'rt') as f:
 			reader = csv.DictReader(f, delimiter=';')
+			print(reader.fieldnames)
 			for row in reader:
-				print("%s : %s : %s : %s : %s" % (row['key'],  row['long_name'], 
-				row['standard_name'], row['units'], row['format']))
+				for key in reader.fieldnames:
+					print("%s:" % row[key],  end='')
+				print() 
 		return
 
 # for testing in standalone context
