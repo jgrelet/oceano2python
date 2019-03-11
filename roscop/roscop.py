@@ -11,6 +11,7 @@ class db:
     def __setattr__(self, name, value):
         self.__dict__[name] = value
 
+
 # class roscop
 # ------------
 
@@ -29,9 +30,9 @@ class Roscop:
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self.hash))
 
     def disp(self, theKey):
-        db = self.hash[theKey]
-        # print(dict(db))
-        # print(db.items())
+        d = self.hash[theKey]
+        for attr, value in d.__dict__.items():
+            print(attr, value)
 
     # read code roscop file
     def read(self):
@@ -60,3 +61,4 @@ if __name__ == "__main__":
     r.read()
     print(r)
     r.disp('TEMP')
+    r.disp('PSAL')
