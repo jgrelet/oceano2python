@@ -30,11 +30,10 @@ class Roscop:
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self.hash))
 
     def disp(self, theKey):
-        # (a, b) = self.hash.items()
-        # print(a, b)
+        #(a,b) = self.hash[theKey].items()
         print(self.hash.items())
         # for attr, value in d.__dict__.items():
-        # print(attr, value)
+        #print(attr, value)
         # print(d.__dict__)
 
     # read code roscop file
@@ -42,7 +41,7 @@ class Roscop:
         d = db()
         with open(self.file, 'rt') as f:
             reader = csv.DictReader(f, delimiter=';')
-            # print("%s" % (reader.fieldnames))
+            #print("%s" % (reader.fieldnames))
             for key in reader.fieldnames:
                 d.key = key
 
@@ -51,7 +50,7 @@ class Roscop:
                 for k in reader.fieldnames:
                     d.k = row[k]
                 self.hash[theKey] = d
-                # print("Key : %s" % theKey)
+                #print("Key : %s" % theKey)
 
         return
 
