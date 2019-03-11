@@ -20,22 +20,35 @@ class Roscop:
   # constructor with values by default
     def __init__(self, file):
         self.file = file
+        self.hash = {}
 
     # call by print()
-    def __repr__(self):
-        #print("%s:" % row[key],  end='')
+    def __str__(self):
+        # print("%s:" % row[key],  end='')
         # print()
-        return "class Roscop, file: {}".format(self.file)
+        return 'Class Roscop, file: %s, size = %d' % (self.file, len(self.hash))
+
+    def disp(self, theKey):
+        db = self.hash[theKey]
+        # print(dict(db))
+        # print(db.items())
 
     # read code roscop file
     def read(self):
-        print("Code roscop file: %s" % self.file)
+        d = db()
         with open(self.file, 'rt') as f:
             reader = csv.DictReader(f, delimiter=';')
+            #print("%s" % (reader.fieldnames))
+            for key in reader.fieldnames:
+                d.key = key
+
             for row in reader:
-                d = db()
-                for key in reader.fieldnames:
-                    d.key = row[key]
+                theKey = row[reader.fieldnames[0]]
+                for k in reader.fieldnames:
+                    d.k = row[k]
+                self.hash[theKey] = d
+                #print("Key : %s" % theKey)
+
         return
 
 
@@ -43,5 +56,7 @@ class Roscop:
 # ---------------------------------
 if __name__ == "__main__":
     from roscop import Roscop
-    r = Roscop("code_roscop.csv").read()
+    r = Roscop("code_roscop.csv")
+    r.read()
     print(r)
+    r.disp('TEMP')
