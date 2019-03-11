@@ -32,6 +32,5 @@ class Roscop:
 # ---------------------------------    
 if __name__ == "__main__":
 	from roscop import Roscop
-	r = Roscop("code_roscop.csv")
-	r.read()
+	r = Roscop("code_roscop.csv").read()
 	print(r)
