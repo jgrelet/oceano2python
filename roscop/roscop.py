@@ -46,7 +46,7 @@ class Roscop:
                         # remove the key
                         row.pop(k)
                     else:
-                        logging.debug("%s: %s" % (k, row[k]))
+                        logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
                 self.hash[theKey] = row
 
         return
@@ -68,7 +68,8 @@ if __name__ == "__main__":
     parser.add_argument("file", type=str, help="the csv file to parse")
     args = parser.parse_args()
     if args.debug:
-        logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(
+            format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
     key = args.key
     # Read the csv file and create an instance of Roscop class
