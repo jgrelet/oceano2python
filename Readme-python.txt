@@ -51,6 +51,23 @@ Pour utiliser le bash de git, modifier la ligne:
     "terminal.integrated.shell.windows": "C:\\MinGW\\msys\\1.0\\bin\\bash.exe",
 par
     "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+    
+Add in user setting.json:
+  "[python]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4
+    }
+
+In setting.json:
+
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": false,
+    "python.pythonPath": "C:\\opt\\python\\python3.7\\python.exe",
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "python.autoComplete.addBrackets": true,
+    "editor.formatOnPaste": true
 
 Modules pYthon à intaller:
 --------------------------
