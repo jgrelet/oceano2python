@@ -23,6 +23,7 @@ class Roscop:
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self.hash))
 
     def disp(self, theKey):
+        print("%s :" % theKey)
         print(self.hash[theKey])
 
     # read code roscop file
@@ -42,9 +43,9 @@ class Roscop:
 # for testing in standalone context
 # ---------------------------------
 if __name__ == "__main__":
-    #from roscop import Roscop
+    # from roscop import Roscop
     r = Roscop("code_roscop.csv")
     r.read()
     print(r)
-    r.disp('TEMP')
-    r.disp('PSAL')
+    # r.disp('TEMP')
+    r.disp('BATH')
