@@ -33,8 +33,12 @@ class Roscop:
 
             for row in reader:
                 theKey = row[reader.fieldnames[0]]
-                # for k in reader.fieldnames:
-                #    print(k, row[k])
+                for k in reader.fieldnames:
+                    # if the value of key empty, remove the key
+                    if row[k] == '':
+                        row.pop(k)
+                    else:
+                        print(k, row[k])
                 self.hash[theKey] = row
 
         return
