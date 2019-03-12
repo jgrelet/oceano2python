@@ -52,8 +52,18 @@ Pour utiliser le bash de git, modifier la ligne:
 par
     "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
 
+Modules pYthon à intaller:
+--------------------------
 Autoformatting
 ----------------------
 > pip install autopep8
 Installer l'extension Python-autopep8
 Cmd+P choisir autopip
+> pip install pylint
+
+Developpement:
+> pip install pynmea2
+> pip install pySerial
+> pip install netCDF4
+> pip install seawater
+> pip install numpy
