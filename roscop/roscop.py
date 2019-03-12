@@ -1,19 +1,17 @@
-"""
-code roscop
-"""
-
 import csv
 import shelve
 import sys
-
-
-# class roscop
-# ------------
+import logging
+import argparse
 
 
 class Roscop:
 
-  # constructor with values by default
+    '''
+    This class read a csv file describing physical parameter with ROSCOP codification
+    '''
+
+    # constructor with values by default
     def __init__(self, file):
         self.file = file
         self.hash = {}
@@ -34,11 +32,12 @@ class Roscop:
             for row in reader:
                 theKey = row[reader.fieldnames[0]]
                 for k in reader.fieldnames:
-                    # if the value of key empty, remove the key
+                    # if the value of key is empty
                     if row[k] == '':
+                        # remove the key
                         row.pop(k)
                     else:
-                        print(k, row[k])
+                        logging.debug("%s: %s" % (k, row[k]))
                 self.hash[theKey] = row
 
         return
@@ -47,8 +46,21 @@ class Roscop:
 # for testing in standalone context
 # ---------------------------------
 if __name__ == "__main__":
-    # from roscop import Roscop
-    r = Roscop("code_roscop.csv")
+
+    # display extra logging info
+    # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
+    parser = argparse.ArgumentParser(
+        description='This class Roscop parse a csv file describing physical parameter codification')
+    parser.add_argument("-d", "--debug", help="display debug informations",
+                        action="store_true")
+    parser.add_argument("file", type=str, help="the csv file to parse")
+    args = parser.parse_args()
+    if args.debug:
+        logging.basicConfig(level=logging.DEBUG)
+
+    # Read the csv file and create an instance of Roscop class
+    r = Roscop(args.file)
+    #r = Roscop("code_roscop.csv")
     r.read()
     print(r)
     # r.disp('TEMP')
