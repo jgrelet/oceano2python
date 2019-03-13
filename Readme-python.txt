@@ -6,6 +6,14 @@ Fatal error in launcher: Unable to create process using '"'
 ...
 Successfully installed pip-19.0.3
 [ntird-us191-jg4:jgrelet]/c/git/python/pirata
+
+Sous Linux Ubuntu 16.04, l'upgrade de pip failed !
+Utiliser:
+> python3 -m pip install --user <package>  # instead
+Then I recommend adding the following aliases to your .bashrc:
+pip() ( python -m pip "$@" )
+pip3() ( python3 -m pip "$@" )
+
 > pip install toml
 Collecting toml
   Downloading https://files.pythonhosted.org/packages/a2/12/ced7105d2de62fa7c8fb5fce92cc4ce66b57c95fb875e9318dba7f8c5db0/toml-0.10.0-py2.py3-none-any.whl
