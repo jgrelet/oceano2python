@@ -8,8 +8,12 @@ Successfully installed pip-19.0.3
 [ntird-us191-jg4:jgrelet]/c/git/python/pirata
 
 Sous Linux Ubuntu 16.04, l'upgrade de pip failed !
+---------------------------------------------------
+voir: https://askubuntu.com/questions/1025793/running-pip3-importerror-cannot-import-name-main
 Utiliser:
 > python3 -m pip install --user <package>  # instead
+
+A tester:
 Then I recommend adding the following aliases to your .bashrc:
 pip() ( python -m pip "$@" )
 pip3() ( python3 -m pip "$@" )
@@ -77,7 +81,7 @@ In setting.json:
     "python.autoComplete.addBrackets": true,
     "editor.formatOnPaste": true
 
-Modules pYthon à intaller:
+Modules Python à intaller:
 --------------------------
 Autoformatting
 ----------------------
