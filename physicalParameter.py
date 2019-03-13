@@ -50,11 +50,11 @@ class Roscop:
                 theKey = row[reader.fieldnames[0]]
                 for k in reader.fieldnames:
                     # if the value of key is empty
-                    if row[k] == '':
+                    if row[k] == '' or k == 'key':
                         # remove the key
                         row.pop(k)
                     else:
-                        #logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
+                        # logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
                         logging.debug(
                             " {} -> {}: {}".format(theKey, k, row[k]))
                 self.__hash[theKey] = row
@@ -66,9 +66,8 @@ class Roscop:
 # ---------------------------------
 if __name__ == "__main__":
 
-    # display extra logging info
-    # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
-    # https://docs.python.org/2/howto/argparse.html
+    # usage:
+    # > python physicalParameter.py code_roscop.csv -k TEMP
     parser = argparse.ArgumentParser(
         description='This class Roscop parse a csv file describing physical parameter codification')
     parser.add_argument("-d", "--debug", help="display debug informations",
@@ -76,6 +75,10 @@ if __name__ == "__main__":
     parser.add_argument("-k", "--key", nargs='+',
                         help="display dictionary for key(s), example -k TEMP [PSAL ...]")
     parser.add_argument("file", type=str, help="the csv file to parse")
+
+    # display extra logging info
+    # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
+    # https://docs.python.org/2/howto/argparse.html
     args = parser.parse_args()
     if args.debug:
         logging.basicConfig(
@@ -95,5 +98,5 @@ if __name__ == "__main__":
         for k in key:
             r.displayCode(k)
 
-    print(r.returnCode(key[0])['key'])
+    print("{}: {}".format(key[0], r.returnCode(key[0])['long_name']))
     # print(r[key])

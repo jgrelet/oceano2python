@@ -16,17 +16,18 @@ class RoscopTest(unittest.TestCase):
         self.r = Roscop(self.file)
 
     def test_file(self):
-        """
-        Test if filename is correct
-        """
+        """ Test if filename is correct """
 
         self.assertEqual(self.r.file, self.file)
 
     def test_entries(self):
+        ''' test the number of entries in csv file '''
         self.assertEqual(len(self.r), 68)
 
     def test_key(self):
-        self.assertEqual(self.r.returnCode('TEMP')['key'], 'TEMP')
+        ''' test the standard_name for physical parameter TEMP '''
+        self.assertEqual(self.r.returnCode('TEMP')[
+                         'standard_name'], 'sea_water_temperature')
 
 
 if __name__ == '__main__':
