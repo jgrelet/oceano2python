@@ -14,24 +14,32 @@ class Roscop:
     # constructor with values by default
     def __init__(self, file):
         self.file = file
-        self.hash = {}
+        self.__hash = {}
+        self.read()
 
     # call by print()
     def __str__(self):
-        return 'Class Roscop, file: %s, size = %d' % (self.file, len(self.hash))
+        ''' overload string representation '''
+        return 'Class Roscop, file: %s, size = %d' % (self.file, len(self))
 
     def __getitem__(self, name):
-        '''
-        overload r[key]
-        '''
-        return self.hash[name]
+        ''' overload r[key] '''
+        return self.__hash[name]
 
     def __repr__(self):
+        ''' overload print() '''
         return super().__repr__()
 
-    def disp(self, theKey):
+    def __len__(self):
+        ''' overload len() '''
+        return len(self.__hash)
+
+    def displayCode(self, theKey):
         print("%s :" % theKey)
         print(self[theKey])
+
+    def returnCode(self, theKey):
+        return(self[theKey])
 
     # read code roscop file
     def read(self):
@@ -49,7 +57,7 @@ class Roscop:
                         #logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
                         logging.debug(
                             " {} -> {}: {}".format(theKey, k, row[k]))
-                self.hash[theKey] = row
+                self.__hash[theKey] = row
 
         return
 
@@ -77,7 +85,7 @@ if __name__ == "__main__":
     r = Roscop(args.file)
     # r = Roscop("code_roscop.csv")
 
-    r.read()
+    # r.read()
     print(r)
 
     # get -k arg(s) list
@@ -85,7 +93,7 @@ if __name__ == "__main__":
     # if args list is empty, key contain NoneType
     if key is not None:
         for k in key:
-            r.disp(k)
+            r.displayCode(k)
 
-    # r.disp('TEMP')
+    print(r.returnCode(key[0])['key'])
     # print(r[key])

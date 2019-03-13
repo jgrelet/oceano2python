@@ -96,3 +96,8 @@ Developpement:
 > pip install netCDF4
 > pip install seawater
 > pip install numpy
+
+Tests avec unittest:
+--------------------
+Les fichiers de tests sont sous tests
+> python -m unittest -v tests/test_roscop.py
