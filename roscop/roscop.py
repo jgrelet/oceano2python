@@ -46,7 +46,9 @@ class Roscop:
                         # remove the key
                         row.pop(k)
                     else:
-                        logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
+                        #logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
+                        logging.debug(
+                            " {} -> {}: {}".format(theKey, k, row[k]))
                 self.hash[theKey] = row
 
         return
@@ -71,14 +73,20 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-    key = args.key
     # Read the csv file and create an instance of Roscop class
     r = Roscop(args.file)
     # r = Roscop("code_roscop.csv")
+
     r.read()
     print(r)
-    # r.disp('TEMP')
-    for k in key:
-        r.disp(k)
+
+    # get -k arg(s) list
+    key = args.key
+    # if args list is empty, key contain NoneType
+    if key is not None:
+        for k in key:
+            r.disp(k)
+
     # print(r.TEMP)
+    # r.disp('TEMP')
     # print(r[key])
