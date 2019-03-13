@@ -1,5 +1,5 @@
 [global]
-author         = "jgrelet IRD jmarch 2019 PIRATA-FR29 cruise"
+author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
 debug          = false
 echo           = true
 
@@ -31,8 +31,42 @@ hour = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
 bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
 operator = 'Operator\s*:\s*(.*)'
 type = 'Type\s*:\s*(.*)'
-split          = "ETDD,2,PRES,3,DEPTH,4,TEMP,5,PSAL,18,DENS,20,SVEL,22,DOX2,16,FLU2,14,FLU3,15,TUR3,13,NAVG,24"
-splitAll       = "ETDD,2,PRES,3,DEPH,4,TE01,5,TE02,6,CND1,7,CND2,8,DOV1,9,DOV2,10,DVT1,11,DVT2,12,TUR3,13,FLU2,14,FLU3,15,DO12,16,DO22,17,PSA1,18,PSA2,19,DEN1,20,DEN2,21,SVEL,22,NAVG,24"
+
+split.ETDD = 2
+split.PRES = 3
+split.DEPTH = 4
+split.TEMP = 5
+split.PSAL = 18
+split.DENS = 20
+split.SVEL = 22
+split.DOX2 = 16
+split.FLU2 = 14
+split.FLU3 = 15
+split.TUR3 = 13
+split.NAVG = 24
+
+splitAll.ETDD = 2
+splitAll.PRES = 3
+splitAll.DEPH = 4
+splitAll.TE01 = 5
+splitAll.TE02 = 6
+splitAll.CND1 = 7
+splitAll.CND2 = 8
+splitAll.DOV1 = 9
+splitAll.DOV2 = 10
+splitAll.DVT1 = 11
+splitAll.DVT2 = 12
+splitAll.TUR3 = 13
+splitAll.FLU2 = 14
+splitAll.FLU3 = 15
+splitAll.DO12 = 16
+splitAll.DO22 = 17
+splitAll.PSA1 = 18
+splitAll.PSA2 = 19
+splitAll.DEN1 = 20
+splitAll.DEN2 = 21
+splitAll.SVEL = 22
+splitAll.NAVG = 24
 
 [btl]
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
