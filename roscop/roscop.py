@@ -20,9 +20,9 @@ class Roscop:
     def __str__(self):
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self.hash))
 
-    def __getattr__(self, name):
+    def __getitem__(self, name):
         '''
-        overload r.key
+        overload r[key]
         '''
         return self.hash[name]
 
@@ -31,7 +31,7 @@ class Roscop:
 
     def disp(self, theKey):
         print("%s :" % theKey)
-        print(self.hash[theKey])
+        print(self[theKey])
 
     # read code roscop file
     def read(self):
@@ -87,6 +87,5 @@ if __name__ == "__main__":
         for k in key:
             r.disp(k)
 
-    # print(r.TEMP)
     # r.disp('TEMP')
     # print(r[key])
