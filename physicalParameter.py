@@ -13,18 +13,39 @@ class Roscop:
 
     # constructor with values by default
     def __init__(self, file):
+        # attibutes
+        # public:
         self.file = file
+        # private:
         self.__hash = {}
+        # constructor build objet by reading the file
         self.read()
 
-    # call by print()
+    # overloading operators
     def __str__(self):
         ''' overload string representation '''
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self))
 
-    def __getitem__(self, name):
+    def __getitem__(self, key):
         ''' overload r[key] '''
-        return self.__hash[name]
+        if key not in self.__hash:
+            logging.error(
+                " Invalid key: \"{}\"".format(key))
+        else:
+            return self.__hash[key]
+
+    def __setitem__(self, key, value):
+        ''' overload r[key] = value '''
+        if type(value) is not dict:
+            logging.error(
+                " The value: \"{}\" must be a dictionary".format(value))
+            return
+
+        if key not in self.__hash:
+            self.__hash[key] = value
+        else:
+            logging.error(
+                " Modify the existing key: \"{}\" is not allowed".format(key))
 
     def __repr__(self):
         ''' overload print() '''
@@ -34,12 +55,15 @@ class Roscop:
         ''' overload len() '''
         return len(self.__hash)
 
-    def displayCode(self, theKey):
-        print("%s :" % theKey)
-        print(self[theKey])
+    # methods public
+    def displayCode(self, key):
+        ''' for a given key print it's name and values as a dictionary '''
+        print("%s :" % key)
+        print(self[key])
 
-    def returnCode(self, theKey):
-        return(self[theKey])
+    def returnCode(self, key):
+        ''' for a given key return the values as a dictionary '''
+        return(self[key])
 
     # read code roscop file
     def read(self):
@@ -99,4 +123,6 @@ if __name__ == "__main__":
             r.displayCode(k)
 
     print("{}: {}".format(key[0], r.returnCode(key[0])['long_name']))
-    # print(r[key])
+    r['TOTO'] = {'uncle': 'tata'}
+    print(r['TOTO'])
+    r['TEMP'] = 'tata'
