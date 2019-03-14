@@ -43,7 +43,7 @@ class testRoscop(unittest.TestCase):
         self.assertEqual(self.r.returnCode('PSAL')[
                          'standard_name'], 'sea_water_salinity')
         self.assertEqual(self.r.returnCode('PSAL')[
-                         'units'], '1')
+                         'conventions'], 'PSU')
         self.assertEqual(self.r.returnCode('PSAL')[
                          'comment'], 'Ocean practical salinity (PSS-78)')
 
