@@ -1,3 +1,390 @@
+Aide mémoire Python
+-------------------
+J Grelet June 2011 - March 2019
+
+Les listes:
+-----------
+Collection d'objet
+L=[]
+L=[1,2,3,4]
+L[2:]
+[3,4]
+L[:-1]
+[1, 2, 3]
+L[::-1]
+[4, 3, 2, 1]
+L.method()  avec method = append, sort,index,reverse
+
+Tuples:
+-------
+Un tuple est équivalent à une liste masi il n'est pas modifiable
+T=(1,2,3)
+T[1]
+2
+T[1]=5
+TypeError: 'tuple' object does not support item assignment
+
+Dictionnaires:
+--------------
+Tables non ordonnées de référence d'objets
+D={}
+D={'un': 1, "deux: 2}
+D['un']
+1
+D.has_key('deux')
+True
+D.keys()
+['un', 'deux']
+D.values()
+[1,2]
+
+d[key] = value
+    Set d[key] to value.
+
+del d[key]
+    Remove d[key] from d. Raises a KeyError if key is not in the map.
+
+key in d
+    Return True if d has a key key, else False.
+
+key not in d
+    Equivalent to not key in d.
+
+iter(d)
+    Return an iterator over the keys of the dictionary. This is a shortcut for iter(d.keys()).
+
+clear()
+    Remove all items from the dictionary.
+
+copy()
+    Return a shallow copy of the dictionary.
+
+classmethod fromkeys(seq[, value])
+    Create a new dictionary with keys from seq and values set to value.
+    fromkeys() is a class method that returns a new dictionary. value defaults to None.
+
+get(key[, default])
+    Return the value for key if key is in the dictionary, else default. If default is not given, it defaults to None, so that this method never raises a KeyError.
+
+items()
+    Return a new view of the dictionary’s items ((key, value) pairs). See the documentation of view objects.
+
+keys()
+    Return a new view of the dictionary’s keys. See the documentation of view objects.
+
+pop(key[, default])
+    If key is in the dictionary, remove it and return its value, else return default. If default is not given and key is not in the dictionary, a KeyError is raised.
+
+popitem()
+    Remove and return an arbitrary (key, value) pair from the dictionary.
+
+    popitem() is useful to destructively iterate over a dictionary, as often used in set algorithms. If the dictionary is empty, calling popitem() raises a KeyError.
+
+setdefault(key[, default])
+    If key is in the dictionary, return its value. If not, insert key with a value of default and return default. default defaults to None.
+
+update([other])
+    Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
+    update() accepts either another dictionary object or an iterable of key/value pairs (as tuples or other iterables of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: d.update(red=1, blue=2).
+
+values()
+    Return a new view of the dictionary’s values. See the documentation of view objects.
+
+
+Fonctions spéciales:
+--------------------
+lambda: fonction anonyme
+f = lambda a, b: a + b
+f(1,2)
+3
+
+apply:  appelle des fonction avec des tuples en arguments
+apply(f, (2,3)
+5
+
+map:    applique une fonction à chaque objet d'une séquence
+def m(x): return x*2
+map(m,[0,2,4]
+[0, 4, 8]
+
+print:  écrit sur la sortie standard
+print "Class" + "Foo"
+ClassFoo
+print
+print "Class %s is not = %d" % ('Foo', 1)
+Class Foo is not = 1
+print "Class %s is not = %d" % ('Foo', 1),
+
+Classes et espace de nom (namespace):
+-------------------------------------
+import: récupère l'intégralité d'un module
+from:   récupère certains noms d'un module
+reload: recharge le module modifié
+
+Notion importante lorsque l'on travaille dans l'interpréteur (python ou ipython)
+L'import charge et exécute la première fois le code du module (fichier)
+> cat simple.py
+print "Hello"
+spam = 1
+
+>>> import simple   # importe charge et exécute la première fois le code du module
+Hello
+>>> simple.spam     # l'affectation a créé un attribut
+1
+>>> simple.spam = 2 # change l'attribut dans le module
+>>> import simple   # récupère le module déjà chargé
+>>> simple.spam     # le code n'a pas été exécuté de nouveau
+2
+
+Classe Foo déclarée dans un module foo, soit un fichier foo.py
+import foo
+f=foo.Foo()
+
+from foo import Foo
+f = Foo()
+
+Les fonctions définies dans les classes ne sont accéssibles que via une instance
+a=Foo()
+a.dummy()
+Foo().dummy()
+
+Avec python, un attribut d'instance (membre) est une simple variable et existe 
+dès qu'on lui affecte une valeur.
+class Foo:
+  def foo(self,value):
+    self.attribut = value
+    return self.attribut
+
+Foo().foo(5)
+5
+
+Cet attribut peux également être initialisé (par défault) à la création de
+l'instance par le constructeur __init__ (méthode appelée à la création d'un 
+objet)
+class Foo:
+    def __init__(self,value=0):
+        self.attribut = value
+    def __repr__(self):
+        return  "%d" % self.attribut
+a=Foo()
+a
+0
+a=Foo(5)
+a
+5
+
+
+Attribut de classe
+class Foo:
+  foo = const
+
+Attribut d'instance
+class Foo:
+  __init__(self, value)
+    self.foo = value
+
+En interne python associe les appels des méthodes d'instances aux méthodes de 
+classes:
+instance.methode(args,...) => class.methode(instance, args, ...)
+
+Attributs privés d'une classe (utilise le name mangling)
+self.__attribut => self._Class.__atribut
+
+Attribut protected est passé en protégé (accessible aux fils mais pas en
+dehors de l'objet) simplement en ajoutant "_" (a verifier)
+
+Méthodes de classes liées:
+class Foo:
+   def foo(self, msg):
+   print msg
+
+o = Foo()
+f = o.foo
+f('Hello')
+
+Méthodes de classes non liées (unbound):
+o = Foo()
+<__main__.Foo instance at 0x927e70c>
+f = Foo.foo
+<unbound method Foo.foo>
+f(o,'Hello')
+Hello
+
+Les méthodes non liées requièrent un objet explicite
+
+Introspection:
+--------------
+Obtenir la liste des attribbuts d'une classe sous forme de dictionnaire:
+o = Foo()
+print o.__dict__
+
+La liste des cles
+print o.__dict__.keys()
+
+La liste des valeurs
+print o.__dict__.values()
+
+Obtenir la liste des methodes et des attribbuts d'une classe:
+print dir(o)
+
+Determiner si les attributs d'un objet sont des methodes:
+callable(o.<attribut>)
+ex:
+callable(o.name)
+>>> True
+type(o.name)
+>>> <type 'instancemethod'>
+
+Si une classe herite de object:
+class foo(object):
+print dir(o)
+elle herite des methodes ['__class__','__setattr__', ....]
+Liste des methodes:
+methodList = [method for method in dir(object) if callable(getattr(object, method))]
+
+Ajouter dynamiquement un attribut:
+setattr(self, attributName, value)
+
+Affecter dynamiquement un attribut (un dictionnaire ici):
+setattr(self, attributName, {})
+getattr(self, attributName)[key] = value
+
+Remplir dynamiquement une l'equivalent C d'une structure en Python:
+class bunch:
+  def __init__(self, **kwds):
+    self.__dict__.update(kwds)
+
+s = bunch()                     # initialisation
+s = bunch(k1=v1, k2=v2, ....)   # initialisation
+s.k1 = v1
+s.k2 = v2
+
+avec l'exemple precedent:
+setattr(self, s, {})
+getattr(self, s)[k1] = v1
+self.s[key].value             
+
+
+Ipyton:
+-------
+Pour changer de repertoire
+cd path
+
+Pour lancer un script
+run script.py
+
+Recharger un module: 
+import module ne charge le module que la premiere fois
+faire un reload(module) apres modification du code
+
+Installer ZCA (Zope Component Architecture)
+-------------------------------------------
+Depuis les sources:
+
+zope.component-3.10.0.tar.gz
+zope.component-3.4.0.tar.gz
+zope.deferredimport-3.4.0.tar.gz
+zope.deprecation-3.4.0.tar.gz
+zope.event-3.4.1.tar.gz
+zope.exceptions-3.4.0.tar.gz
+zope.interface-3.4.0.tar.gz
+zope.testing-3.5.6.tar.gz
+
+> python setup.py build
+> sudo python setup.py install
+
+Interfaces:
+-----------
+from zope.interface import Interface, Attribute
+class IFoo(Interface):
+     """Foo interface documentation"""
+
+     x = Attribute("""Un attribut x""")
+  
+     def bar(q, r=None):
+       """bar methode: arg: q, r=none"""
+
+IFoo.__doc__
+'Foo interface documentation'
+IFoo.__name__
+'IFoo'
+IFoo.__module__
+'__main__'
+
+Note that `bar` doesn't take a `self` argument. When calling instance methods,
+you don't pass a `self` argument, so a `self` argument isn't included in the
+interface signature. 
+
+names=list(IFoo)
+names
+['x', 'bar']
+
+Declaring interfaces
+====================
+
+Having defined interfaces, we can *declare* that objects provide
+them.  Before we describe the details, lets define some terms:
+
+*provide*
+   We say that objects *provide* interfaces.  If an object provides an
+   interface, then the interface specifies the behavior of the
+   object. In other words, interfaces specify the behavior of the
+   objects that provide them.
+
+*implement*
+   We normally say that classes *implement* interfaces.  If a class
+   implements an interface, then the instances of the class provide
+   the interface.  Objects provide interfaces that their classes
+   implement [#factory]_.  (Objects can provide interfaces directly,
+   in addition to what their classes implement.)
+
+   It is important to note that classes don't usually provide the
+   interfaces that they implement.
+
+   We can generalize this to factories.  For any callable object we
+   can declare that it produces objects that provide some interfaces
+   by saying that the factory implements the interfaces.
+
+Now that we've defined these terms, we can talk about the API for
+declaring interfaces.
+
+Declaring implemented interfaces
+--------------------------------
+
+The most common way to declare interfaces is using the implements
+function in a class statement::
+
+from zope.interface import implements
+class Foo:
+    implements(IFoo)
+
+    def __init__(self, x=None):
+        self.x = x
+  
+    def bar(self, q, r=None):  
+        return q, r, self.x
+ 
+    def __repr__(self):
+        return "Foo(%s)" % self.x
+
+
+In this example, we declared that `Foo` implements `IFoo`. This means
+that instances of `Foo` provide `IFoo`.  Having made this declaration,
+there are several ways we can introspect the declarations.  First, we
+can ask an interface whether it is implemented by a class::
+
+  >>> IFoo.implementedBy(Foo)
+  True
+
+And we can ask whether an interface is provided by an object::
+
+  >>> foo = Foo()
+  >>> IFoo.providedBy(foo)
+  True
+
+Configuration march 2019:
++++++++++++++++++++++++++
+
 Sous Windows, VSCode et Python 3.7.2
 > pip3
 Fatal error in launcher: Unable to create process using '"'
