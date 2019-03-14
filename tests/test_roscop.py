@@ -3,14 +3,19 @@ import unittest
 from physicalParameter import Roscop
 
 '''
-> python -m unittest -v tests/test_roscop.py
+Run test in single file
+> python - m unittest - v tests/test_roscop.py
+
+Run all test_ * in dir tests:
+> python - m unittest  discover tests - v
+> python - m unittest  discover - s tests - p 'test_*.py' - v
 '''
 
 
-class RoscopTest(unittest.TestCase):
+class testRoscop(unittest.TestCase):
 
     def setUp(self):
-        """Initialisation des tests."""
+        """ Test initialisation """
 
         self.file = 'code_roscop.csv'
         self.r = Roscop(self.file)

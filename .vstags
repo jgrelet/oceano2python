@@ -1,0 +1,15 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+display_version	.\btl-all.pl	107;"	s
+entete_odv	.\btl-all.pl	282;"	s
+get_options	.\btl-all.pl	131;"	s
+position	.\btl-all.pl	259;"	s
+read_config	.\btl-all.pl	161;"	s
+read_config_string	.\btl-all.pl	148;"	s
+usage	.\btl-all.pl	115;"	s
+usage	.\sta-fr22.pl	35;"	s
+write_xml_header	.\btl-all.pl	211;"	s

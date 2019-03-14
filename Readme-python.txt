@@ -486,5 +486,24 @@ Developpement:
 
 Tests avec unittest:
 --------------------
+Voir: https://docs.python.org/3.7/library/unittest.html?highlight=unittest
+
 Les fichiers de tests sont sous tests
-> python -m unittest -v tests/test_roscop.py
+Run test in single file
+> python - m unittest - v tests/test_roscop.py
+
+Run all test_ * in dir tests:
+> python - m unittest  discover tests - v
+> python - m unittest  discover - s tests - p 'test_*.py' - v
+
+Methods name:
+assertEqual() 	
+assertNotEqual() 
+assertTrue() 	
+assertFalse() 	
+assertRaises() 	
+assertAlmostEqual() 	
+assertNotAlmostEqual() 	
+assertRegex() 	  	
+assertNotRegex() 	
+assertRaisesRegex()
