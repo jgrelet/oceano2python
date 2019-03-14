@@ -31,8 +31,6 @@ bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
 operator = 'Operator\s*:\s*(.*)'
 type = 'Type\s*:\s*(.*)'
 
-
-
 [btl]
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
 instrumentNumber         = "unknown"
