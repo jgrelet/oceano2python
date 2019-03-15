@@ -78,7 +78,6 @@ class Roscop:
                         # remove the key
                         row.pop(k)
                     else:
-                        # logging.debug(" %s -> %s: %s" % (theKey, k, row[k]))
                         logging.debug(
                             " {} -> {}: {}".format(theKey, k, row[k]))
                 self.__hash[theKey] = row
