@@ -3,6 +3,7 @@ file_extractor.py
 '''
 import fileinput
 import toml
+import numpy
 
 
 class FileExtractor:
@@ -19,6 +20,7 @@ class FileExtractor:
         # private:
         self.__headeer = {}
         self.__data = {}
+        self.__indMax = 0
         # constructor build objet by reading the file
 
     # overloading operators
@@ -29,17 +31,22 @@ class FileExtractor:
 
    # read code roscop file
     def read(self, keys, dic):
+        indice = 0
         for line in fileinput.input(
                 self.file, openhook=fileinput.hook_encoded("ISO-8859-1")):
             if line[0] == '#' or line[0] == '*':
                 continue
 
+            indice += 1
             # iterate over the lines of opened file "fileName"
             # ------------------------------------------------
             p = line.split()
             for k in keys:
-                print("{} ".format(p[dic[k]]), end='')
+                print('{:>{width}}'.format(
+                    p[dic[k]], width=8), end=' ')
             print()
+        self.__indMax = indice
+        print("{}".format(self.__indMax))
 
 
 # for testing in standalone context
