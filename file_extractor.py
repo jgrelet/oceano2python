@@ -69,9 +69,11 @@ class FileExtractor:
         return self.n, self.m
 
     # second pass, extract data from roscop code in files and fill array
-    def secondPass(self, keys, dic):
+    def secondPass(self, keys, cfg, type):
         n = 0
         m = 0
+
+        hash = cfg['split'][type]
 
         # initialize arrays, move at the end of firstPass ?
         for key in keys:
@@ -91,10 +93,10 @@ class FileExtractor:
                     str = ' '
                     # fill array with extracted value of line for eack key (physical parameter)
                     for key in keys:
-                        self.__data[key][n, m] = p[dic[key]]
+                        self.__data[key][n, m] = p[hash[key]]
                         # debug info
                         str += "{:>{width}}".format(
-                            p[dic[key]], width=8)
+                            p[hash[key]], width=8)
                     logging.debug(str)
 
                     # increment m indice (the line number)
@@ -108,16 +110,21 @@ class FileExtractor:
 if __name__ == "__main__":
 
     # usage:
-    # python file_extractor.py data/cnv/dfr29*.cnv -d
+    # > python file_extractor.py data/cnv/dfr2900[1-3].cnv -d
+    # > python file_extractor.py data/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
+    # > python file_extractor.py data/cnv/dfr29*.cnv -d
     parser = argparse.ArgumentParser(
         description='This class read multiple ASCII file, extract physical parameter \
-            from ROSCOP codification at the given column and fill arrays')
-    parser.add_argument("-d", "--debug", help="display debug informations",
-                        action="store_true")
-    parser.add_argument("-k", "--key", nargs='+',
-                        help="display dictionary for key(s), example -k TEMP [PSAL ...]")
-    parser.add_argument(
-        'files', nargs='*', help="cnv file(s) to parse, example data/cnv/dfr29*.cnv")
+            from ROSCOP codification at the given column and fill arrays ',
+        epilog='J. Grelet IRD US191 - March 2019')
+    parser.add_argument('-d', '--debug', help='display debug informations',
+                        action='store_true')
+    parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
+                        default='tests/test.toml')
+    parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
+                        help='display dictionary for key(s), (default: %(default)s)')
+    parser.add_argument('files', nargs='*',
+                        help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
 
     # display extra logging info
     # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
@@ -128,9 +135,11 @@ if __name__ == "__main__":
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
     fe = FileExtractor(args.files)
-    cfg = toml.load('tests/test.toml')
-    dic = cfg['split']['ctd']
+    print("File(s): {}, Config: {}".format(args.files, args.config))
+    cfg = toml.load(args.config)
     [n, m] = fe.firstPass()
     print("Indices:", n, m)
-    fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], dic)
-    fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+    fe.secondPass(args.key, cfg, 'ctd')
+    #fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
+    fe.disp(args.key)
+    #fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])

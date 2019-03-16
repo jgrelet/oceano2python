@@ -483,6 +483,14 @@ Developpement:
 > pip install netCDF4
 > pip install seawater
 > pip install numpy
+> pip install PyInstaller
+> pip install PySimpleGUI
+
+To create your EXE file from your program that uses PySimpleGUI, my_program.py, 
+enter this command in your Windows command prompt:
+
+> pyinstaller -wF my_program.py
+
 
 Tests avec unittest:
 --------------------
