@@ -1,6 +1,7 @@
 import argparse
 import sys
-import PySimpleGUI as sg
+import PySimpleGUIQt as sg
+# import PySimpleGUIQt as sg
 import toml
 import logging
 from file_extractor import FileExtractor
@@ -26,28 +27,36 @@ parser.add_argument('files', nargs='*',
                     help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
 args = parser.parse_args()
 
+# set looging mode if debug
 if args.debug:
     logging.basicConfig(
         format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-
 # test arguements from sys.argv, args is never to None with default option set
 if len(sys.argv) == 1:
-    event, fname = sg.Window('My Script').Layout([[sg.Text('Document to open')],
-                                                  [sg.In(), sg.FileBrowse()],
-                                                  [sg.CloseButton('Open'), sg.CloseButton('Cancel')]]).Read()
-    #fname = pathlib.PurePosixPath(fname)
-    print(event, fname)
+    # define GUI layout
+    layout = ([[sg.Text('File(s) to read and convert')],
+               [sg.Input(size=(40, 1)), sg.FileBrowse()],
+               [sg.Checkbox('PRES'), sg.Checkbox('TEMP'), sg.Checkbox('PSAL')],
+               [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
+
+    # create the main windows
+    event, values = sg.Window('Oceano converter').Layout(layout).Read()
+
+    # fname = pathlib.PurePosixPath(fname)
+    print(event, values[0])
 
 
 else:
-    fname = args.files
+    # in line command
+    values[0] = args.files
 
-if not fname:
+if not values[0]:
     sg.Popup("Cancel", "No filename supplied")
     raise SystemExit("Cancelling: no filename supplied")
-fe = FileExtractor(fname)
-print("File(s): {}, Config: {}".format(fname, args.config))
+# transform full pathname into list
+fe = FileExtractor([values[0]])
+print("File(s): {}, Config: {}".format(values[0], args.config))
 
 cfg = toml.load(args.config)
 [n, m] = fe.firstPass()

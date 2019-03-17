@@ -486,6 +486,16 @@ Developpement:
 > pip install PyInstaller
 > pip install PySimpleGUI
 
+Pour utiliser QT au lieu de Tk
+> pip install PySimpleGUIQt
+> pip install PySide2
+
+Puis remplacer le :
+import PySimpleGUI as gs
+par
+import PySimpleGUIQt as gs
+
+
 To create your EXE file from your program that uses PySimpleGUI, my_program.py, 
 enter this command in your Windows command prompt:
 
