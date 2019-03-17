@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['oceano.py'],
-             pathex=['c:\\git\\python\\pirata'],
+             pathex=['C:\\git\\python\\pirata'],
              binaries=[],
              datas=[],
              hiddenimports=[],

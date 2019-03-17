@@ -32,15 +32,20 @@ if args.debug:
     logging.basicConfig(
         format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
+# read config Toml file and get the physical parameter, Roscop code
 cfg = toml.load(args.config)
 keys = cfg['split']['ctd'].keys()
 
 # test arguements from sys.argv, args is never to None with default option set
 if args.gui or args.debug or len(sys.argv) == 1:
+
+    # change look and feel color scheme
+    sg.ChangeLookAndFeel('SandyBeach')
+
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],
-               [sg.Input(key='_FILE', size=(30, 0.8)), sg.FileBrowse(
-                   initial_folder='data/cnv', file_types=(("cnv files", "*.cnv"),))],
+               [sg.FilesBrowse(key='_FILE',
+                               initial_folder='data/cnv', file_types=(("cnv files", "*.cnv"),))],
                *[[sg.Checkbox(k, key=k)] for k in keys],
                [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
@@ -57,12 +62,9 @@ if args.gui or args.debug or len(sys.argv) == 1:
             del new_values[k]
     args.key = new_values.keys()
 
-    # if one file is selected, values['_FILE'] is a string and fileExtractor need a tuple
-    # (var,) convert var in one element tuple
-    if isinstance(values['_FILE'], tuple):
-        args.files = values['_FILE']
-    else:
-        args.files = (values['_FILE'],)
+    # values['_FILE'] is a string with files separated by ';' and fileExtractor need a list
+    files = values['_FILE'].split(';')
+    args.files = files
 
 else:
     # in line command mode
