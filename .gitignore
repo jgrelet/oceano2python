@@ -15,4 +15,5 @@ __pycache__/
 *.py[cod]
 *$py.class
 build/
-
+dest/
+oceano.spec

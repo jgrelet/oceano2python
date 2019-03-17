@@ -39,7 +39,7 @@ keys = cfg['split']['ctd'].keys()
 if args.gui or args.debug or len(sys.argv) == 1:
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],
-               [sg.Input(key='FILE', size=(30, 1)), sg.FileBrowse(
+               [sg.Input(key='_FILE', size=(30, 0.8)), sg.FileBrowse(
                    initial_folder='data/cnv', file_types=(("cnv files", "*.cnv"),))],
                *[[sg.Checkbox(k, key=k)] for k in keys],
                [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
@@ -50,21 +50,27 @@ if args.gui or args.debug or len(sys.argv) == 1:
     # debug return values from GUI
     logging.debug("Event: {}, Values: {}".format(event, values))
 
-    # extract the parameter selected (true)
+    # extract parameters selected (true) from dict values
+    new_values = values.copy()
+    for k in values.keys():
+        if k[0] == '_' or values[k] == False:
+            del new_values[k]
+    args.key = new_values.keys()
 
-    # if one file is selected, values['FILE'] is a string and fileExtractor need a tuple
+    # if one file is selected, values['_FILE'] is a string and fileExtractor need a tuple
     # (var,) convert var in one element tuple
-    if isinstance(values['FILE'], tuple):
-        args.files = values['FILE']
+    if isinstance(values['_FILE'], tuple):
+        args.files = values['_FILE']
     else:
-        args.files = (values['FILE'],)
+        args.files = (values['_FILE'],)
 
 else:
     # in line command mode
     args.files
 
 # check if no file selected or cancel button pressed
-logging.debug("File(s): {}, Config: {}".format(args.files, args.config))
+logging.debug("File(s): {}, Config: {}, Keys: {}".format(
+    args.files, args.config, args.key))
 if not all(args.files):
     sg.Popup("Cancel", "No filename supplied")
     raise SystemExit("Cancelling: no filename supplied")

@@ -50,7 +50,7 @@ comment        = "CTD bottles water sampling with temperature, salinity and oxyg
 	FLU2 = 14
 	FLU3 = 15
 	TUR3 = 13
-	NAVG = 24
+	NAVG = 23
 
 	[split.ctdAll]
 	ETDD = 2
@@ -74,7 +74,7 @@ comment        = "CTD bottles water sampling with temperature, salinity and oxyg
 	DEN1 = 20
 	DEN2 = 21
 	SVEL = 22
-	NAVG = 24
+	NAVG = 23
 
 	[split.btl]
 	BOTL = 1
