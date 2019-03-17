@@ -495,6 +495,8 @@ import PySimpleGUI as gs
 par
 import PySimpleGUIQt as gs
 
+Sous Ubuntu, installer python3-tk pour PySimpleGUI:
+> sudo  apt-get install python3-tk
 
 To create your EXE file from your program that uses PySimpleGUI, my_program.py, 
 enter this command in your Windows command prompt:
