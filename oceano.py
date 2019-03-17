@@ -52,7 +52,7 @@ if args.gui or args.debug or len(sys.argv) == 1:
 
     # extract the parameter selected (true)
 
-    # if one file is selected, values['_FILE'] is a string and fileExtractor need a tuple
+    # if one file is selected, values['FILE'] is a string and fileExtractor need a tuple
     # (var,) convert var in one element tuple
     if isinstance(values['FILE'], tuple):
         args.files = values['FILE']
