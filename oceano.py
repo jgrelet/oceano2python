@@ -36,28 +36,32 @@ if args.debug:
 if len(sys.argv) == 1:
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],
-               [sg.Input(size=(40, .8)), sg.FileBrowse(
-                   file_types=(("cnv files", "*.cnv"),))],
-               [sg.Checkbox('PRES'), sg.Checkbox('TEMP'), sg.Checkbox('PSAL')],
+               [sg.Input(key='_FILE', size=(40, .8)), sg.FileBrowse(
+                   initial_folder='data/cnv', file_types=(("cnv files", "*.cnv"),))],
+               [sg.Checkbox('PRES', key='_PRES'), sg.Checkbox(
+                   'TEMP', key='_TEMP'), sg.Checkbox('PSAL', key='_PSAL')],
                [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
     # create the main windows
     event, values = sg.Window('Oceano converter').Layout(layout).Read()
 
     # fname = pathlib.PurePosixPath(fname)
-    print(event, values[0])
-
+    print("Event: {}, Values: {}".format(event, values))
+    if type(values['_FILE']) is tuple:
+        args.files = values['_FILE']
+    else:
+        args.files = (values['_FILE'],)
 
 else:
     # in line command
-    values[0] = args.files
+    args.files
 
-if not values[0]:
+if not args.files:
     sg.Popup("Cancel", "No filename supplied")
     raise SystemExit("Cancelling: no filename supplied")
 # transform full pathname into list
-fe = FileExtractor([values[0]])
-print("File(s): {}, Config: {}".format(values[0], args.config))
+fe = FileExtractor(args.files)
+print("File(s): {}, Config: {}".format(args.files, args.config))
 
 cfg = toml.load(args.config)
 [n, m] = fe.firstPass()
