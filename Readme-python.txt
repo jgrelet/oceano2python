@@ -486,6 +486,10 @@ Developpement:
 > pip install PyInstaller
 > pip install PySimpleGUI
 
+
+Sous Ubuntu, installer python3-tk pour PySimpleGUI:
+> sudo  apt-get install python3-tk
+
 To create your EXE file from your program that uses PySimpleGUI, my_program.py, 
 enter this command in your Windows command prompt:
 
