@@ -32,40 +32,48 @@ if args.debug:
     logging.basicConfig(
         format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
+cfg = toml.load(args.config)
+keys = cfg['split']['ctd'].keys()
+
 # test arguements from sys.argv, args is never to None with default option set
-if len(sys.argv) == 1:
+if args.gui or args.debug or len(sys.argv) == 1:
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],
-               [sg.Input(key='_FILE', size=(40, .8)), sg.FileBrowse(
+               [sg.Input(key='FILE', size=(30, 1)), sg.FileBrowse(
                    initial_folder='data/cnv', file_types=(("cnv files", "*.cnv"),))],
-               [sg.Checkbox('PRES', key='_PRES'), sg.Checkbox(
-                   'TEMP', key='_TEMP'), sg.Checkbox('PSAL', key='_PSAL')],
+               *[[sg.Checkbox(k, key=k)] for k in keys],
                [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
     # create the main windows
     event, values = sg.Window('Oceano converter').Layout(layout).Read()
 
-    # fname = pathlib.PurePosixPath(fname)
-    print("Event: {}, Values: {}".format(event, values))
-    if type(values['_FILE']) is tuple:
-        args.files = values['_FILE']
+    # debug return values from GUI
+    logging.debug("Event: {}, Values: {}".format(event, values))
+
+    # extract the parameter selected (true)
+
+    # if one file is selected, values['_FILE'] is a string and fileExtractor need a tuple
+    # (var,) convert var in one element tuple
+    if isinstance(values['FILE'], tuple):
+        args.files = values['FILE']
     else:
-        args.files = (values['_FILE'],)
+        args.files = (values['FILE'],)
 
 else:
-    # in line command
+    # in line command mode
     args.files
 
-if not args.files:
+# check if no file selected or cancel button pressed
+logging.debug("File(s): {}, Config: {}".format(args.files, args.config))
+if not all(args.files):
     sg.Popup("Cancel", "No filename supplied")
     raise SystemExit("Cancelling: no filename supplied")
-# transform full pathname into list
+
+# fileExtractor
 fe = FileExtractor(args.files)
-print("File(s): {}, Config: {}".format(args.files, args.config))
 
 cfg = toml.load(args.config)
 [n, m] = fe.firstPass()
-print("Indices:", n, m)
 fe.secondPass(args.key, cfg, 'ctd')
 # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
 fe.disp(args.key)
