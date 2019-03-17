@@ -36,7 +36,8 @@ if args.debug:
 if len(sys.argv) == 1:
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],
-               [sg.Input(size=(40, 1)), sg.FileBrowse()],
+               [sg.Input(size=(40, .8)), sg.FileBrowse(
+                   file_types=(("cnv files", "*.cnv"),))],
                [sg.Checkbox('PRES'), sg.Checkbox('TEMP'), sg.Checkbox('PSAL')],
                [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
