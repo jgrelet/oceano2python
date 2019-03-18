@@ -17,3 +17,4 @@ __pycache__/
 build/
 dest/
 oceano.spec
+oceano.cfg
