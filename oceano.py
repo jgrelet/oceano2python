@@ -1,6 +1,6 @@
 import argparse
 import sys
-import PySimpleGUIQt as sg
+import PySimpleGUI as sg
 # import PySimpleGUIQt as sg
 import toml
 import logging
