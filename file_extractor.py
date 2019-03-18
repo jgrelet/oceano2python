@@ -36,9 +36,14 @@ class FileExtractor:
         return 'Class FileExtractor, file: %s, size = %d' % (self.files, len(self))
 
     def disp(self, keys):
+        # for key in keys:
+        #     print("{}:".format(key))
+        #     print(self.__data[key])
+        buf = ''
         for key in keys:
-            print("{}:".format(key))
-            print(self.__data[key])
+            buf += "{}:\n".format(key)
+            buf += "{}\n".format(self.__data[key])
+        return buf
 
    # first pass on file(s)
     def firstPass(self):
@@ -140,6 +145,6 @@ if __name__ == "__main__":
     [n, m] = fe.firstPass()
     print("Indices:", n, m)
     fe.secondPass(args.key, cfg, 'ctd')
-    #fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
+    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
     fe.disp(args.key)
-    #fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+    # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])

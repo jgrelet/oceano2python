@@ -533,3 +533,14 @@ assertNotAlmostEqual()
 assertRegex() 	  	
 assertNotRegex() 	
 assertRaisesRegex()
+
+Git:
+-------
+Pour mettre à jour le depot distant après l'avoir créé sur github.com
+> git pull origin master --allow-unrelated-histories
+From https://github.com/jgrelet/oceano2python
+ * branch            master     -> FETCH_HEAD
+Merge made by the 'recursive' strategy.
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 README.md

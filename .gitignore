@@ -1,5 +1,6 @@
 /.vscode
 .vscode
+.vstags
 *.exe
 *.o
 *.a
