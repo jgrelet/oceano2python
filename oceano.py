@@ -6,6 +6,9 @@ import toml
 import logging
 from file_extractor import FileExtractor
 import pathlib
+from configparser import ConfigParser
+import os
+import distutils.util as du
 
 # usage:
 # > python oceano.py data/cnv/dfr2900[1-3].cnv -d
@@ -26,6 +29,14 @@ parser.add_argument('-g', '--gui', action='store_true',
 parser.add_argument('files', nargs='*',
                     help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
 args = parser.parse_args()
+
+# initialize program configuration
+configfile_name = 'oceano.ini'
+# Open or create the configuration file as it doesn't exist yet
+config = ConfigParser()
+config.optionxform = str
+file = config.read(configfile_name)
+print(file)
 
 # set looging mode if debug
 if args.debug:
@@ -49,8 +60,20 @@ if args.gui or args.debug or len(sys.argv) == 1:
                *[[sg.Checkbox(k, key=k)] for k in keys],
                [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
+    # get a local instance windows use later with Update() method
+    window = sg.Window('Oceano converter').Layout(layout)
+
+    # test if configuration file not empty []
+    if len(file) != 0:
+        # recover the last config setting saved in yaml file and update the windows
+        keys = config.options('global')
+        for key in keys:
+            value = config.get('global', key)
+            if key[0] != '_':
+                window.FindElement(key).Update(True)
+
     # create the main windows
-    event, values = sg.Window('Oceano converter').Layout(layout).Read()
+    event, values = window.Read()
 
     # debug return values from GUI
     logging.debug("Event: {}, Values: {}".format(event, values))
@@ -71,7 +94,7 @@ else:
     args.files
 
 # check if no file selected or cancel button pressed
-logging.debug("File(s): {}, Config: {}, Keys: {}".format(
+logging.debug("File(s): {}, config: {}, Keys: {}".format(
     args.files, args.config, args.key))
 if not all(args.files):
     sg.Popup("Cancel", "No filename supplied")
@@ -86,3 +109,14 @@ fe.secondPass(args.key, cfg, 'ctd')
 # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
 fe.disp(args.key)
 # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+
+# save program configuration
+config.add_section('global')
+for key, value in values.items():
+    print(key, value)
+    config.set('global', key, str(value))
+
+# save to file
+with open(configfile_name, 'w') as cfgfile:
+    config.write(cfgfile)
+    cfgfile.close()
