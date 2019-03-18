@@ -1,0 +1,6 @@
+
+
+Pb avec Qt sous Ubuntu:
+TypeError: QFileDialog.getOpenFileNames(QWidget parent=None, str caption='', str directory='', 
+str filter='', str initialFilter='', QFileDialog.Options options=0) -> (list-of-str, str): 
+'dir' is not a valid keyword argument

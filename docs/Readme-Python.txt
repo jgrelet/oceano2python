@@ -398,6 +398,10 @@ Sous Linux Ubuntu 16.04, l'upgrade de pip failed !
 ---------------------------------------------------
 voir: https://askubuntu.com/questions/1025793/running-pip3-importerror-cannot-import-name-main
 Utiliser:
+> pip install <package> --user
+ou 
+> sudo pip install <package> 
+ou
 > python3 -m pip install --user <package>  # instead
 
 A tester:
@@ -405,15 +409,15 @@ Then I recommend adding the following aliases to your .bashrc:
 pip() ( python -m pip "$@" )
 pip3() ( python3 -m pip "$@" )
 
-> pip install toml
-Collecting toml
-  Downloading https://files.pythonhosted.org/packages/a2/12/ced7105d2de62fa7c8fb5fce92cc4ce66b57c95fb875e9318dba7f8c5db0/toml-0.10.0-py2.py3-none-any.whl
-Installing collected packages: toml
-Successfully installed toml-0.10.0
+Commande pip pour lister les paquets installes, en root et mode user:
+> pip list
+> pip list --user
+> pip show <package>
 
 Il est prefereable d'installer la derniere version Python 3.7.2
 
-Configuration du fichier setting.json de jgrelet:
+Configuration du fichier VSC setting.json de jgrelet:
+-----------------------------------------------------
 
 // Placez vos paramètres dans ce fichier pour remplacer les paramètres par défaut
 {
@@ -470,14 +474,15 @@ In setting.json:
 
 Modules Python à intaller:
 --------------------------
-Autoformatting
-----------------------
+
+Autoformatting:
 > pip install autopep8
 Installer l'extension Python-autopep8
 Cmd+P choisir autopip
 > pip install pylint
 
 Developpement:
+> pip install toml
 > pip install pynmea2
 > pip install pySerial
 > pip install netCDF4
