@@ -490,6 +490,7 @@ Developpement:
 > pip install numpy
 > pip install PyInstaller
 > pip install PySimpleGUI
+> pip install ConfigParser 
 
 Pour utiliser QT au lieu de Tk
 > pip install PySimpleGUIQt
