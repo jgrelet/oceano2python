@@ -27,9 +27,9 @@ class testConfig(unittest.TestCase):
                     'bottomDepth': 'Bottom Depth\\s*:\\s*(\\d*\\.?\\d+?)\\s*\\S*', 'operator': 'Operator\\s*:\\s*(.*)',
                     'type': 'Type\\s*:\\s*(.*)'}
         self.splitCtd = {'ETDD': 2, 'PRES': 3, 'DEPTH': 4, 'TEMP': 5, 'PSAL': 18,
-                         'DENS': 20, 'SVEL': 22, 'DOX2': 16, 'FLU2': 14, 'FLU3': 15, 'TUR3': 13, 'NAVG': 24}
+                         'DENS': 20, 'SVEL': 22, 'DOX2': 16, 'FLU2': 14, 'FLU3': 15, 'TUR3': 13, 'NAVG': 23}
         self.splitCtdAll = {'ETDD': 2, 'PRES': 3, 'DEPTH': 4, 'TE01': 5, 'TE02': 6, 'CND1': 7, 'CND2': 8, 'DOV1': 9, 'DOV2': 10, 'DVT1': 11, 'DVT2': 12,
-                            'TUR3': 13, 'FLU2': 14, 'FLU3': 15, 'DO12': 16, 'DO22': 17, 'PSA1': 18, 'PSA2': 19, 'DEN1': 20, 'DEN2': 21, 'SVEL': 22, 'NAVG': 24}
+                            'TUR3': 13, 'FLU2': 14, 'FLU3': 15, 'DO12': 16, 'DO22': 17, 'PSA1': 18, 'PSA2': 19, 'DEN1': 20, 'DEN2': 21, 'SVEL': 22, 'NAVG': 23}
         self.splitBtl = {'BOTL': 1, 'month': 2, 'day': 3, 'year': 4, 'PSA1': 5, 'PSA2': 6, 'DO11': 7,
                          'DO12': 8, 'DO21': 9, 'DO22': 10, 'Potemp090C': 11, 'Potemp190C': 12,
                          'ETDD': 13, 'PRES': 14, 'DEPH': 15, 'TE01': 16, 'TE02': 17, 'CND1': 18, 'CND2': 19,
