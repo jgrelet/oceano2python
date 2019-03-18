@@ -1,19 +1,12 @@
 #!/usr/bin/python3
 import sys
-if sys.version_info[0] >= 3:
-    import tkinter as tk
-    from tkinter import filedialog
-    from tkinter.colorchooser import askcolor
-    from tkinter import ttk
-    import tkinter.scrolledtext as tkst
-    import tkinter.font
-else:
-    import Tkinter as tk
-    import tkFileDialog
-    import ttk
-    import tkColorChooser
-    import tkFont
-    import ScrolledText
+
+import tkinter as tk
+from tkinter import filedialog
+from tkinter.colorchooser import askcolor
+from tkinter import ttk
+import tkinter.scrolledtext as tkst
+import tkinter.font
 
 import types
 import datetime
@@ -962,9 +955,10 @@ class Checkbox(Element):
     def Update(self, value=None, disabled=None, visible=None):
         if value is not None:
             try:
-                self.TKIntVar.set(value)
+                self.TKIntVar = value  
                 self.InitialState = value
-            except:
+            except Exception as e:
+                print('Failed to set TkIntVar with value: {}, exeption: {}'.format(value, str(e)))
                 pass
         if disabled == True:
             self.TKCheckbutton.configure(state='disabled')

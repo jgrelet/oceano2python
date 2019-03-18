@@ -1,6 +1,6 @@
 import argparse
 import sys
-import PySimpleGUI as sg
+import myPySimpleGUI as sg
 # import PySimpleGUIQt as sg
 import toml
 import logging
@@ -31,13 +31,13 @@ parser.add_argument('files', nargs='*',
 args = parser.parse_args()
 
 # initialize program configuration
-configfile_name = 'oceano.ini'
+configfile = 'oceano.cfg'
 # Open or create the configuration file as it doesn't exist yet
-config = ConfigParser()
+'''config = ConfigParser()
 config.optionxform = str
 file = config.read(configfile_name)
 print(file)
-
+'''
 # set looging mode if debug
 if args.debug:
     logging.basicConfig(
@@ -62,7 +62,8 @@ if args.gui or args.debug or len(sys.argv) == 1:
 
     # get a local instance windows use later with Update() method
     window = sg.Window('Oceano converter').Layout(layout)
-
+    window.LoadFromDisk(configfile)
+    '''
     # test if configuration file not empty []
     if len(file) != 0:
         # recover the last config setting saved in yaml file and update the windows
@@ -71,9 +72,10 @@ if args.gui or args.debug or len(sys.argv) == 1:
             value = config.get('global', key)
             if key[0] != '_':
                 window.FindElement(key).Update(True)
-
+    '''
     # create the main windows
     event, values = window.Read()
+    window.SaveToDisk(configfile)
 
     # debug return values from GUI
     logging.debug("Event: {}, Values: {}".format(event, values))
@@ -103,7 +105,7 @@ if not all(args.files):
 # fileExtractor
 fe = FileExtractor(args.files)
 
-cfg = toml.load(args.config)
+# cfg = toml.load(args.config)
 [n, m] = fe.firstPass()
 fe.secondPass(args.key, cfg, 'ctd')
 # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
@@ -111,7 +113,7 @@ fe.disp(args.key)
 # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
 
 # save program configuration
-config.add_section('global')
+'''config.add_section('global')
 for key, value in values.items():
     print(key, value)
     config.set('global', key, str(value))
@@ -120,3 +122,4 @@ for key, value in values.items():
 with open(configfile_name, 'w') as cfgfile:
     config.write(cfgfile)
     cfgfile.close()
+    '''
