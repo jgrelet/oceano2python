@@ -64,7 +64,7 @@ if __name__ == "__main__":
     keys = cfg['split']['ctd'].keys()
 
     # test arguements from sys.argv, args is never to None with default option set
-    if args.gui or args.debug or len(sys.argv) == 1:
+    if args.gui or len(sys.argv) == 1:
 
         # change look and feel color scheme
         sg.ChangeLookAndFeel('SandyBeach')
@@ -81,6 +81,11 @@ if __name__ == "__main__":
         window.LoadFromDisk(configfile)
         # display the main windows
         event, values = window.Read()
+
+        # if user close the windows
+        if event == None:
+            raise SystemExit("Cancelling: user exit")
+
         # save program configuration
         window.SaveToDisk(configfile)
 
@@ -107,9 +112,9 @@ if __name__ == "__main__":
         fe, n, m = process(args, cfg, 'ctd')
 
         # display result in popup GUI
-        dims = "Dimensions: {} x {}".format(m, n)
+        dims = "Dimensions: {} x {}".format(n, m)
         sg.PopupScrolled('Oceano2python', dims,
-                         fe.disp(args.key),  size=(50, 60))
+                         fe.disp(args.key),  size=(80, 40))
 
     else:
         # in command line mode (console)
