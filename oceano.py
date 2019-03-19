@@ -116,7 +116,13 @@ if __name__ == "__main__":
         sg.PopupScrolled('Oceano2python', dims,
                          fe.disp(args.key),  size=(80, 40))
 
+        # It will output to a debug window. Bug ? debug windows xas closed before exiting program
+        # print = sg.Print
+        # or
+        # print = sg.Print(size=(80,40))
+
     else:
+
         # in command line mode (console)
         fe, n, m = process(args, cfg, 'ctd')
         print("Dimensions: {} x {}".format(m, n))
