@@ -10,8 +10,27 @@ from configparser import ConfigParser
 import os
 import distutils.util as du
 
+# typeInstrument is a dictionary as key: files extension
+typeInstrument = {'CTD': 'cnv', 'XBT': 'edf', 'LADCP': 'lad', 'TSG': 'COLCOR'}
 
-def process(args, cfg, type):
+
+def process(args, cfg, ti):
+    '''
+    Extract data from ASCII files and return FileExtractor instannce and array size of extracted data
+
+    Parameters
+    ----------
+        args : ConfigParser
+        cfg : dict
+            toml instance describing the file structure to decode
+        ti : str {'CNV', 'XBT','LADCP','TSG',}
+            The typeInstrument key
+
+    Returns
+    -------
+        fe: FileExtractor
+        n, m: array size
+    '''
 
     # check if no file selected or cancel button pressed
     logging.debug("File(s): {}, config: {}, Keys: {}".format(
@@ -22,8 +41,8 @@ def process(args, cfg, type):
 
     # cfg = toml.load(args.config)
     [n, m] = fe.firstPass()
-    fe.secondPass(args.key, cfg, type)
-    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
+    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
+    fe.secondPass(args.key, cfg, ti)
     # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
     return fe, n, m
 
@@ -43,6 +62,8 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
+    parser.add_argument('-i', '--instrument', nargs='?', default=['CTD'],
+                        help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP (default: %(default)s)')
     parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
@@ -72,13 +93,22 @@ if __name__ == "__main__":
         # define GUI layout
         layout = ([[sg.Text('File(s) to read and convert')],
                    [sg.FilesBrowse(key='_FILE',
-                                   initial_folder='data/cnv', file_types=(("cnv files", "*.cnv"),))],
-                   *[[sg.Checkbox(k, key=k)] for k in keys],
+                                   tooltip='Choose one or more files',
+                                   initial_folder='data/cnv',
+                                   file_types=(("cnv files", "*.cnv"),))],
+                   [sg.Multiline(size=(30, 5),
+                                 key='_MULTI')],
+                   # replace the list by typeInstrument.keys()
+                   # TODOS
+                   [sg.InputCombo(['CTD', 'XBT', 'LADCP', 'TSG'],
+                                  key='_INSR', tooltip='Select the instrument')],
+                   * [[sg.Checkbox(k, key=k, tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
                    [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
         # create a local instance windows used to reload the saved config from file
         window = sg.Window('Oceano converter').Layout(layout)
         window.LoadFromDisk(configfile)
+        window.Finalize
         # display the main windows
         event, values = window.Read()
 
@@ -95,7 +125,7 @@ if __name__ == "__main__":
         # extract selected parameters (true) from dict values
         new_values = values.copy()
         for k in values.keys():
-            if k == '_FILE' or values[k] == False:
+            if k[0] == '_' or values[k] == False:
                 del new_values[k]
         args.key = new_values.keys()
 
@@ -122,8 +152,12 @@ if __name__ == "__main__":
         # print = sg.Print(size=(80,40))
 
     else:
-
+        # test if a or more file are selected
+        if args.files == []:
+            print('You need to specify one or more files to process !!!', end='\n\n')
+            parser.print_help(sys.stderr)
+            sys.exit(1)
         # in command line mode (console)
-        fe, n, m = process(args, cfg, 'ctd')
+        fe, n, m = process(args, cfg, 'CTD')
         print("Dimensions: {} x {}".format(m, n))
         print(fe.disp(args.key))

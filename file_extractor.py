@@ -78,7 +78,8 @@ class FileExtractor:
         n = 0
         m = 0
 
-        hash = cfg['split'][type]
+        # get the dictionary from toml block, type instrument is in lower case
+        hash = cfg['split'][type.lower()]
 
         # initialize arrays, move at the end of firstPass ?
         for key in keys:
