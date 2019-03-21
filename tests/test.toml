@@ -37,6 +37,20 @@ instrumentNumber         = "unknown"
 titleSummary   = "Water sample during PIRATA-FR29 cruise with 20 levels"
 comment        = "CTD bottles water sampling with temperature, salinity and oxygen from primary and secondary sensors"
 
+[xbt]
+
+cruisePrefix   = "fr29"
+stationPrefixLength  = 3
+header = 40
+acquisitionSoftware = "WinMK21"
+acquisitionVersion = "2.10.1" 
+processingSoftware = ""
+processingVersion = ""
+type           = "SIPPICAN"
+sn             = "01150"
+title_summary  = "XBT profiles processed during PIRATA-FR29 cruise"
+comment        = "Extract from .edf files"
+
 [split]
 	[split.ctd]
 	ETDD = 2
@@ -103,4 +117,7 @@ comment        = "CTD bottles water sampling with temperature, salinity and oxyg
 	TUR3 = 24
 	FLU2 = 25
 	
-	
+[split.xbt]
+	DEPTH = 1
+	TEMP = 2
+	SVEL = 3	

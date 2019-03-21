@@ -12,6 +12,7 @@ import distutils.util as du
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': 'cnv', 'XBT': 'edf', 'LADCP': 'lad', 'TSG': 'COLCOR'}
+ti = typeInstrument  # an alias
 
 
 def process(args, cfg, ti):
@@ -80,9 +81,10 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-    # read config Toml file and get the physical parameter, Roscop code
+    # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
-    keys = cfg['split']['ctd'].keys()
+    instru = args.instrument[0]
+    keys = cfg['split'][instru.lower()].keys()
 
     # test arguements from sys.argv, args is never to None with default option set
     if args.gui or len(sys.argv) == 1:
@@ -95,26 +97,39 @@ if __name__ == "__main__":
                    [sg.FilesBrowse(key='_FILE',
                                    tooltip='Choose one or more files',
                                    initial_folder='data/cnv',
-                                   file_types=(("cnv files", "*.cnv"),))],
+                                   file_types=(("{} files".format(ti[instru]), "*.{}".format(ti[instru])),))],
                    [sg.Multiline(size=(30, 5),
                                  key='_MULTI')],
                    # replace the list by typeInstrument.keys()
                    # TODOS
-                   [sg.InputCombo(['CTD', 'XBT', 'LADCP', 'TSG'],
+                   [sg.InputCombo(['CTD', 'XBT', 'LADCP', 'TSG'], enable_events=True,
                                   key='_INSR', tooltip='Select the instrument')],
-                   * [[sg.Checkbox(k, key=k, tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
+                   * [[sg.Checkbox(k, key=k, enable_events=True,
+                                   tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
                    [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
         # create a local instance windows used to reload the saved config from file
         window = sg.Window('Oceano converter').Layout(layout)
         window.LoadFromDisk(configfile)
         window.Finalize
-        # display the main windows
-        event, values = window.Read()
 
-        # if user close the windows
-        if event == None:
-            raise SystemExit("Cancelling: user exit")
+        # main GUI loop
+        while True:
+           # display the main windows
+            event, values = window.Read()
+            print(event, values)
+            if event is 'Cancel' or event == None:
+                raise SystemExit("Cancelling: user exit")
+
+            if event is 'Run':
+                break
+
+            sg.Button()
+            print(window.FindElement('_FILE'))
+            window.FindElement('_FILE').Update(
+                file_types=(("edf files", "*.edf"),))
+            #   ("{} files".format(values['_INSR']), "*.{}".format(values['_INSR'])),))
+            # Update(window.FindElement('_FILES'))
 
         # save program configuration
         window.SaveToDisk(configfile)
@@ -139,7 +154,7 @@ if __name__ == "__main__":
             raise SystemExit("Cancelling: no filename supplied")
 
         # process of files start here
-        fe, n, m = process(args, cfg, 'ctd')
+        fe, n, m = process(args, cfg, values['_INSR'])
 
         # display result in popup GUI
         dims = "Dimensions: {} x {}".format(n, m)
@@ -158,6 +173,6 @@ if __name__ == "__main__":
             parser.print_help(sys.stderr)
             sys.exit(1)
         # in command line mode (console)
-        fe, n, m = process(args, cfg, 'CTD')
+        fe, n, m = process(args, cfg, ti[instru])
         print("Dimensions: {} x {}".format(m, n))
         print(fe.disp(args.key))
