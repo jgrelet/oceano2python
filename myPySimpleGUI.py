@@ -1628,7 +1628,7 @@ class Button(Element):
 
         return
 
-    def Update(self, text=None, button_color=(None, None), disabled=None, image_data=None, image_filename=None, visible=None, image_subsample=None, image_size=None, file_types=None):
+    def Update(self, text=None, button_color=(None, None), disabled=None, image_data=None, image_filename=None, visible=None, image_subsample=None, image_size=None, file_types=None, initial_folder=None):
         try:
             if text is not None:
                 self.TKButton.configure(text=text)
@@ -1670,6 +1670,8 @@ class Button(Element):
             self.TKButton.pack()
         if file_types is not None:
             self.FileTypes = file_types
+        if initial_folder is not None:
+            self.FileTypes = initial_folder
 
     def GetText(self):
         return self.ButtonText

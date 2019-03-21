@@ -94,19 +94,21 @@ if __name__ == "__main__":
 
         # define GUI layout
         layout = ([[sg.Text('File(s) to read and convert')],
-                   [sg.FilesBrowse(key='_FILE',
+                   [sg.Multiline(size=(40, 5), key='_IN_'),
+                    sg.Input(key='_HIDDEN_', visible=False,
+                             enable_events=True),
+                    sg.FilesBrowse(key='_HIDDEN_',
                                    tooltip='Choose one or more files',
-                                   initial_folder='data/cnv',
+                                   initial_folder='data/{}'.format(ti[instru]),
                                    file_types=(("{} files".format(ti[instru]), "*.{}".format(ti[instru])),))],
-                   [sg.Multiline(size=(30, 5),
-                                 key='_MULTI')],
-                   # replace the list by typeInstrument.keys()
-                   # TODOS
-                   [sg.InputCombo(['CTD', 'XBT', 'LADCP', 'TSG'], enable_events=True,
-                                  key='_INSR', tooltip='Select the instrument')],
-                   * [[sg.Checkbox(k, key=k, enable_events=True,
+                   [sg.Input(key='_COMBO_', visible=False,
+                             enable_events=True),
+                    sg.InputCombo(['CTD', 'XBT', 'LADCP', 'TSG'],
+                                  key='_COMBO_', tooltip='Select the instrument')],
+                   * [[sg.Checkbox(k, key=k,
                                    tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
-                   [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
+                   [sg.OK(), sg.CloseButton('Cancel')]])
+        # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
         # create a local instance windows used to reload the saved config from file
         window = sg.Window('Oceano converter').Layout(layout)
@@ -118,18 +120,22 @@ if __name__ == "__main__":
            # display the main windows
             event, values = window.Read()
             print(event, values)
+
             if event is 'Cancel' or event == None:
                 raise SystemExit("Cancelling: user exit")
 
-            if event is 'Run':
+            if event is 'OK':
                 break
 
-            sg.Button()
-            print(window.FindElement('_FILE'))
-            window.FindElement('_FILE').Update(
-                file_types=(("edf files", "*.edf"),))
-            #   ("{} files".format(values['_INSR']), "*.{}".format(values['_INSR'])),))
-            # Update(window.FindElement('_FILES'))
+            if event is '_COMBO_':
+                window.FindElement('_HIDDEN_').File_types = (
+                    ("{} files".format(ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
+                # initial_folder='data/{}'.format(ti[values['_COMBO_']]))
+                # Update(window.FindElement('_FILES'))
+
+            if event is '_HIDDEN_':
+                window.Element('_IN_').Update(
+                    values['_HIDDEN_'].split(';'))
 
         # save program configuration
         window.SaveToDisk(configfile)
@@ -144,8 +150,8 @@ if __name__ == "__main__":
                 del new_values[k]
         args.key = new_values.keys()
 
-        # values['_FILE'] is a string with files separated by ';' and fileExtractor need a list
-        files = values['_FILE'].split(';')
+        # values['_HIDDEN_'] is a string with files separated by ';' and fileExtractor need a list
+        files = values['_HIDDEN_'].split(';')
         args.files = files
 
         # test if a or more file are selected
@@ -154,7 +160,7 @@ if __name__ == "__main__":
             raise SystemExit("Cancelling: no filename supplied")
 
         # process of files start here
-        fe, n, m = process(args, cfg, values['_INSR'])
+        fe, n, m = process(args, cfg, values['_COMBO_'])
 
         # display result in popup GUI
         dims = "Dimensions: {} x {}".format(n, m)
