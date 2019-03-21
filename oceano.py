@@ -130,8 +130,6 @@ if __name__ == "__main__":
             if event is '_COMBO_':
                 window.FindElement('_HIDDEN_').File_types = (
                     ("{} files".format(ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
-                # initial_folder='data/{}'.format(ti[values['_COMBO_']]))
-                # Update(window.FindElement('_FILES'))
 
             if event is '_HIDDEN_':
                 window.Element('_IN_').Update(
