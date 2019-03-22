@@ -61,7 +61,8 @@ if __name__ == "__main__":
         usage='\npython oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d\n'
         'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
         'python oceano.py data/CTDcnv/dfr29*.cnv -d\n'
-        'python oceano.py ../data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n',
+        'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
+        "python oceano.py data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT -d",
         epilog='J. Grelet IRD US191 - March 2019')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
@@ -105,7 +106,7 @@ if __name__ == "__main__":
                                    tooltip='Choose one or more files',
                                    initial_folder='data/{}'.format(ti[device]),
                                    file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
-                   [sg.Combo(ti.keys(), enable_events=True,
+                   [sg.Combo(list(ti.keys()), enable_events=True,
                              key='_COMBO_', tooltip='Select the instrument')],
                    * [[sg.Checkbox(k, key=k,
                                    tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],

@@ -19,24 +19,26 @@ class FileExtractor:
     ----------
     fname : file, str, pathlib.Path, list of str
         File, filename, or list to read.
+    separator : str, default None
     skip_header : int, optional
         The number of lines to skip at the beginning of the file.
     '''
 
-    # constructor with values by default
-    def __init__(self, fname, skip_header=0):
+    # constructor with values by defaul
+    def __init__(self, fname, separator=None, skip_header=0):
         # attibutes
         # public:
         self.fname = fname
         self.n = 0
         self.m = 0
-        # replace this constante with roscop fill value
-        self.FillValue = 1e36
 
         # private:
         self.__skip_header = skip_header
+        self.__separator = separator
         self.__header = {}
         self.__data = {}
+        # replace this constante with roscop fill value
+        self.__FillValue = 1e36
     # overloading operators
 
     def __str__(self):
@@ -104,6 +106,8 @@ class FileExtractor:
         m = 0
 
         # set skipHeader is declared in toml section, 0 by default
+        if 'separator' in cfg[device.lower()]:
+            self.__separator = cfg[device.lower()]['separator']
         if 'skipHeader' in cfg[device.lower()]:
             self.__skip_header = cfg[device.lower()]['skipHeader']
         logging.debug(self.__skip_header)
@@ -115,7 +119,7 @@ class FileExtractor:
         for key in keys:
             # mult by __fillValue next
             # the shape parameter has to be an int or sequence of ints
-            self.__data[key] = np.ones((self.n, self.m)) * self.FillValue
+            self.__data[key] = np.ones((self.n, self.m)) * self.__FillValue
 
         for file in self.fname:
             with fileinput.input(
@@ -125,8 +129,8 @@ class FileExtractor:
                         continue
                     if line[0] == '#' or line[0] == '*':
                         continue
-                    # split the line
-                    p = line.split()
+                    # split the line, remove leading and trailing space before
+                    p = line.strip().split(self.__separator)
 
                     str = ' '
                     # fill array with extracted value of line for eack key (physical parameter)
@@ -135,7 +139,6 @@ class FileExtractor:
                         # debug info
                         str += "{:>{width}}".format(
                             p[hash[key]], width=8)
-                        logging.debug(str)
                     logging.debug(str)
 
                     # increment m indice (the line number)
