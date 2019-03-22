@@ -31,13 +31,19 @@ D={}
 D={'un': 1, "deux: 2}
 D['un']
 1
-D.has_key('deux')
+'deux' in D
 True
 D.keys()
 ['un', 'deux']
 D.values()
 [1,2]
 
+len(D)
+    Return the number of items in the dictionary d.
+
+d[key]
+    Return the item of d with key key. Raises a KeyError if key is not in the map.
+    
 d[key] = value
     Set d[key] to value.
 

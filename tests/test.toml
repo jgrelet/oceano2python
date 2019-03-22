@@ -41,7 +41,7 @@ comment        = "CTD bottles water sampling with temperature, salinity and oxyg
 
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
-header = 40
+skipHeader = 40
 acquisitionSoftware = "WinMK21"
 acquisitionVersion = "2.10.1" 
 processingSoftware = ""

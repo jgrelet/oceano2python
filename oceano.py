@@ -51,13 +51,17 @@ def process(args, cfg, ti):
 if __name__ == "__main__":
     '''
     usage:
-    > python oceano.py data/cnv/dfr2900[1-3].cnv -d
-    > python oceano.py data/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
-    > python oceano.py data/cnv/dfr29*.cnv -d
+    > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -d
+    > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
+    > python oceano.py data/CTD/cnv/dfr29*.cnv -d
     '''
     parser = argparse.ArgumentParser(
         description='This program read multiple ASCII file, extract physical parameter \
-                following ROSCOP codification at the given column, fill arrays, write header file',
+                following ROSCOP codification at the given column, fill arrays, write header file ',
+        usage='\npython oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d\n'
+        'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
+        'python oceano.py data/CTDcnv/dfr29*.cnv -d\n'
+        'python oceano.py data/XBT/T7_000*.cnv -i XBT -k DEPTH TEMP SVEL\n',
         epilog='J. Grelet IRD US191 - March 2019')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
@@ -83,8 +87,9 @@ if __name__ == "__main__":
 
     # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
-    instru = args.instrument[0]
-    keys = cfg['split'][instru.lower()].keys()
+    device = str(args.instrument[0])  # convert one element list to str
+    print(device)
+    keys = cfg['split'][device.lower()].keys()
 
     # test arguements from sys.argv, args is never to None with default option set
     if args.gui or len(sys.argv) == 1:
@@ -99,11 +104,9 @@ if __name__ == "__main__":
                              enable_events=True),
                     sg.FilesBrowse(key='_HIDDEN_',
                                    tooltip='Choose one or more files',
-                                   initial_folder='data/{}'.format(ti[instru]),
-                                   file_types=(("{} files".format(ti[instru]), "*.{}".format(ti[instru])),))],
-                   [sg.Input(key='_COMBO_', visible=False,
-                             enable_events=True),
-                    sg.Combo(['CTD', 'XBT', 'LADCP', 'TSG'],
+                                   initial_folder='data/{}'.format(ti[device]),
+                                   file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
+                   [sg.Combo(ti.keys(), enable_events=True,
                              key='_COMBO_', tooltip='Select the instrument')],
                    * [[sg.Checkbox(k, key=k,
                                    tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
@@ -119,7 +122,7 @@ if __name__ == "__main__":
         while True:
            # display the main windows
             event, values = window.Read()
-            print(event, values)
+            # print(event, values)
 
             if event is 'Cancel' or event == None:
                 raise SystemExit("Cancelling: user exit")
@@ -128,8 +131,14 @@ if __name__ == "__main__":
                 break
 
             if event is '_COMBO_':
-                window.FindElement('_HIDDEN_').File_types = (
-                    ("{} files".format(ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
+                e = window.Rows[1][2]
+                # print(e.FileTypes)
+                e.FileTypes = (("{} files".format(
+                    ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
+                window.Finalize
+                # print(e.FileTypes)
+                # window.FindElement('_HIDDEN_').File_types = (
+                #    ("{} files".format(ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
 
             if event is '_HIDDEN_':
                 window.Element('_IN_').Update(
@@ -177,6 +186,6 @@ if __name__ == "__main__":
             parser.print_help(sys.stderr)
             sys.exit(1)
         # in command line mode (console)
-        fe, n, m = process(args, cfg, ti[instru])
+        fe, n, m = process(args, cfg, device)
         print("Dimensions: {} x {}".format(m, n))
         print(fe.disp(args.key))
