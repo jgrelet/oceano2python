@@ -88,7 +88,6 @@ if __name__ == "__main__":
     # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
     device = str(args.instrument)  # convert one element list to str
-    print(device)
     keys = cfg['split'][device.lower()].keys()
 
     # test arguements from sys.argv, args is never to None with default option set

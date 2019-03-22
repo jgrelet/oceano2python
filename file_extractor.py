@@ -34,7 +34,7 @@ class FileExtractor:
         self.FillValue = 1e36
 
         # private:
-        self.skip_header = skip_header
+        self.__skip_header = skip_header
         self.__header = {}
         self.__data = {}
     # overloading operators
@@ -103,13 +103,10 @@ class FileExtractor:
         n = 0
         m = 0
 
-        #print(device, cfg[device.lower()])
-        print(device)
-        # set skip_header is declared in toml section, 0 by default
-        if 'skikHeader' in cfg[device.lower()]:
-            self.skip_header = cfg[device.lower()]['skipHeader']
-        #
-        logging.debug(self.skip_header)
+        # set skipHeader is declared in toml section, 0 by default
+        if 'skipHeader' in cfg[device.lower()]:
+            self.__skip_header = cfg[device.lower()]['skipHeader']
+        logging.debug(self.__skip_header)
 
         # get the dictionary from toml block, device must be is in lower case
         hash = cfg['split'][device.lower()]
@@ -124,7 +121,7 @@ class FileExtractor:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 for line in f:
-                    if f.filelineno() < self.skip_header + 1:
+                    if f.filelineno() < self.__skip_header + 1:
                         continue
                     if line[0] == '#' or line[0] == '*':
                         continue
@@ -138,6 +135,7 @@ class FileExtractor:
                         # debug info
                         str += "{:>{width}}".format(
                             p[hash[key]], width=8)
+                        logging.debug(str)
                     logging.debug(str)
 
                     # increment m indice (the line number)
