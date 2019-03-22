@@ -61,13 +61,13 @@ if __name__ == "__main__":
         usage='\npython oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d\n'
         'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
         'python oceano.py data/CTDcnv/dfr29*.cnv -d\n'
-        'python oceano.py data/XBT/T7_000*.cnv -i XBT -k DEPTH TEMP SVEL\n',
+        'python oceano.py ../data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n',
         epilog='J. Grelet IRD US191 - March 2019')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
-    parser.add_argument('-i', '--instrument', nargs='?', default=['CTD'],
+    parser.add_argument('-i', '--instrument', nargs='?', default='CTD',
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP (default: %(default)s)')
     parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
-    device = str(args.instrument[0])  # convert one element list to str
+    device = str(args.instrument)  # convert one element list to str
     print(device)
     keys = cfg['split'][device.lower()].keys()
 
