@@ -510,8 +510,22 @@ enter this command in your Windows command prompt:
 > pyinstaller -wF my_program.py
 
 
-Tests avec unittest:
+Tests unitaires avec unittest:
 --------------------
+Configuration VSC, setting.json:
+Modifier les arguments suivant l'application.
+
+  "python.unitTest.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.unittestEnabled": true,
+
 Voir: https://docs.python.org/3.7/library/unittest.html?highlight=unittest
 
 Les fichiers de tests sont sous tests
