@@ -103,8 +103,8 @@ if __name__ == "__main__":
                                    file_types=(("{} files".format(ti[instru]), "*.{}".format(ti[instru])),))],
                    [sg.Input(key='_COMBO_', visible=False,
                              enable_events=True),
-                    sg.InputCombo(['CTD', 'XBT', 'LADCP', 'TSG'],
-                                  key='_COMBO_', tooltip='Select the instrument')],
+                    sg.Combo(['CTD', 'XBT', 'LADCP', 'TSG'],
+                             key='_COMBO_', tooltip='Select the instrument')],
                    * [[sg.Checkbox(k, key=k,
                                    tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
                    [sg.OK(), sg.CloseButton('Cancel')]])
