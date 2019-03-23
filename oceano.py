@@ -27,6 +27,8 @@ def processArgs():
         epilog='J. Grelet IRD US191 - March 2019')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
+    parser.add_argument('--demo', nargs='?', default='CTD',
+                        help='specify the commande line for instrument, eg CTD, XBT, TSG, LADCP (default: %(default)s)')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
     parser.add_argument('-i', '--instrument', nargs='?', default='CTD',
