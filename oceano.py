@@ -139,6 +139,7 @@ if __name__ == "__main__":
 
         # setup the GUI windows Layout
         window = defineGUI()
+        device = window.FindElement('_COMBO_').DefaultValue
         updateFilesBrowseCombo(ti[device])
 
         # main GUI loop
