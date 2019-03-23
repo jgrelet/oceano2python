@@ -11,7 +11,8 @@ import os
 import distutils.util as du
 
 # typeInstrument is a dictionary as key: files extension
-typeInstrument = {'CTD': 'CNV', 'XBT': 'EDF', 'LADCP': 'LAD', 'TSG': 'COLCOR'}
+typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
+    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': 'COLCOR'}
 ti = typeInstrument  # an alias
 
 
@@ -53,11 +54,8 @@ def defineGUI():
                          enable_events=True),
                 sg.FilesBrowse(key='_HIDDEN_',
                                tooltip='Choose one or more files',
-                               initial_folder='data/{}'.format(
-                                   ti[device].lower()),
-                               )],
-               # file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
-               [sg.Combo(list(ti.keys()), enable_events=True,
+                               initial_folder='data/{}'.format(ti[device][0]))],
+               [sg.Combo(list(ti.keys()), enable_events=True, size=(8, 1),
                          key='_COMBO_', tooltip='Select the instrument')],
                * [[sg.Checkbox(k, key=k,
                                tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
@@ -71,11 +69,11 @@ def defineGUI():
     return window
 
 
-def updateFilesBrowseCombo(extention):
-    e = window.Rows[1][2]
-    e.FileTypes = (("{} files".format(
-        extention), "*.{}".format(extention)), ("{} files".format(
-            extention.lower()), "*.{}".format(extention.lower())))
+def updateFilesBrowseCombo(extentions):
+    e = window.Rows[1][2]   # hardcoded
+    e.FileTypes = []      # init to empty list
+    for ext in extentions:
+        e.FileTypes.append(("{} files".format(ext), "*.{}".format(ext)))
     window.Finalize
 
 

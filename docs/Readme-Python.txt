@@ -27,43 +27,37 @@ TypeError: 'tuple' object does not support item assignment
 Dictionnaires:
 --------------
 Tables non ordonnées de référence d'objets
-D={}
-D={'un': 1, "deux: 2}
-D['un']
+>>> D={}
+>>> D={'un': 1, 'deux': 2}
+>>> D['un']
 1
-'deux' in D
+>>> 'deux' in D
 True
-D.keys()
-['un', 'deux']
-D.values()
-[1,2]
-
-len(D)
-    Return the number of items in the dictionary d.
-
-d[key]
-    Return the item of d with key key. Raises a KeyError if key is not in the map.
+>>> D.keys()
+dict_keys(['un', 'deux'])
+>>> list(D.keys())
+['un', 'deux')]
+>>> D.values()
+dict_values([1, 2])
+>>> list(D.values())
+[1, 2]
+>>> len(D)      Return the number of items in the dictionary d.
+2
+>>> d[key]      Return the item of d with key key. Raises a KeyError if key is not in the map.
     
-d[key] = value
-    Set d[key] to value.
+>>> d[key] = value        Set d[key] to value.
 
-del d[key]
-    Remove d[key] from d. Raises a KeyError if key is not in the map.
+>>> del d[key]            Remove d[key] from d. Raises a KeyError if key is not in the map.
 
-key in d
-    Return True if d has a key key, else False.
+>>> key in d              Return True if d has a key key, else False.
 
-key not in d
-    Equivalent to not key in d.
+>>> key not in d          Equivalent to not key in d.
 
-iter(d)
-    Return an iterator over the keys of the dictionary. This is a shortcut for iter(d.keys()).
+>>> iter(d)               Return an iterator over the keys of the dictionary. This is a shortcut for iter(d.keys()).
 
-clear()
-    Remove all items from the dictionary.
+>>> d.clear()             Remove all items from the dictionary.
 
-copy()
-    Return a shallow copy of the dictionary.
+>>> d.copy()              Return a shallow copy of the dictionary.
 
 classmethod fromkeys(seq[, value])
     Create a new dictionary with keys from seq and values set to value.
@@ -91,10 +85,16 @@ setdefault(key[, default])
 
 update([other])
     Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
-    update() accepts either another dictionary object or an iterable of key/value pairs (as tuples or other iterables of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: d.update(red=1, blue=2).
+    update() accepts either another dictionary object or an iterable of key/value pairs (as tuples or other iterables
+    of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: 
+    d.update(red=1, blue=2).
 
 values()
     Return a new view of the dictionary’s values. See the documentation of view objects.
+
+The objects returned from dict.keys(), dict.values(), and dict.items() are called dictionary views. 
+They provide a dynamic view on the dictionary’s entries, which means that when the dictionary changes, 
+the view reflects these changes. To force the dictionary view to become a full list use list(dictview). 
 
 
 Fonctions spéciales:
@@ -218,6 +218,11 @@ Hello
 
 Les méthodes non liées requièrent un objet explicite
 
+dictionary:
+-----------
+An associative array, where arbitrary keys are mapped to values. 
+The keys can be any object with __hash__() and __eq__() methods. Called a hash in Perl.
+
 Introspection:
 --------------
 Obtenir la liste des attribbuts d'une classe sous forme de dictionnaire:
@@ -269,6 +274,20 @@ avec l'exemple precedent:
 setattr(self, s, {})
 getattr(self, s)[k1] = v1
 self.s[key].value             
+
+Decorator:
+-----------
+A function returning another function, usually applied as a function transformation using the @wrapper syntax. 
+Common examples for decorators are classmethod() and staticmethod().
+The decorator syntax is merely syntactic sugar, the following two function definitions are semantically equivalent:
+
+def f(...):
+    ...
+f = staticmethod(f)
+
+@staticmethod
+def f(...):
+    ...
 
 
 Ipyton:
