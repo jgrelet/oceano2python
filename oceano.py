@@ -11,7 +11,7 @@ import os
 import distutils.util as du
 
 # typeInstrument is a dictionary as key: files extension
-typeInstrument = {'CTD': 'cnv', 'XBT': 'edf', 'LADCP': 'lad', 'TSG': 'COLCOR'}
+typeInstrument = {'CTD': 'CNV', 'XBT': 'EDF', 'LADCP': 'LAD', 'TSG': 'COLCOR'}
 ti = typeInstrument  # an alias
 
 
@@ -51,8 +51,10 @@ def defineGUI():
                          enable_events=True),
                 sg.FilesBrowse(key='_HIDDEN_',
                                tooltip='Choose one or more files',
-                               initial_folder='data/{}'.format(ti[device]),
-                               file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
+                               initial_folder='data/{}'.format(
+                                   ti[device].lower()),
+                               )],
+               # file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
                [sg.Combo(list(ti.keys()), enable_events=True,
                          key='_COMBO_', tooltip='Select the instrument')],
                * [[sg.Checkbox(k, key=k,
@@ -65,6 +67,14 @@ def defineGUI():
     window.LoadFromDisk(configfile)
     window.Finalize
     return window
+
+
+def updateFilesBrowseCombo(extention):
+    e = window.Rows[1][2]
+    e.FileTypes = (("{} files".format(
+        extention), "*.{}".format(extention)), ("{} files".format(
+            extention.lower()), "*.{}".format(extention.lower())))
+    window.Finalize
 
 
 def process(args, cfg, ti):
@@ -127,7 +137,9 @@ if __name__ == "__main__":
     # test arguements from sys.argv, args is never to None with default option set
     if args.gui or len(sys.argv) == 1:
 
+        # setup the GUI windows Layout
         window = defineGUI()
+        updateFilesBrowseCombo(ti[device])
 
         # main GUI loop
         while True:
@@ -144,10 +156,7 @@ if __name__ == "__main__":
             if event is '_COMBO_':
                 # you have to go into the bowels of the pygi code, to get the instance of the Combo
                 # by the line and column number of the window to update its "fileType" property.
-                e = window.Rows[1][2]
-                e.FileTypes = (("{} files".format(
-                    ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
-                window.Finalize
+                updateFilesBrowseCombo(ti[values['_COMBO_']])
 
             # update the Multilines instance from FilesBrowse return
             if event is '_HIDDEN_':
