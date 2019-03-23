@@ -15,6 +15,58 @@ typeInstrument = {'CTD': 'cnv', 'XBT': 'edf', 'LADCP': 'lad', 'TSG': 'COLCOR'}
 ti = typeInstrument  # an alias
 
 
+def processArgs():
+    parser = argparse.ArgumentParser(
+        description='This program read multiple ASCII file, extract physical parameter \
+                    following ROSCOP codification at the given column, fill arrays, write header file ',
+        usage='\npython oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d\n'
+        'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
+        'python oceano.py data/CTDcnv/dfr29*.cnv -d\n'
+        'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
+        "python oceano.py data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT",
+        epilog='J. Grelet IRD US191 - March 2019')
+    parser.add_argument('-d', '--debug', help='display debug informations',
+                        action='store_true')
+    parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
+                        default='tests/test.toml')
+    parser.add_argument('-i', '--instrument', nargs='?', default='CTD',
+                        help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP (default: %(default)s)')
+    parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
+                        help='display dictionary for key(s), (default: %(default)s)')
+    parser.add_argument('-g', '--gui', action='store_true',
+                        help='use GUI interface')
+    parser.add_argument('files', nargs='*',
+                        help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
+    return parser
+
+
+def defineGUI():
+    # change look and feel color scheme
+    sg.ChangeLookAndFeel('SandyBeach')
+
+    # define GUI layout
+    layout = ([[sg.Text('File(s) to read and convert')],
+               [sg.Multiline(size=(40, 5), key='_IN_'),
+                sg.Input(key='_HIDDEN_', visible=False,
+                         enable_events=True),
+                sg.FilesBrowse(key='_HIDDEN_',
+                               tooltip='Choose one or more files',
+                               initial_folder='data/{}'.format(ti[device]),
+                               file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
+               [sg.Combo(list(ti.keys()), enable_events=True,
+                         key='_COMBO_', tooltip='Select the instrument')],
+               * [[sg.Checkbox(k, key=k,
+                               tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
+               [sg.OK(), sg.CloseButton('Cancel')]])
+    # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
+
+    # create a local instance windows used to reload the saved config from file
+    window = sg.Window('Oceano converter').Layout(layout)
+    window.LoadFromDisk(configfile)
+    window.Finalize
+    return window
+
+
 def process(args, cfg, ti):
     '''
     Extract data from ASCII files and return FileExtractor instannce and array size of extracted data
@@ -55,27 +107,8 @@ if __name__ == "__main__":
     > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
     > python oceano.py data/CTD/cnv/dfr29*.cnv -d
     '''
-    parser = argparse.ArgumentParser(
-        description='This program read multiple ASCII file, extract physical parameter \
-                following ROSCOP codification at the given column, fill arrays, write header file ',
-        usage='\npython oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d\n'
-        'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
-        'python oceano.py data/CTDcnv/dfr29*.cnv -d\n'
-        'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
-        "python oceano.py data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT -d",
-        epilog='J. Grelet IRD US191 - March 2019')
-    parser.add_argument('-d', '--debug', help='display debug informations',
-                        action='store_true')
-    parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
-                        default='tests/test.toml')
-    parser.add_argument('-i', '--instrument', nargs='?', default='CTD',
-                        help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP (default: %(default)s)')
-    parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
-                        help='display dictionary for key(s), (default: %(default)s)')
-    parser.add_argument('-g', '--gui', action='store_true',
-                        help='use GUI interface')
-    parser.add_argument('files', nargs='*',
-                        help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
+    # recover and process line arguments
+    parser = processArgs()
     args = parser.parse_args()
 
     # initialize filename use to save GUI configuration
@@ -94,29 +127,7 @@ if __name__ == "__main__":
     # test arguements from sys.argv, args is never to None with default option set
     if args.gui or len(sys.argv) == 1:
 
-        # change look and feel color scheme
-        sg.ChangeLookAndFeel('SandyBeach')
-
-        # define GUI layout
-        layout = ([[sg.Text('File(s) to read and convert')],
-                   [sg.Multiline(size=(40, 5), key='_IN_'),
-                    sg.Input(key='_HIDDEN_', visible=False,
-                             enable_events=True),
-                    sg.FilesBrowse(key='_HIDDEN_',
-                                   tooltip='Choose one or more files',
-                                   initial_folder='data/{}'.format(ti[device]),
-                                   file_types=(("{} files".format(ti[device]), "*.{}".format(ti[device])),))],
-                   [sg.Combo(list(ti.keys()), enable_events=True,
-                             key='_COMBO_', tooltip='Select the instrument')],
-                   * [[sg.Checkbox(k, key=k,
-                                   tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
-                   [sg.OK(), sg.CloseButton('Cancel')]])
-        # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
-
-        # create a local instance windows used to reload the saved config from file
-        window = sg.Window('Oceano converter').Layout(layout)
-        window.LoadFromDisk(configfile)
-        window.Finalize
+        window = defineGUI()
 
         # main GUI loop
         while True:
@@ -127,19 +138,18 @@ if __name__ == "__main__":
             if event is 'Cancel' or event == None:
                 raise SystemExit("Cancelling: user exit")
 
-            if event is 'OK':
+            if event is 'OK':  # end of initialization, process data now
                 break
 
             if event is '_COMBO_':
+                # you have to go into the bowels of the pygi code, to get the instance of the Combo
+                # by the line and column number of the window to update its "fileType" property.
                 e = window.Rows[1][2]
-                # print(e.FileTypes)
                 e.FileTypes = (("{} files".format(
                     ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
                 window.Finalize
-                # print(e.FileTypes)
-                # window.FindElement('_HIDDEN_').File_types = (
-                #    ("{} files".format(ti[values['_COMBO_']]), "*.{}".format(ti[values['_COMBO_']])),)
 
+            # update the Multilines instance from FilesBrowse return
             if event is '_HIDDEN_':
                 window.Element('_IN_').Update(
                     values['_HIDDEN_'].split(';'))
