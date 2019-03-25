@@ -44,8 +44,22 @@ def processArgs():
 
 
 def defineGUI():
+
+    # get all devices
+    devices = list(ti.keys())
+
     # change look and feel color scheme
     sg.ChangeLookAndFeel('SandyBeach')
+    frameLayout = {}
+    deviceLayout = []
+
+    # define a frame layout for each instrument (device)
+    for d in devices:
+        keys = cfg['split'][device.lower()].keys()
+        frameLayout[d] = [* [[sg.Checkbox(k, key=k,
+                                          tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys]]
+    for d in devices:
+        deviceLayout.append(sg.Frame(d, frameLayout[d]))
 
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],
@@ -57,8 +71,7 @@ def defineGUI():
                                initial_folder='data/{}'.format(ti[device][0]))],
                [sg.Combo(list(ti.keys()), enable_events=True, size=(8, 1),
                          key='_COMBO_', tooltip='Select the instrument')],
-               * [[sg.Checkbox(k, key=k,
-                               tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys],
+               [deviceLayout],
                [sg.OK(), sg.CloseButton('Cancel')]])
     # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
@@ -131,6 +144,7 @@ if __name__ == "__main__":
 
     # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
+    # this the select device from command line !
     device = str(args.instrument)  # convert one element list to str
     keys = cfg['split'][device.lower()].keys()
 

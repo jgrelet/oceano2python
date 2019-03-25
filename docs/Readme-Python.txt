@@ -13,7 +13,31 @@ L[:-1]
 [1, 2, 3]
 L[::-1]
 [4, 3, 2, 1]
-L.method()  avec method = append, sort,index,reverse
+L.method()  avec method = append, sort,index,reverse, extend
+
+We see that extend() is semantically clearer, and that it can run much faster than append(), 
+when you intend to append each element in an iterable to a list.
+If you only have a single element (not in an iterable) to add to the list, use append.
+
+The following two snippets are semantically equivalent:
+for item in iterator:
+    a_list.append(item)
+and
+a_list.extend(iterator)
+
+The latter may be faster as the loop is implemented in C.
+
+List comprehensions:
+------------------------------------------
+new_list = [expression for_loop_one_or_more condtions]
+
+numbers = [1, 2, 3, 4]
+squares = [n**2 for n in numbers]
+print(squares) # Output: [1, 4, 9, 16]
+
+list_a = [1, 2, 3]
+square_cube_list = [ [a**2, a**3] for a in list_a]
+print(square_cube_list) # Output: [[1, 1], [4, 8], [9, 27]]
 
 Tuples:
 -------
