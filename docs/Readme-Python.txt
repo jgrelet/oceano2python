@@ -544,6 +544,9 @@ Developpement:
 Pour utiliser QT au lieu de Tk
 > pip install PySimpleGUIQt
 > pip install PySide2
+> pip install PyAstronomy
+> pip install sciPy
+> pip install basemap
 
 Puis remplacer le :
 import PySimpleGUI as gs

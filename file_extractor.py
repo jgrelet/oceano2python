@@ -69,7 +69,7 @@ class FileExtractor:
 
         for file in self.fname:
             with fileinput.input(
-                    file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
+                    file.name, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 filesRead += 1
                 for line in f:
                     if line[0] == '#' or line[0] == '*':
@@ -123,7 +123,7 @@ class FileExtractor:
 
         for file in self.fname:
             with fileinput.input(
-                    file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
+                    file.name, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 for line in f:
                     if f.filelineno() < self.__skip_header + 1:
                         continue
