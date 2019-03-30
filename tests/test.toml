@@ -159,3 +159,9 @@ comment        = "Extract from .lad files"
 	DEPTH = 0
 	EWCT = 1
 	NSCT = 2
+
+[split.tsg]
+	DEPTH = 0
+	SSJT = 1
+	SSTP = 2
+	SSPS = 3
