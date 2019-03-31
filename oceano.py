@@ -9,6 +9,7 @@ import pathlib
 from configparser import ConfigParser
 import os
 import distutils.util as du
+import netcdf
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
@@ -24,7 +25,7 @@ def processArgs():
                     following ROSCOP codification at the given column, fill arrays, write header file ',
         usage='\npython oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d\n'
         'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
-        'python oceano.py data/CTDcnv/dfr29*.cnv -i CTD -d\n'
+        'python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -d\n'
         'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
         'python oceano.py data/LADCP/*.lad - i LADCP - k DEPTH EWCT NSCT\n'
         ' \n',
@@ -266,3 +267,4 @@ if __name__ == "__main__":
         fe, n, m = process(args, cfg, device)
         print("Dimensions: {} x {}".format(m, n))
         print(fe.disp(args.key))
+        netcdf.writeNetCDF( 'test.nc', fe)
