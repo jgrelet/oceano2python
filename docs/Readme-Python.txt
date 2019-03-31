@@ -519,8 +519,12 @@ In setting.json:
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
     "python.autoComplete.addBrackets": true,
-    "editor.formatOnPaste": true
+    "editor.formatOnPaste": true,
 
+    // whitelist numpy to remove lint errors
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=netCDF4"
+    ]
 Modules Python à intaller:
 --------------------------
 
