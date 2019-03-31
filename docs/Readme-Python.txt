@@ -13,7 +13,31 @@ L[:-1]
 [1, 2, 3]
 L[::-1]
 [4, 3, 2, 1]
-L.method()  avec method = append, sort,index,reverse
+L.method()  avec method = append, sort,index,reverse, extend
+
+We see that extend() is semantically clearer, and that it can run much faster than append(), 
+when you intend to append each element in an iterable to a list.
+If you only have a single element (not in an iterable) to add to the list, use append.
+
+The following two snippets are semantically equivalent:
+for item in iterator:
+    a_list.append(item)
+and
+a_list.extend(iterator)
+
+The latter may be faster as the loop is implemented in C.
+
+List comprehensions:
+------------------------------------------
+new_list = [expression for_loop_one_or_more condtions]
+
+numbers = [1, 2, 3, 4]
+squares = [n**2 for n in numbers]
+print(squares) # Output: [1, 4, 9, 16]
+
+list_a = [1, 2, 3]
+square_cube_list = [ [a**2, a**3] for a in list_a]
+print(square_cube_list) # Output: [[1, 1], [4, 8], [9, 27]]
 
 Tuples:
 -------
@@ -27,37 +51,37 @@ TypeError: 'tuple' object does not support item assignment
 Dictionnaires:
 --------------
 Tables non ordonnées de référence d'objets
-D={}
-D={'un': 1, "deux: 2}
-D['un']
+>>> D={}
+>>> D={'un': 1, 'deux': 2}
+>>> D['un']
 1
-D.has_key('deux')
+>>> 'deux' in D
 True
-D.keys()
-['un', 'deux']
-D.values()
-[1,2]
+>>> D.keys()
+dict_keys(['un', 'deux'])
+>>> list(D.keys())
+['un', 'deux')]
+>>> D.values()
+dict_values([1, 2])
+>>> list(D.values())
+[1, 2]
+>>> len(D)      Return the number of items in the dictionary d.
+2
+>>> d[key]      Return the item of d with key key. Raises a KeyError if key is not in the map.
+    
+>>> d[key] = value        Set d[key] to value.
 
-d[key] = value
-    Set d[key] to value.
+>>> del d[key]            Remove d[key] from d. Raises a KeyError if key is not in the map.
 
-del d[key]
-    Remove d[key] from d. Raises a KeyError if key is not in the map.
+>>> key in d              Return True if d has a key key, else False.
 
-key in d
-    Return True if d has a key key, else False.
+>>> key not in d          Equivalent to not key in d.
 
-key not in d
-    Equivalent to not key in d.
+>>> iter(d)               Return an iterator over the keys of the dictionary. This is a shortcut for iter(d.keys()).
 
-iter(d)
-    Return an iterator over the keys of the dictionary. This is a shortcut for iter(d.keys()).
+>>> d.clear()             Remove all items from the dictionary.
 
-clear()
-    Remove all items from the dictionary.
-
-copy()
-    Return a shallow copy of the dictionary.
+>>> d.copy()              Return a shallow copy of the dictionary.
 
 classmethod fromkeys(seq[, value])
     Create a new dictionary with keys from seq and values set to value.
@@ -85,10 +109,16 @@ setdefault(key[, default])
 
 update([other])
     Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
-    update() accepts either another dictionary object or an iterable of key/value pairs (as tuples or other iterables of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: d.update(red=1, blue=2).
+    update() accepts either another dictionary object or an iterable of key/value pairs (as tuples or other iterables
+    of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: 
+    d.update(red=1, blue=2).
 
 values()
     Return a new view of the dictionary’s values. See the documentation of view objects.
+
+The objects returned from dict.keys(), dict.values(), and dict.items() are called dictionary views. 
+They provide a dynamic view on the dictionary’s entries, which means that when the dictionary changes, 
+the view reflects these changes. To force the dictionary view to become a full list use list(dictview). 
 
 
 Fonctions spéciales:
@@ -212,6 +242,11 @@ Hello
 
 Les méthodes non liées requièrent un objet explicite
 
+dictionary:
+-----------
+An associative array, where arbitrary keys are mapped to values. 
+The keys can be any object with __hash__() and __eq__() methods. Called a hash in Perl.
+
 Introspection:
 --------------
 Obtenir la liste des attribbuts d'une classe sous forme de dictionnaire:
@@ -263,6 +298,20 @@ avec l'exemple precedent:
 setattr(self, s, {})
 getattr(self, s)[k1] = v1
 self.s[key].value             
+
+Decorator:
+-----------
+A function returning another function, usually applied as a function transformation using the @wrapper syntax. 
+Common examples for decorators are classmethod() and staticmethod().
+The decorator syntax is merely syntactic sugar, the following two function definitions are semantically equivalent:
+
+def f(...):
+    ...
+f = staticmethod(f)
+
+@staticmethod
+def f(...):
+    ...
 
 
 Ipyton:
@@ -472,8 +521,12 @@ In setting.json:
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
     "python.autoComplete.addBrackets": true,
-    "editor.formatOnPaste": true
+    "editor.formatOnPaste": true,
 
+    // whitelist numpy to remove lint errors
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=netCDF4"
+    ]
 Modules Python à intaller:
 --------------------------
 
@@ -497,10 +550,19 @@ Developpement:
 > pip install ConfigParser 
 
 
+basemap
+> sudo apt-get install libgeos-3.5.0 libgeos-c1v5 libgeos-dev
+> sudo -H python3 -m pip install basemap-v1.1.0.tar.gz 
+
+Installing collected packages: pyproj, pyshp, basemap
+Successfully installed basemap-1.1.0 pyproj-2.1.2 pyshp-2.1.0
 
 Pour utiliser QT au lieu de Tk
 > pip install PySimpleGUIQt
 > pip install PySide2
+> pip install PyAstronomy
+> pip install sciPy
+> pip install basemap
 
 Puis remplacer le :
 import PySimpleGUI as gs
@@ -516,8 +578,22 @@ enter this command in your Windows command prompt:
 > pyinstaller -wF my_program.py
 
 
-Tests avec unittest:
+Tests unitaires avec unittest:
 --------------------
+Configuration VSC, setting.json:
+Modifier les arguments suivant l'application.
+
+  "python.unitTest.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.unittestEnabled": true,
+
 Voir: https://docs.python.org/3.7/library/unittest.html?highlight=unittest
 
 Les fichiers de tests sont sous tests
@@ -525,8 +601,8 @@ Run test in single file
 > python - m unittest - v tests/test_roscop.py
 
 Run all test_ * in dir tests:
-> python - m unittest  discover tests - v
-> python - m unittest  discover - s tests - p 'test_*.py' - v
+> python -m unittest  discover tests -v
+> python -m unittest  discover -s tests -p 'test_*.py' -v
 
 Methods name:
 assertEqual() 	

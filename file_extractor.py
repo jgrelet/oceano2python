@@ -13,45 +13,62 @@ class FileExtractor:
 
     '''
     This class read multiple ASCII file, extract physical parameter from ROSCOP codification at the given column
-    and fill arrays
+    and fill arrays.
+
+    Parameters
+    ----------
+    fname : file, str, pathlib.Path, list of str
+        File, filename, or list to read.
+    separator : str, default None
+    skip_header : int, optional
+        The number of lines to skip at the beginning of the file.
     '''
 
-    # constructor with values by default
-    def __init__(self, files):
+    # constructor with values by defaul
+    def __init__(self, fname, keys, separator=None, skip_header=0):
         # attibutes
         # public:
-        self.files = files
+        self.fname = fname
+        self.keys = keys
         self.n = 0
         self.m = 0
-        # replace this constante with roscop fill value
-        self.FillValue = 1e36
 
         # private:
-        self.__headeer = {}
+        self.__skip_header = skip_header
+        self.__separator = separator
+        self.__header = {}
         self.__data = {}
+        # replace this constante with roscop fill value
+        self.__FillValue = 1e36
     # overloading operators
 
     def __str__(self):
         ''' overload string representation '''
-        return 'Class FileExtractor, file: %s, size = %d' % (self.files, len(self))
+        return 'Class FileExtractor, file: %s, size = %d' % (self.fname, len(self))
 
-    def disp(self, keys):
+    def disp(self):
         # for key in keys:
         #     print("{}:".format(key))
         #     print(self.__data[key])
         buf = ''
-        for key in keys:
+        for key in self.keys:
             buf += "{}:\n".format(key)
             buf += "{}\n".format(self.__data[key])
         return buf
 
    # first pass on file(s)
     def firstPass(self):
+        '''
+        Returns
+         ------
+        out : [n,m]
+        The size of array.
+        '''
         lineRead = 0
         filesRead = 0
         indMax = 0
 
-        for file in self.files:
+        for file in self.fname:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 filesRead += 1
@@ -71,34 +88,54 @@ class FileExtractor:
         # the size of arrays
         self.n = filesRead
         self.m = indMax
-        return self.n, self.m
+        # return self.n, self.m
 
-    # second pass, extract data from roscop code in files and fill array
-    def secondPass(self, keys, cfg, type):
+    # second pass, extract data from roscop code in fname and fill array
+    def secondPass(self, cfg, device):
+        '''
+        Read the file to its internal dict
+
+        Parameters
+        ----------
+        keys: sequence, a list of physical parameter to read.
+            ex: ['PRES', 'TEMP', 'PSAL']
+        cfg: toml.load() instance, configuration file
+        device: str, instrument
+            ex: CTD,XBT or LADCP
+        '''
         n = 0
         m = 0
 
-        # get the dictionary from toml block, type instrument is in lower case
-        hash = cfg['split'][type.lower()]
+        # set skipHeader is declared in toml section, 0 by default
+        if 'separator' in cfg[device.lower()]:
+            self.__separator = cfg[device.lower()]['separator']
+        if 'skipHeader' in cfg[device.lower()]:
+            self.__skip_header = cfg[device.lower()]['skipHeader']
+        logging.debug(self.__skip_header)
+
+        # get the dictionary from toml block, device must be is in lower case
+        hash = cfg['split'][device.lower()]
 
         # initialize arrays, move at the end of firstPass ?
-        for key in keys:
+        for key in self.keys:
             # mult by __fillValue next
             # the shape parameter has to be an int or sequence of ints
-            self.__data[key] = np.ones((self.n, self.m)) * self.FillValue
+            self.__data[key] = np.ones((self.n, self.m)) * self.__FillValue
 
-        for file in self.files:
+        for file in self.fname:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 for line in f:
+                    if f.filelineno() < self.__skip_header + 1:
+                        continue
                     if line[0] == '#' or line[0] == '*':
                         continue
-                    # split the line
-                    p = line.split()
+                    # split the line, remove leading and trailing space before
+                    p = line.strip().split(self.__separator)
 
                     str = ' '
                     # fill array with extracted value of line for eack key (physical parameter)
-                    for key in keys:
+                    for key in self.keys:
                         self.__data[key][n, m] = p[hash[key]]
                         # debug info
                         str += "{:>{width}}".format(
@@ -116,9 +153,9 @@ class FileExtractor:
 if __name__ == "__main__":
 
     # usage:
-    # > python file_extractor.py data/cnv/dfr2900[1-3].cnv -d
-    # > python file_extractor.py data/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
-    # > python file_extractor.py data/cnv/dfr29*.cnv -d
+    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -d
+    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
+    # > python file_extractor.py data/CTD/cnv/dfr29*.cnv -d
     parser = argparse.ArgumentParser(
         description='This class read multiple ASCII file, extract physical parameter \
             from ROSCOP codification at the given column and fill arrays ',
@@ -127,9 +164,9 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
-    parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
+    parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
-    parser.add_argument('files', nargs='*',
+    parser.add_argument('fname', nargs='*',
                         help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
 
     # display extra logging info
@@ -140,12 +177,11 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-    fe = FileExtractor(args.files)
-    print("File(s): {}, Config: {}".format(args.files, args.config))
+    fe = FileExtractor(args.fname, args.keys)
+    print("File(s): {}, Config: {}".format(args.fname, args.config))
     cfg = toml.load(args.config)
-    [n, m] = fe.firstPass()
-    print("Indices:", n, m)
-    fe.secondPass(args.key, cfg, 'ctd')
-    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
-    fe.disp(args.key)
-    # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+    fe.firstPass()
+    print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
+    fe.secondPass(cfg, 'ctd')
+    # debug
+    # print(fe.disp())
