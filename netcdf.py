@@ -7,8 +7,10 @@ from physicalParameter import Roscop
 def writeNetCDF(fileName, fe):
 
     data = {}
-    dims = ['TIME', 'LATITUDE', 'LONGITUDE', 'DEPTH']
-    vars = dims.copy()
+    dims = ['TIME', 'LATITUDE', 'LONGITUDE']
+    variables = dims.copy()
+    dims_4d = dims.copy()
+    dims_4d = dims_4d.append('DEPTH')
 
     # move to main after tests
     r = Roscop("code_roscop.csv")
@@ -30,8 +32,10 @@ def writeNetCDF(fileName, fe):
     # create variables
     # add dimensions before variables list
     for k in fe.keys:
-        vars.append(k)
-    for key in vars:
+        variables.append(k)
+    # variables.extend(fe.keys())
+    print(variables)
+    for key in variables:
         # for each variables get the attributes list
         hash = r.returnCode(key)
         # _FillValue attribute must be set when variable is created
@@ -43,8 +47,13 @@ def writeNetCDF(fileName, fe):
         else:
             fillvalue = None
         # create the variable
-        data[key] = nc.createVariable(
-            key, dtype(hash['types']).char, dims, fill_value=fillvalue)
+        print(key)
+        if any(key in item for item in dims):
+            data[key] = nc.createVariable(
+                key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
+        else:
+            data[key] = nc.createVariable(
+                key, dtype(hash['types']).char, dims_4d, fill_value=fillvalue)
         # remove from the dictionary
         hash.pop('types')
         # create dynamically variable attributes
@@ -52,5 +61,5 @@ def writeNetCDF(fileName, fe):
             setattr(data[key], k, hash[k])
 
     # debug
-    for key in vars:
+    for key in variables:
         print(data[key])

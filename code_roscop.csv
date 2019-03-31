@@ -4,7 +4,7 @@ PRLF;int32;profile number;;1;;;;;;%4d;99999;;;Station number, a station could be
 PROFILE;int32;profile number;;1;;;;;;%4d;99999;;;Station number, a station could be have more than one cast;;;;;
 LATITUDE;float32;latitude of measurement;latitude;degrees_north;;;;;;;;Y;;;;;;WGS84;urn:ogc:crs:EPSG::4326
 LONGITUDE;float32;longitude of measurement;longitude;degrees_east;;;;;;;;X;;;;;;WGS84;urn:ogc:crs:EPSG::4327
-TIME;float64;time of measurement;time;days since 1950-01-01T00:00:00Z;Relative julian days with decimal part (as parts of the day);;;0;90000;%6.6d;;T;;;;;;;
+TIME;float64;time of measurement;time;days since 1950-01-01T00:00:00Z;Relative julian days with decimal part (as parts of the day);;;0.0;90000.0;%6.6f;;T;;;;;;;
 ETDD;float32;ellapsed time;;1;;;;0;90000;%9.5f;;;;;;;;;
 DEPH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
 DEPTH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
