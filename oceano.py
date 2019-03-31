@@ -38,7 +38,7 @@ def processArgs():
                         default='tests/test.toml')
     parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
-    parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
+    parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
                         help='use GUI interface')
@@ -122,17 +122,17 @@ def process(args, cfg, ti):
 
     # check if no file selected or cancel button pressed
     logging.debug("File(s): {}, config: {}, Keys: {}".format(
-        args.files, args.config, args.key))
+        args.files, args.config, args.keys))
 
     # fileExtractor
-    fe = FileExtractor(args.files)
+    fe = FileExtractor(args.files, args.keys)
 
     # cfg = toml.load(args.config)
-    [n, m] = fe.firstPass()
+    fe.firstPass()
     # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
-    fe.secondPass(args.key, cfg, ti)
+    fe.secondPass(cfg, ti)
     # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
-    return fe, n, m
+    return fe
 
 
 if __name__ == "__main__":
@@ -224,15 +224,15 @@ if __name__ == "__main__":
         for k in values.keys():
             if k[0] == '_' or values[k] == False:
                 del new_values[k]
-        args.key = new_values.keys()
+        args.keys = new_values.keys()
 
         # process of files start here
-        fe, n, m = process(args, cfg, values['_COMBO_'])
+        fe = process(args, cfg, values['_COMBO_'])
 
         # display result in popup GUI
         dims = "Dimensions: {} x {}".format(n, m)
         sg.PopupScrolled('Oceano2python', dims,
-                         fe.disp(args.key),  size=(80, 40))
+                         fe.disp(args.keys),  size=(80, 40))
 
         # It will output to a debug window. Bug ? debug windows xas closed before exiting program
         # print = sg.Print
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
         keys = cfg['split'][device.lower()].keys()
         # in command line mode (console)
-        fe, n, m = process(args, cfg, device)
-        print("Dimensions: {} x {}".format(m, n))
-        print(fe.disp(args.key))
-        netcdf.writeNetCDF( 'test.nc', fe)
+        fe = process(args, cfg, device)
+        print("Dimensions: {} x {}".format(fe.m, fe.n))
+        print(fe.disp())
+        netcdf.writeNetCDF( 'output/test.nc', fe)

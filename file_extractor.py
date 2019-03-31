@@ -25,10 +25,11 @@ class FileExtractor:
     '''
 
     # constructor with values by defaul
-    def __init__(self, fname, separator=None, skip_header=0):
+    def __init__(self, fname, keys, separator=None, skip_header=0):
         # attibutes
         # public:
         self.fname = fname
+        self.keys = keys
         self.n = 0
         self.m = 0
 
@@ -45,12 +46,12 @@ class FileExtractor:
         ''' overload string representation '''
         return 'Class FileExtractor, file: %s, size = %d' % (self.fname, len(self))
 
-    def disp(self, keys):
+    def disp(self):
         # for key in keys:
         #     print("{}:".format(key))
         #     print(self.__data[key])
         buf = ''
-        for key in keys:
+        for key in self.keys:
             buf += "{}:\n".format(key)
             buf += "{}\n".format(self.__data[key])
         return buf
@@ -87,10 +88,10 @@ class FileExtractor:
         # the size of arrays
         self.n = filesRead
         self.m = indMax
-        return self.n, self.m
+        # return self.n, self.m
 
     # second pass, extract data from roscop code in fname and fill array
-    def secondPass(self, keys, cfg, device):
+    def secondPass(self, cfg, device):
         '''
         Read the file to its internal dict
 
@@ -116,7 +117,7 @@ class FileExtractor:
         hash = cfg['split'][device.lower()]
 
         # initialize arrays, move at the end of firstPass ?
-        for key in keys:
+        for key in self.keys:
             # mult by __fillValue next
             # the shape parameter has to be an int or sequence of ints
             self.__data[key] = np.ones((self.n, self.m)) * self.__FillValue
@@ -134,7 +135,7 @@ class FileExtractor:
 
                     str = ' '
                     # fill array with extracted value of line for eack key (physical parameter)
-                    for key in keys:
+                    for key in self.keys:
                         self.__data[key][n, m] = p[hash[key]]
                         # debug info
                         str += "{:>{width}}".format(
@@ -152,9 +153,9 @@ class FileExtractor:
 if __name__ == "__main__":
 
     # usage:
-    # > python file_extractor.py data/cnv/dfr2900[1-3].cnv -d
-    # > python file_extractor.py data/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
-    # > python file_extractor.py data/cnv/dfr29*.cnv -d
+    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -d
+    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
+    # > python file_extractor.py data/CTD/cnv/dfr29*.cnv -d
     parser = argparse.ArgumentParser(
         description='This class read multiple ASCII file, extract physical parameter \
             from ROSCOP codification at the given column and fill arrays ',
@@ -163,7 +164,7 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
-    parser.add_argument('-k', '--key', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
+    parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('fname', nargs='*',
                         help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
@@ -176,12 +177,11 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-    fe = FileExtractor(args.fname)
+    fe = FileExtractor(args.fname, args.keys)
     print("File(s): {}, Config: {}".format(args.fname, args.config))
     cfg = toml.load(args.config)
-    [n, m] = fe.firstPass()
-    print("Indices:", n, m)
-    fe.secondPass(args.key, cfg, 'ctd')
-    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cdf, 'ctd')
-    fe.disp(args.key)
-    # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+    fe.firstPass()
+    print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
+    fe.secondPass(cfg, 'ctd')
+    # debug
+    # print(fe.disp())
