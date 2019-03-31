@@ -403,6 +403,8 @@ ou
 > sudo pip install <package> 
 ou
 > python3 -m pip install --user <package>  # instead
+ou
+> sudo -H python3 -m pip install <package>
 
 A tester:
 Then I recommend adding the following aliases to your .bashrc:
@@ -486,11 +488,15 @@ Developpement:
 > pip install pynmea2
 > pip install pySerial
 > pip install netCDF4
+> pip install netCDF4 
+> pip install matplotlib
 > pip install seawater
 > pip install numpy
 > pip install PyInstaller
 > pip install PySimpleGUI
 > pip install ConfigParser 
+
+
 
 Pour utiliser QT au lieu de Tk
 > pip install PySimpleGUIQt
