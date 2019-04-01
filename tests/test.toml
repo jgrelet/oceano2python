@@ -23,8 +23,9 @@ typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
 isHeader = '^[*#]'
 isDevice       = [ '^\*\s+(Sea-Bird)','(\*END\*)' ]
-latitude = ['Latitude\s*:\s*(\d+)\s+(\d+.\d+)\s+(\w)','NMEA Latitude\s*=\s*(\d+\s+\d+.\d+\s+\w)']
-longitude = ['Longitude\s*:\s*(\d+)\s+(\d+.\d+)\s+(\w)','NMEA Longitude\s*=\s*(\d+\s+\d+.\d+\s+\w)']
+time = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+latitude = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+longitude = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
 date = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
 hour = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
 bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'

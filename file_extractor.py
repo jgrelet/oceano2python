@@ -7,6 +7,7 @@ import toml
 import sys
 import argparse
 import numpy as np
+import re
 
 
 class FileExtractor:
@@ -64,7 +65,10 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-   # first pass on file(s)
+    def re_compile(self):
+
+       # first pass on file(s)
+
     def first_pass(self):
         '''
         Returns
