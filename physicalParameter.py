@@ -27,11 +27,11 @@ class Roscop:
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self))
 
     def __getitem__(self, key):
-        ''' overload r[key] 
+        ''' overload r[key]
             for a given key return the values as a dictionary '''
         if key not in self.__hash:
             logging.error(
-                " Invalid key: \"{}\"".format(key))
+                " physicalParametr.py: invalid key: \"{}\"".format(key))
         else:
             return self.__hash[key]
 
@@ -39,14 +39,14 @@ class Roscop:
         ''' overload r[key] = value '''
         if type(value) is not dict:
             logging.error(
-                " The value: \"{}\" must be a dictionary".format(value))
+                " physicalParametr.py: the value: \"{}\" must be a dictionary".format(value))
             return
 
         if key not in self.__hash:
             self.__hash[key] = value
         else:
             logging.error(
-                " Modify the existing key: \"{}\" is not allowed".format(key))
+                " physicalParametr.py: modify the existing key: \"{}\" is not allowed".format(key))
 
     def __repr__(self):
         ''' overload print() '''
@@ -65,18 +65,26 @@ class Roscop:
     # read code roscop file
     def read(self):
         with open(self.file, 'rt') as f:
+
+            # Create an object that maps the information in each row to an OrderedDict
+            # the values in the first row of file f will be used as the fieldnames.
             reader = csv.DictReader(f, delimiter=';')
 
             for row in reader:
                 theKey = row[reader.fieldnames[0]]
+
                 for k in reader.fieldnames:
                     # if the value of key is empty
                     if row[k] == '' or k == 'key':
                         # remove the key
                         row.pop(k)
                     else:
+                        # use the second line with key string to convert each numeric type into float
+                        if theKey != 'string':
+                            if self['string'][k] == 'numeric':
+                                row[k] = float(row[k])
                         logging.debug(
-                            " {} -> {}: {}".format(theKey, k, row[k]))
+                            " {} -> {}, {} = {}".format(theKey, k, type(row[k]), row[k]))
                 self.__hash[theKey] = row
 
         return
@@ -87,7 +95,7 @@ class Roscop:
 if __name__ == "__main__":
 
     # usage:
-    # > python physicalParameter.py code_roscop.csv -k TEMP
+    # > python physicalParameter.py code_roscop.csv -k TEMP -d
     parser = argparse.ArgumentParser(
         description='This class Roscop parse a csv file describing physical parameter codification')
     parser.add_argument("-d", "--debug", help="display debug informations",
@@ -116,9 +124,9 @@ if __name__ == "__main__":
     # if args list is empty, key contain NoneType
     if key is not None:
         for k in key:
-            r.displayCode(k)
+            r[k]
 
-    print("{}: {}".format(key[0], r.returnCode(key[0])['long_name']))
+    print("{}: {}".format(key[0], r[key[0]]['long_name']))
     r['TOTO'] = {'uncle': 'tata'}
     print(r['TOTO'])
     r['TEMP'] = 'tata'
