@@ -1,7 +1,7 @@
 import logging
 from netCDF4 import Dataset
 from numpy import arange, dtype
-from physicalParameter import Roscop
+from physical_parameter import Roscop
 
 
 def writeNetCDF(fileName, fe):

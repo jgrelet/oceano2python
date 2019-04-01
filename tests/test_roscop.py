@@ -1,6 +1,6 @@
 import unittest
 
-from physicalParameter import Roscop
+from physical_parameter import Roscop
 
 '''
 Run test in single file
@@ -31,20 +31,20 @@ class testRoscop(unittest.TestCase):
 
     def test_key_TEMP(self):
         ''' test the standard_name for physical parameter TEMP '''
-        self.assertEqual(self.r.returnCode('TEMP')[
+        self.assertEqual(self.r['TEMP'][
                          'standard_name'], 'sea_water_temperature')
-        self.assertEqual(self.r.returnCode('TEMP')[
+        self.assertEqual(self.r['TEMP'][
                          'units'], 'degree_Celsius')
-        self.assertEqual(self.r.returnCode('TEMP')[
+        self.assertEqual(self.r['TEMP'][
                          'comment'], 'Ocean temperature in Degrees Celsius')
 
     def test_key_PSAL(self):
         ''' test the standard_name for physical parameter PSAL '''
-        self.assertEqual(self.r.returnCode('PSAL')[
+        self.assertEqual(self.r['PSAL'][
                          'standard_name'], 'sea_water_salinity')
-        self.assertEqual(self.r.returnCode('PSAL')[
+        self.assertEqual(self.r['PSAL'][
                          'conventions'], 'PSU')
-        self.assertEqual(self.r.returnCode('PSAL')[
+        self.assertEqual(self.r['PSAL'][
                          'comment'], 'Ocean practical salinity (PSS-78)')
 
 

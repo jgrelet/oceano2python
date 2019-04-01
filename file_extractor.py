@@ -65,7 +65,7 @@ class FileExtractor:
         return buf
 
    # first pass on file(s)
-    def firstPass(self):
+    def first_pass(self):
         '''
         Returns
          ------
@@ -99,7 +99,7 @@ class FileExtractor:
         # return self.n, self.m
 
     # second pass, extract data from roscop code in fname and fill array
-    def secondPass(self, cfg, device):
+    def second_pass(self, cfg, device):
         '''
         Read the file to its internal dict
 
@@ -188,8 +188,8 @@ if __name__ == "__main__":
     fe = FileExtractor(args.fname, args.keys)
     print("File(s): {}, Config: {}".format(args.fname, args.config))
     cfg = toml.load(args.config)
-    fe.firstPass()
+    fe.first_pass()
     print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
-    fe.secondPass(cfg, 'ctd')
+    fe.second_pass(cfg, 'ctd')
     # debug
     # print(fe.disp())

@@ -128,9 +128,9 @@ def process(args, cfg, ti):
     fe = FileExtractor(args.files, args.keys)
 
     # cfg = toml.load(args.config)
-    fe.firstPass()
+    fe.first_pass()
     # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
-    fe.secondPass(cfg, ti)
+    fe.second_pass(cfg, ti)
     # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
     return fe
 
