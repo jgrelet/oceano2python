@@ -6,7 +6,10 @@ from physicalParameter import Roscop
 
 def writeNetCDF(fileName, fe):
 
-    data = {}
+    # ncvars is a dictionary that store a netcdf variable for each physical parameter key
+    ncvars = {}
+
+    # variables and dimensions use for 1D and 2D variables
     variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
     variables = variables_1D.copy()
     dims_2D = ['TIME', 'DEPTH']
@@ -47,29 +50,29 @@ def writeNetCDF(fileName, fe):
             fillvalue = None
         # create the variable
         if any(key in item for item in variables_1D):
-            data[key] = nc.createVariable(
+            ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
         else:
-            data[key] = nc.createVariable(
+            ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
         # remove from the dictionary
         hash.pop('types')
         # create dynamically variable attributes
         for k in hash.keys():
-            setattr(data[key], k, hash[k])
+            setattr(ncvars[key], k, hash[k])
     nc._enddef()
 
     # debug
     for key in variables:
         logging.debug(" var: {}, dims: {}, shape: {}, dtype: {}, ndim: {}".format(
-            key, data[key].dimensions, data[key].shape, data[key].dtype, data[key].ndim))
+            key, ncvars[key].dimensions, ncvars[key].shape, ncvars[key].dtype, ncvars[key].ndim))
 
-    # write the data
+    # write the ncvars
     for key in variables:
         if any(key in item for item in variables_1D):
-            data[key][:] = fe[key]
+            ncvars[key][:] = fe[key]
         else:
-            data[key][:, :] = fe[key]
+            ncvars[key][:, :] = fe[key]
 
     # close the netcdf file
     nc.close()
