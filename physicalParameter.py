@@ -27,7 +27,8 @@ class Roscop:
         return 'Class Roscop, file: %s, size = %d' % (self.file, len(self))
 
     def __getitem__(self, key):
-        ''' overload r[key] '''
+        ''' overload r[key] 
+            for a given key return the values as a dictionary '''
         if key not in self.__hash:
             logging.error(
                 " Invalid key: \"{}\"".format(key))
@@ -60,10 +61,6 @@ class Roscop:
         ''' for a given key print it's name and values as a dictionary '''
         print("%s :" % key)
         print(self[key])
-
-    def returnCode(self, key):
-        ''' for a given key return the values as a dictionary '''
-        return(self[key])
 
     # read code roscop file
     def read(self):

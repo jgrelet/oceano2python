@@ -265,6 +265,6 @@ if __name__ == "__main__":
         keys = cfg['split'][device.lower()].keys()
         # in command line mode (console)
         fe = process(args, cfg, device)
-        print("Dimensions: {} x {}".format(fe.m, fe.n))
-        print(fe.disp())
+        #print("Dimensions: {} x {}".format(fe.m, fe.n))
+        #print(fe.disp())
         netcdf.writeNetCDF( 'output/test.nc', fe)

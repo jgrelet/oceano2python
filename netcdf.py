@@ -17,7 +17,7 @@ def writeNetCDF(fileName, fe):
     # create netcdf file
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
-
+    print('writing netCDF file: {}'.format(fileName))
     # create dimensions
     # n is number of profiles, m the max size of profiles
     time = nc.createDimension("TIME", fe.n)
@@ -35,8 +35,8 @@ def writeNetCDF(fileName, fe):
         variables.append(k)
     # variables.extend(fe.keys())
     for key in variables:
-        # for each variables get the attributes list
-        hash = r.returnCode(key)
+        # for each variables get the attributes dictionary from Roscop
+        hash = r[key]
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
         if '_FillValue' in hash:
@@ -73,3 +73,4 @@ def writeNetCDF(fileName, fe):
 
     # close the netcdf file
     nc.close()
+    print('done...')
