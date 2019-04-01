@@ -57,7 +57,7 @@ class Roscop:
         return len(self.__hash)
 
     # methods public
-    def displayCode(self, key):
+    def display_code(self, key):
         ''' for a given key print it's name and values as a dictionary '''
         print("%s :" % key)
         print(self[key])
