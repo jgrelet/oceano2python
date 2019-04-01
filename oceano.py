@@ -230,9 +230,9 @@ if __name__ == "__main__":
         fe = process(args, cfg, values['_COMBO_'])
 
         # display result in popup GUI
-        dims = "Dimensions: {} x {}".format(n, m)
+        dims = "Dimensions: {} x {}".format(fe.n, fe.m)
         sg.PopupScrolled('Oceano2python', dims,
-                         fe.disp(args.keys),  size=(80, 40))
+                         fe.disp(),  size=(80, 40))
 
         # It will output to a debug window. Bug ? debug windows xas closed before exiting program
         # print = sg.Print

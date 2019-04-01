@@ -7,10 +7,9 @@ from physicalParameter import Roscop
 def writeNetCDF(fileName, fe):
 
     data = {}
-    dims = ['TIME', 'LATITUDE', 'LONGITUDE']
-    variables = dims.copy()
-    dims_4d = dims.copy()
-    dims_4d = dims_4d.append('DEPTH')
+    variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
+    variables = variables_1D.copy()
+    dims_2D = ['TIME', 'DEPTH']
 
     # move to main after tests
     r = Roscop("code_roscop.csv")
@@ -26,6 +25,7 @@ def writeNetCDF(fileName, fe):
     lon = nc.createDimension("LONGITUDE", fe.n)
     depth = nc.createDimension('DEPTH', fe.m)
 
+    # debug
     logging.debug(" depth: {}, time: {}, lat: {}, lon: {}".format(
         len(depth), len(time), len(lat), len(lon)))
 
@@ -34,7 +34,6 @@ def writeNetCDF(fileName, fe):
     for k in fe.keys:
         variables.append(k)
     # variables.extend(fe.keys())
-    print(variables)
     for key in variables:
         # for each variables get the attributes list
         hash = r.returnCode(key)
@@ -47,19 +46,30 @@ def writeNetCDF(fileName, fe):
         else:
             fillvalue = None
         # create the variable
-        print(key)
-        if any(key in item for item in dims):
+        if any(key in item for item in variables_1D):
             data[key] = nc.createVariable(
                 key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
         else:
             data[key] = nc.createVariable(
-                key, dtype(hash['types']).char, dims_4d, fill_value=fillvalue)
+                key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
         # remove from the dictionary
         hash.pop('types')
         # create dynamically variable attributes
         for k in hash.keys():
             setattr(data[key], k, hash[k])
+    nc._enddef()
 
     # debug
     for key in variables:
-        print(data[key])
+        logging.debug(" var: {}, dims: {}, shape: {}, dtype: {}, ndim: {}".format(
+            key, data[key].dimensions, data[key].shape, data[key].dtype, data[key].ndim))
+
+    # write the data
+    for key in variables:
+        if any(key in item for item in variables_1D):
+            data[key][:] = fe[key]
+        else:
+            data[key][:, :] = fe[key]
+
+    # close the netcdf file
+    nc.close()

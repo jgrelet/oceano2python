@@ -40,7 +40,15 @@ class FileExtractor:
         self.__data = {}
         # replace this constante with roscop fill value
         self.__FillValue = 1e36
+
     # overloading operators
+    def __getitem__(self, key):
+        ''' overload r[key] '''
+        if key not in self.__data:
+            logging.error(
+                " file_extractor.py: invalid key: \"{}\"".format(key))
+        else:
+            return self.__data[key]
 
     def __str__(self):
         ''' overload string representation '''
