@@ -4,11 +4,11 @@ from physical_parameter import Roscop
 
 '''
 Run test in single file
-> python - m unittest - v tests/test_roscop.py
+> python -m unittest -v tests/test_roscop.py
 
 Run all test_ * in dir tests:
 > python -m unittest  discover tests - v
-> python -m unittest  discover - s tests - p 'test_*.py' - v
+> python -m unittest  discover -s tests -p 'test_*.py' -v
 '''
 
 
