@@ -15,6 +15,8 @@ ENV PACKAGES="\
 	libnetcdf-dev \ 
 	libxml2 \
 	libxml2-dev \
+	hdf5 \
+	hdf5-dev \
     	ca-certificates \
     	libgcc \
     	libstdc++ \
@@ -29,7 +31,7 @@ ENV PYTHON_PACKAGES="\
     	numpy \
     	matplotlib \
 	scipy \
-	basemap \
+#	basemap \
 	toml \ 
 	pynmea2 \
 	pySerial \ 
