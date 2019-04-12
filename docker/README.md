@@ -15,5 +15,5 @@ docker pull jgrelet/oceano2python:3.6
 ## run the container:
 
 ''''
-docker run -it --rm -v /D_DRIVE:/data -e CRUISE="$CRUISE" -e DRIVE=/data python /bin/bash
+docker run -it --rm -v /D_DRIVE:/data -e CRUISE="$CRUISE" -e DRIVE=/data python jgrelet/oceano2python:3.6 /bin/bash
 ''''
