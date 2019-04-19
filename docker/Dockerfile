@@ -1,11 +1,11 @@
-FROM alpine:3.8
-MAINTAINER Jacques Grelet "Jacques.Grelet@ird.fr"
+FROM alpine:3.6
+LABEL maintainer="Jacques.Grelet_at_ird.fr"
 
 ENV PACKAGES="\
   	dumb-init \
  	musl \
  	libc6-compat \
-    	linux-headers \
+    linux-headers \
 	build-base \
 	bash \
 	make \
@@ -17,21 +17,21 @@ ENV PACKAGES="\
 	libxml2-dev \
 	hdf5 \
 	hdf5-dev \
-    	ca-certificates \
-    	libgcc \
-    	libstdc++ \
-    	tcl \
-    	tk \
-    	libssl1.0 \
+    ca-certificates \
+	libgcc \
+	libstdc++ \
+	tcl \
+	tk \
+    libssl1.0 \
 	net-tools \
 	iputils-ping \
-    	"
+    "
 
 ENV PYTHON_PACKAGES="\
-    	numpy \
-    	matplotlib \
+    numpy \
+    matplotlib \
 	scipy \
-#	basemap \
+	https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz \
 	toml \ 
 	pynmea2 \
 	pySerial \ 
