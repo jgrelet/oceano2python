@@ -65,7 +65,7 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-    def re_compile(self):
+    #def re_compile(self):
 
        # first pass on file(s)
 
