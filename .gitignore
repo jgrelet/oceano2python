@@ -13,6 +13,7 @@
 *.nc
 *.xml
 *.stackdump
+*_tmp
 __pycache__/
 *.py[cod]
 *$py.class
