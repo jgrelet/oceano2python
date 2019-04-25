@@ -18,6 +18,8 @@ ti = typeInstrument  # an alias
 filesBrowsePosition_row = 2
 filesBrowsePosition_column = 1
 
+# initialize filename use to save GUI configuration
+configfile = 'oceano.cfg'
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -54,6 +56,12 @@ def processArgs():
 
 def defineGUI():
 
+    # check if GUI config file exist
+    if args.instrument != None:
+        instrument_default_value = args.instrument
+    else:
+        instrument_default_value = 'CTD'
+
     # get all devices
     devices = list(ti.keys())
 
@@ -75,7 +83,8 @@ def defineGUI():
                          enable_events=True),
                 sg.FilesBrowse(key='_HIDDEN_', initial_folder=None,                   # row 1, col 2
                                tooltip='Choose one or more files')],    
-               [sg.Combo(list(ti.keys()), enable_events=True, size=(8, 1),            # row 2
+               [sg.Combo(list(ti.keys()), enable_events = True, size=(8, 1),          # row 2
+                         default_value = instrument_default_value,                    
                          key='_COMBO_', tooltip='Select the instrument')],
                [sg.Frame(d, frameLayout[d], key='_FRAME_{:s}'.format(d) , visible=True)          # row 3
                 for d in devices],                                                    
@@ -86,7 +95,7 @@ def defineGUI():
     window = sg.Window('Oceano converter').Layout(layout)
     window.LoadFromDisk(configfile)
     window.Finalize
-    return window
+    return window 
 
 
 def updateFilesBrowseCombo(extentions, x, y):
@@ -145,9 +154,6 @@ if __name__ == "__main__":
     # recover and process line arguments
     parser = processArgs()
     args = parser.parse_args()
-
-    # initialize filename use to save GUI configuration
-    configfile = 'oceano.cfg'
 
     # set looging mode if debug
     if args.debug:
