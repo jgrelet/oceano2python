@@ -21,10 +21,12 @@ setuptools 40.8.0
 > pip install ConfigParser
 ```
 
-Installing basemap on Windows from source could be tricky. A simple solution is to install the .whl binary from the URL:
-https://www.lfd.uci.edu/~gohlke/pythonlibs/
+Installing basemap on Windows from source could be tricky. A simple solution is to install the  [Wheels](https://pip.pypa.io/en/latest/user_guide/#installing-from-wheels) (*.whl) binary from the URL:
+[https://www.lfd.uci.edu/~gohlke/pythonlibs/](https://www.lfd.uci.edu/~gohlke/pythonlibs/)
 
-file `basemap-1.2.0-cp37-cp37m-win_amd64.whl`
+Select and download locally the binary Wheels file `basemap-1.2.0-cp37-cp37m-win_amd64.whl`
+
+and install it from Wheels
 
 ``` bash
 > pip install basemap-1.2.0-cp37-cp37m-win_amd64.whl
