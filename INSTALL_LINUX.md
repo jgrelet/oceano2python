@@ -25,7 +25,7 @@ setuptools 40.8.0
 
 ``` bash
 > sudo apt-get install libgeos-3.5.0 libgeos-c1v5 libgeos-dev
-> sudo -H python3 -m pip install basemap-v1.1.0.tar.gz 
+> sudo -H python3 -m pip install basemap-v1.1.0.tar.gz
 
 Installing collected packages: pyproj, pyshp, basemap
 Successfully installed basemap-1.1.0 pyproj-2.1.2 pyshp-2.1.0
@@ -34,7 +34,7 @@ Successfully installed basemap-1.1.0 pyproj-2.1.2 pyshp-2.1.0
 Clone the latest version of PySimpleGUI
 
 ``` bash
-> git clone https://github.com/PySimpleGUI/PySimpleGUI.git 
+> git clone https://github.com/PySimpleGUI/PySimpleGUI.git
 ```
 
 and add the path of PySimpleGUI directory to $PYTHONPATH env
