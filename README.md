@@ -40,7 +40,7 @@ The user must describe in the TOML configuration file the metadata and the struc
 
 ## dev
 
-We use Visual Studio Code (VSC) with Python, better TOML, markdownlint makefile
+We use Visual Studio Code (VSC) with Python, better TOML, markdownlint and makefile extensions
 
 ## prequisite
 
