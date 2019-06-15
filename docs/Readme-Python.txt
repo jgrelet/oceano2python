@@ -465,6 +465,9 @@ Commande pip pour lister les paquets installes, en root et mode user:
 > pip list --user
 > pip show <package>
 
+Behind a proxy:
+> pip install guidata --proxy http://134.246.32.1:3128
+
 Il est prefereable d'installer la derniere version Python 3.7.2
 
 Configuration du fichier VSC setting.json de jgrelet:
@@ -548,7 +551,12 @@ Developpement:
 > pip install PyInstaller
 > pip install PySimpleGUI
 > pip install ConfigParser 
-
+> pip install sip 
+> pip install guidata 
+> pip install Cython 
+> pip install guiqwt (fail missing VC)
+Download source from github
+> python setup.py build -c mingw32 install
 
 basemap
 > sudo apt-get install libgeos-3.5.0 libgeos-c1v5 libgeos-dev
