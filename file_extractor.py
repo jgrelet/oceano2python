@@ -8,7 +8,9 @@ import sys
 import argparse
 import numpy as np
 import re
+from datetime import datetime
 
+DEGREE        = 176
 
 class FileExtractor:
 
@@ -39,6 +41,7 @@ class FileExtractor:
         self.__separator = separator
         self.__header = {}
         self.__data = {}
+        self.__regex = {}
         # replace this constante with roscop fill value
         self.__FillValue = 1e36
 
@@ -65,9 +68,16 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-    #def re_compile(self):
+    def set_regex(self, cfg):
 
-       # first pass on file(s)
+        # first pass on file(s)
+        d = cfg['ctd']['header']
+
+        #print(d, end='\n')
+        for key in d.keys():
+            print("{}: {}".format(key, d[key]))
+            self.__regex[key] = re.compile(d[key])
+        print(end='\n')
 
     def first_pass(self):
         '''
@@ -85,7 +95,7 @@ class FileExtractor:
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 filesRead += 1
                 for line in f:
-                    if line[0] == '#' or line[0] == '*':
+                    if self.__regex['isHeader'].match(line):
                         continue
 
                     # increment the line number
@@ -103,7 +113,7 @@ class FileExtractor:
         # return self.n, self.m
 
     # second pass, extract data from roscop code in fname and fill array
-    def second_pass(self, cfg, device):
+    def second_pass(self, cfg, device, variables_1D):
         '''
         Read the file to its internal dict
 
@@ -117,6 +127,8 @@ class FileExtractor:
         '''
         n = 0
         m = 0
+        # initialize datetime object
+        dt = datetime
 
         # set skipHeader is declared in toml section, 0 by default
         if 'separator' in cfg[device.lower()]:
@@ -129,6 +141,9 @@ class FileExtractor:
         hash = cfg['split'][device.lower()]
 
         # initialize arrays, move at the end of firstPass ?
+        for key in variables_1D:
+            self.__data[key] = np.ones((self.n)) * self.__FillValue
+             
         for key in self.keys:
             # mult by __fillValue next
             # the shape parameter has to be an int or sequence of ints
@@ -140,7 +155,55 @@ class FileExtractor:
                 for line in f:
                     if f.filelineno() < self.__skip_header + 1:
                         continue
-                    if line[0] == '#' or line[0] == '*':
+                    # read and decode header
+                    if self.__regex['isHeader'].match(line):
+                        
+                        if self.__regex['TIME'].search(line):
+                            (month, day, year, hour, minute, second) = \
+                                self.__regex['TIME'].search(line).groups() 
+
+                            # format date and time to  "May 09 2011 16:33:53"
+                            dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
+
+                            # dateTime conversion to "09/05/2011 16:33:53"
+                            dateTime = "%s" % \
+                                (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                            # conversion to "20110509163353"
+                            epic_date = "%s" % \
+                                (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
+
+                            # conversion to julian day
+                            julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
+                            + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
+
+                            # we use julian day with origine 0
+                            julian -= 1
+                            print("{:07.4f} : {} / {}".format(julian, dateTime, epic_date))
+                            self.__data['TIME'][n] = julian  
+                            
+                        if self.__regex['LATITUDE'].search(line):
+                            (lat_deg, lat_min, lat_hemi) = self.__regex['LATITUDE'].search(line).groups() 
+
+                            # format latitude to string
+                            latitude_str = "%s%c%s %s" % (lat_deg, DEGREE, lat_min, lat_hemi)
+
+                            # transform to decimal using ternary operator
+                            latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
+                                (float(lat_deg) + (float(lat_min) / 60.)) * -1
+                            print("{:07.4f} : {}".format(latitude, latitude_str))
+                            self.__data['LATITUDE'][n] = latitude  
+                            
+                        if self.__regex['LONGITUDE'].search(line):
+                            (lon_deg, lon_min, lon_hemi) = self.__regex['LONGITUDE'].search(line).groups() 
+
+                            # format longitude to string
+                            longitude_str = "%s%c%s %s" % (lon_deg, DEGREE, lon_min, lon_hemi)
+
+                            # transform to decimal using ternary operator
+                            longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
+                                (float(lon_deg) + (float(lon_min) / 60.)) * -1
+                            print("{:07.4f} : {}".format(longitude, longitude_str))
+                            self.__data['LONGITUDE'][n] = longitude  
                         continue
                     # split the line, remove leading and trailing space before
                     p = line.strip().split(self.__separator)

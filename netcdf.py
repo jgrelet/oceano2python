@@ -4,13 +4,13 @@ from numpy import arange, dtype
 from physical_parameter import Roscop
 
 
-def writeNetCDF(fileName, fe):
+def writeNetCDF(fileName, fe, variables_1D):
 
     # ncvars is a dictionary that store a netcdf variable for each physical parameter key
     ncvars = {}
 
     # variables and dimensions use for 1D and 2D variables
-    variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
+    #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
     variables = variables_1D.copy()
     dims_2D = ['TIME', 'DEPTH']
 
@@ -21,6 +21,7 @@ def writeNetCDF(fileName, fe):
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
     print('writing netCDF file: {}'.format(fileName))
+    
     # create dimensions
     # n is number of profiles, m the max size of profiles
     time = nc.createDimension("TIME", fe.n)
@@ -70,8 +71,10 @@ def writeNetCDF(fileName, fe):
     # write the ncvars
     for key in variables:
         if any(key in item for item in variables_1D):
+            #print("Key: {}, {}".format(key,fe[key]))
             ncvars[key][:] = fe[key]
         else:
+            #print("Key: {}, {}".format(key,fe[key]))
             ncvars[key][:, :] = fe[key]
 
     # close the netcdf file

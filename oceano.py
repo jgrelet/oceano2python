@@ -14,6 +14,7 @@ import netcdf
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
     'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': 'COLCOR'}
+variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
 ti = typeInstrument  # an alias
 filesBrowsePosition_row = 2
 filesBrowsePosition_column = 1
@@ -136,10 +137,12 @@ def process(args, cfg, ti):
     # fileExtractor
     fe = FileExtractor(args.files, args.keys)
 
+    fe.set_regex(cfg)
+    
     # cfg = toml.load(args.config)
     fe.first_pass()
     # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
-    fe.second_pass(cfg, ti)
+    fe.second_pass(cfg, ti, variables_1D)
     # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
     return fe
 
@@ -273,4 +276,4 @@ if __name__ == "__main__":
         fe = process(args, cfg, device)
         #print("Dimensions: {} x {}".format(fe.m, fe.n))
         #print(fe.disp())
-        netcdf.writeNetCDF( 'output/test.nc', fe)
+        netcdf.writeNetCDF( 'output/test.nc', fe,variables_1D)
