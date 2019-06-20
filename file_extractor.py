@@ -23,21 +23,20 @@ class FileExtractor:
     fname : file, str, pathlib.Path, list of str
         File, filename, or list to read.
     separator : str, default None
-    skip_header : int, optional
         The number of lines to skip at the beginning of the file.
     '''
 
     # constructor with values by defaul
-    def __init__(self, fname, keys, separator=None, skip_header=0):
+    def __init__(self, fname, keys, separator=None):
         # attibutes
         # public:
         self.fname = fname
         self.keys = keys
         self.n = 0
         self.m = 0
+        self.lineHeader = 0
 
         # private:
-        self.__skip_header = skip_header
         self.__separator = separator
         self.__header = {}
         self.__data = {}
@@ -68,10 +67,10 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-    def set_regex(self, cfg):
+    def set_regex(self, cfg, ti):
 
         # first pass on file(s)
-        d = cfg['ctd']['header']
+        d = cfg[ti.lower()]['header']
 
         #print(d, end='\n')
         for key in d.keys():
@@ -86,31 +85,45 @@ class FileExtractor:
         out : [n,m]
         The size of array.
         '''
-        lineRead = 0
+        lineHeader = 0
+        lineData = 0
         filesRead = 0
         indMax = 0
+        isHeader = True
 
         for file in self.fname:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
+                lineData = 0
+                lineHeader = 0
                 filesRead += 1
                 for line in f:
-                    if self.__regex['isHeader'].match(line):
-                        continue
-
+                    # header detection, skip header lines
+                    if isHeader:
+                        if 'isHeader' in self.__regex: 
+                            if  self.__regex['isHeader'].match(line):
+                                lineHeader += 1
+                                continue
+                        elif 'endHeader' in self.__regex:
+                            if self.__regex['endHeader'].match(line):
+                                lineHeader += 1
+                                isHeader = False
+                            else:
+                                lineHeader += 1
+                                continue
+    
                     # increment the line number
-                    lineRead += 1
+                    lineData += 1
 
-                if lineRead > indMax:
-                    indMax = lineRead
+                if lineData > indMax:
+                    indMax = lineData
                 logging.debug(
-                    " file: {} -> read: {:>{width}}".format(
-                        file, lineRead, width=6))
-            lineRead = 0
+                    " {} -> header: {:>{w}} data: {:>{w2}}".format(
+                        file, lineHeader, lineData, w=3, w2=6))
         # the size of arrays
         self.n = filesRead
         self.m = indMax
-        # return self.n, self.m
+        self.lineHeader = lineHeader
 
     # second pass, extract data from roscop code in fname and fill array
     def second_pass(self, cfg, device, variables_1D):
@@ -133,9 +146,6 @@ class FileExtractor:
         # set skipHeader is declared in toml section, 0 by default
         if 'separator' in cfg[device.lower()]:
             self.__separator = cfg[device.lower()]['separator']
-        if 'skipHeader' in cfg[device.lower()]:
-            self.__skip_header = cfg[device.lower()]['skipHeader']
-        logging.debug(self.__skip_header)
 
         # get the dictionary from toml block, device must be is in lower case
         hash = cfg['split'][device.lower()]
@@ -153,11 +163,8 @@ class FileExtractor:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 for line in f:
-                    if f.filelineno() < self.__skip_header + 1:
-                        continue
-                    # read and decode header
-                    if self.__regex['isHeader'].match(line):
-                        
+                    if f.filelineno() < self.lineHeader + 1:
+                        # read and decode header
                         if self.__regex['TIME'].search(line):
                             (month, day, year, hour, minute, second) = \
                                 self.__regex['TIME'].search(line).groups() 
