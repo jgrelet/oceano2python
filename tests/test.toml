@@ -44,7 +44,6 @@ comment        = "CTD bottles water sampling with temperature, salinity and oxyg
 
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
-skipHeader = 40
 acquisitionSoftware = "WinMK21"
 acquisitionVersion = "2.10.1" 
 processingSoftware = ""
@@ -53,6 +52,13 @@ type           = "SIPPICAN"
 sn             = "01150"
 title_summary  = "XBT profiles processed during PIRATA-FR29 cruise"
 comment        = "Extract from .edf files"
+
+	[xbt.header]
+	endHeader = 'Depth\s*\(m\)'
+	TIME = 'Time of Launch\s*[:=]\s*(\d+)/(\d+)/(\d+)'
+	DATE = 'Date of Launch\s*[:=]\s*(\d+):(\d+):(\d+)'
+	LATITUDE = 'Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)(\w)'
+	LONGITUDE = 'Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)(\w)'
 
 [thermo]
 cruisePrefix   = "fr29"
