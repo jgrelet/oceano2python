@@ -3,7 +3,8 @@ MAIN = $(PROJECT).py
 PYTHON = python
 PYLINT = pylint
 TEST_PATH = tests
-OPTIONS = data/CTD/cnv/dfr2900[1-3].cnv -i CTD 
+OPTIONS_CTD = data/CTD/cnv/dfr2900[1-3].cnv -i CTD 
+OPTIONS_XBT = data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
 
 .PHONY: clean-pyc clean-build lint test run build
 
@@ -24,8 +25,11 @@ lint:
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 
-run:
-	$(PYTHON) $(MAIN) $(OPTIONS)
+ctd:
+	$(PYTHON) $(MAIN) $(OPTIONS_CTD)
+
+xbt:
+	$(PYTHON) $(MAIN) $(OPTIONS_XBT)
 
 build:
 	pyinstaller -wF $(MAIN)
