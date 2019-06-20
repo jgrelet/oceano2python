@@ -137,7 +137,7 @@ def process(args, cfg, ti):
     # fileExtractor
     fe = FileExtractor(args.files, args.keys)
 
-    fe.set_regex(cfg)
+    fe.set_regex(cfg, ti)
     
     # cfg = toml.load(args.config)
     fe.first_pass()
