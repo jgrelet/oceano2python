@@ -24,8 +24,9 @@ lint:
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 
+# to run program in GUI mode : make run GUI=-g
 run:
-	$(PYTHON) $(MAIN) $(OPTIONS)
+	$(PYTHON) $(MAIN) $(OPTIONS) $(GUI)
 
 build:
 	pyinstaller -wF $(MAIN)
