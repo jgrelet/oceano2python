@@ -25,11 +25,12 @@ lint:
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 
-ctd:
-	$(PYTHON) $(MAIN) $(OPTIONS_CTD)
+# to run program in GUI mode : make run GUI=-g
+runctd:
+	$(PYTHON) $(MAIN) $(OPTIONS_CTD) $(GUI)
 
-xbt:
-	$(PYTHON) $(MAIN) $(OPTIONS_XBT)
+runxbt:
+	$(PYTHON) $(MAIN) $(OPTIONS_XBT) $(GUI)
 
 build:
 	pyinstaller -wF $(MAIN)
