@@ -196,10 +196,10 @@ if __name__ == "__main__":
             event, values = window.Read()
             print(event, values)
 
-            if event is 'Cancel' or event == None:
+            if event == 'Cancel' or event == None:
                 raise SystemExit("Cancelling: user exit")
 
-            if event is 'OK':  # end of initialization, process data now
+            if event == 'OK':  # end of initialization, process data now
                 # values['_HIDDEN_'] is a string with files separated by ';' and fileExtractor need a list
                 files = values['_HIDDEN_'].split(';')
                 args.files = files
@@ -211,14 +211,14 @@ if __name__ == "__main__":
                     continue
                 break
 
-            if event is '_COMBO_':
+            if event == '_COMBO_':
                 # you have to go into the bowels of the pygi code, to get the instance of the Combo
                 # by the line and column number of the window to update its "fileType" property.
                 updateFilesBrowseCombo(
                     ti[values['_COMBO_']], filesBrowsePosition_column, filesBrowsePosition_row)
 
             # update the Multilines instance from FilesBrowse return
-            if event is '_HIDDEN_':
+            if event == '_HIDDEN_':
                 window.Element('_IN_').Update(
                     values['_HIDDEN_'].split(';'))
 
