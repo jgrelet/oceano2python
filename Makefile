@@ -25,11 +25,12 @@ lint:
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 
-# to run program in GUI mode : make run GUI=-g
-runctd:
+# to run program in GUI mode : make ctd GUI=-g
+ctd:
 	$(PYTHON) $(MAIN) $(OPTIONS_CTD) $(GUI)
 
-runxbt:
+# to run program in GUI mode : make xbt GUI=-g
+xbt:
 	$(PYTHON) $(MAIN) $(OPTIONS_XBT) $(GUI)
 
 build:
