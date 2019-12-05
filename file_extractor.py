@@ -170,13 +170,14 @@ class FileExtractor:
 
         for file in self.fname:
             with fileinput.input(
-                    file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
+                file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
+                day = month = year = hour = minute = second = 0
                 for line in f:
                     if f.filelineno() < self.lineHeader + 1:
                         # read and decode header
-                        if self.__regex['TIME'].search(line):
+                        if self.__regex['DATETIME'].search(line):
                             (month, day, year, hour, minute, second) = \
-                                self.__regex['TIME'].search(line).groups() 
+                                self.__regex['DATETIME'].search(line).groups() 
 
                             # format date and time to  "May 09 2011 16:33:53"
                             dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
@@ -184,6 +185,32 @@ class FileExtractor:
                             # dateTime conversion to "09/05/2011 16:33:53"
                             dateTime = "%s" % \
                                 (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                            # conversion to "20110509163353"
+                            epic_date = "%s" % \
+                                (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
+
+                            # conversion to julian day
+                            julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
+                            + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
+
+                            # we use julian day with origine 0
+                            julian -= 1
+                            print("{:07.4f} : {} / {}".format(julian, dateTime, epic_date))
+                            self.__data['TIME'][n] = julian  
+                            
+                        if self.__regex['DATE'].search(line):
+                            (month, day, year) = \
+                                self.__regex['DATE'].search(line).groups() 
+                        if self.__regex['TIME'].search(line):
+                            (hour, minute, second) = \
+                                self.__regex['TIME'].search(line).groups()   
+                       
+                            # format date and time to  "May 09 2011 16:33:53"
+                            dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
+
+                            # dateTime conversion to "09/05/2011 16:33:53"
+                            dateTime = "%s" % \
+                                (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
                             # conversion to "20110509163353"
                             epic_date = "%s" % \
                                 (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
