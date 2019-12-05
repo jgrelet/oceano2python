@@ -68,6 +68,14 @@ class FileExtractor:
         return buf
 
     def set_regex(self, cfg, ti):
+        ''' prepare (compile) each regular expression inside toml file under section [<device>.header] 
+        	[ctd.header]
+	        isHeader = '^[*#]'
+	        isDevice = '^\*\s+(Sea-Bird)'
+	        TIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	        LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
+	        LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+        '''
 
         # first pass on file(s)
         d = cfg[ti.lower()]['header']
@@ -95,7 +103,6 @@ class FileExtractor:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 lineData = 0
-                lineHeader = 0
                 filesRead += 1
                 for line in f:
                     # header detection, skip header lines
@@ -143,9 +150,11 @@ class FileExtractor:
         # initialize datetime object
         dt = datetime
 
-        # set skipHeader is declared in toml section, 0 by default
+        # set separator field if declared in toml section, none by default
         if 'separator' in cfg[device.lower()]:
             self.__separator = cfg[device.lower()]['separator']
+
+        # set skipHeader is declared in toml section, 0 by default
 
         # get the dictionary from toml block, device must be is in lower case
         hash = cfg['split'][device.lower()]
@@ -212,6 +221,7 @@ class FileExtractor:
                             print("{:07.4f} : {}".format(longitude, longitude_str))
                             self.__data['LONGITUDE'][n] = longitude  
                         continue
+
                     # split the line, remove leading and trailing space before
                     p = line.strip().split(self.__separator)
 

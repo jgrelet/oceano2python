@@ -137,10 +137,12 @@ def process(args, cfg, ti):
     # fileExtractor
     fe = FileExtractor(args.files, args.keys)
 
+    # prepare (compile) each regular expression inside toml file under section [<device=ti>.header] 
     fe.set_regex(cfg, ti)
     
-    # cfg = toml.load(args.config)
+    # the first pass skip headers and return data dimensions size
     fe.first_pass()
+    
     # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
     fe.second_pass(cfg, ti, variables_1D)
     # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
@@ -276,4 +278,6 @@ if __name__ == "__main__":
         fe = process(args, cfg, device)
         #print("Dimensions: {} x {}".format(fe.m, fe.n))
         #print(fe.disp())
-        netcdf.writeNetCDF( 'output/test.nc', fe,variables_1D)
+
+    # write the NetCDF file
+    netcdf.writeNetCDF( "netcdf/OS_{}_{}.nc".format(cfg['cruise']['cycleMesure'], device), fe,variables_1D)
