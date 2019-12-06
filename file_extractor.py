@@ -17,13 +17,15 @@ class FileExtractor:
     '''
     This class read multiple ASCII file, extract physical parameter from ROSCOP codification at the given column
     and fill arrays.
+    Header values and 1 dimensions variables as TIME, LATITUDE and LONGITUDE are 
+    automaticaly extracted from toml configuration file, actually bi set_regexp function, may be add inside constructor ?
 
     Parameters
     ----------
     fname : file, str, pathlib.Path, list of str
         File, filename, or list to read.
-    separator : str, default None
-        The number of lines to skip at the beginning of the file.
+    keys: list of physical parameter to extract
+    separator : str, column separator, default None (blank)
     '''
 
     # constructor with values by defaul
