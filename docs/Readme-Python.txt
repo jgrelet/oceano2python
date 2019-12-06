@@ -585,6 +585,20 @@ enter this command in your Windows command prompt:
 
 > pyinstaller -wF my_program.py
 
+Problem during execution (under Windows):
+File "netCDF4\_netCDF4.pyx", line 1213, in init netCDF4._netCDF4
+ModuleNotFoundError: No module named 'cftime'
+
+Try solution may be found here:
+https://stackoverflow.com/questions/29067588/problems-building-python-distribion-containing-netcdf4
+
+
+    remove the current pyinstaller: pip uninstall pyinstaller
+
+    clone and install pyinstaller from the python3 branch (https://github.com/pyinstaller/pyinstaller)
+
+    modify your .spec file from hiddenimports = [] to hiddenimports = ['netCDF4.utils', 'netcdftime']
+
 
 Tests unitaires avec unittest:
 --------------------
@@ -634,3 +648,5 @@ Merge made by the 'recursive' strategy.
  README.md | 2 ++
  1 file changed, 2 insertions(+)
  create mode 100644 README.md
+
+make test
