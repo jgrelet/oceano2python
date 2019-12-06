@@ -22,17 +22,17 @@ titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
 typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
 
-	[ctd.header]
-	isHeader = '^[*#]'
-	isDevice = '^\*\s+(Sea-Bird)'
-	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
-	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
-	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
-	DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
-	TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
-	bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
-	operator = 'Operator\s*:\s*(.*)'
-	type = 'Type\s*:\s*(.*)'
+[ctd.header]
+isHeader = '^[*#]'
+isDevice = '^\*\s+(Sea-Bird)'
+DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
+LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
+TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
+bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+operator = 'Operator\s*:\s*(.*)'
+type = 'Type\s*:\s*(.*)'
 
 [btl]
 typeInstrument           = "SBE32 standard 24 Niskin bottles"

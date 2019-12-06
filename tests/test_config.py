@@ -20,14 +20,14 @@ class testConfig(unittest.TestCase):
                        'creator': 'Jacques.Grelet@ird.fr'}
         self.ctd = {'cruisePrefix': 'fr29', 'station': 'Station\\s*:\\s*\\D*(\\d*)', 'stationPrefixLength': 3,
                     'titleSummary': 'CTD profiles processed during PIRATA-FR29 cruise', 'typeInstrument': 'SBE911+',
-                    'instrumentNumber': '09P1263', 'isHeader': '^[*#]', 'isDevice': ['^\\*\\s+(Sea-Bird)', '(\\*END\\*)'],
-                    'latitude':  'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)',
-                    'longitude': 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)',
-                    'time': 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)',
-                    'date': 'Date\s*:\s*(\d+)/(\d+)/(\d+)',
-                    'hour': '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)',
+                    'instrumentNumber': '09P1263', 'header': {'isHeader': '^[*#]', 'isDevice': '^\\*\\s+(Sea-Bird)',
+                    'LATITUDE':  'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)',
+                    'LONGITUDE': 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)',
+                    'DATETIME': 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)',
+                    'DATE': 'Date\s*:\s*(\d+)/(\d+)/(\d+)',
+                    'TIME': '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)',
                     'bottomDepth': 'Bottom Depth\\s*:\\s*(\\d*\\.?\\d+?)\\s*\\S*', 'operator': 'Operator\\s*:\\s*(.*)',
-                    'type': 'Type\\s*:\\s*(.*)'}
+                    'type': 'Type\\s*:\\s*(.*)'}}
         self.splitCtd = {'ETDD': 2, 'PRES': 3, 'DEPTH': 4, 'TEMP': 5, 'PSAL': 18,
                          'DENS': 20, 'SVEL': 22, 'DOX2': 16, 'FLU2': 14, 'FLU3': 15, 'TUR3': 13, 'NAVG': 23}
         self.splitCtdAll = {'ETDD': 2, 'PRES': 3, 'DEPTH': 4, 'TE01': 5, 'TE02': 6, 'CND1': 7, 'CND2': 8, 'DOV1': 9, 'DOV2': 10, 'DVT1': 11, 'DVT2': 12,
@@ -54,7 +54,7 @@ class testConfig(unittest.TestCase):
         d = self.cfg['ctd']
         for k in d.keys():
             self.assertEqual(d[k], self.ctd[k])
-
+            
     def test_split_ctd(self):
         """ Test if all value  in block [SPLIT.CTD] are correct """
         d = self.cfg['split']['ctd']
