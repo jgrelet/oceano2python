@@ -51,10 +51,12 @@ You need to install aditional Python packages for the following OS:
 
 ## build and run
 
-To build, run and test, you can use make:
+To build, run tests, build (compiled version), test examples (CTD/XBT), with GUI, you can use make:
 
 ``` bash
-make build
 make test
-make run
+make build
+make ctd
+make xbt
+make ctd GUI=-g
 ```
