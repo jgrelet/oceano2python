@@ -591,14 +591,22 @@ ModuleNotFoundError: No module named 'cftime'
 
 Try solution may be found here:
 https://stackoverflow.com/questions/29067588/problems-building-python-distribion-containing-netcdf4
+Unistall/install last netCDF4 version:
+> pip uninstall netCDF4
+> pip install netCDF4
 
+Edit and modify:
+ C:\opt\python\Python37\Lib\site-packages\PyInstaller\hooks\hook-netCDF4.py
+replace:
+hiddenimports = ['netCDF4.utils', 'netcdftime']
+with:
+hiddenimports = ['netCDF4.utils', 'cftime']
 
-    remove the current pyinstaller: pip uninstall pyinstaller
+Version [1.4.0](https://pypi.python.org/pypi/netCDF4/1.4.0) released. 
+The netcdftime package is no longer included, it is now a separate 
+[package](https://pypi.python.org/pypi/cftime) dependency. 
 
-    clone and install pyinstaller from the python3 branch (https://github.com/pyinstaller/pyinstaller)
-
-    modify your .spec file from hiddenimports = [] to hiddenimports = ['netCDF4.utils', 'netcdftime']
-
+https://github.com/pyinstaller/pyinstaller/pull/4422/commits/a6098d062e713ab93d71ccb021d3c61f4a6b3360
 
 Tests unitaires avec unittest:
 --------------------
