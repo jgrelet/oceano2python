@@ -29,11 +29,12 @@ class FileExtractor:
     '''
 
     # constructor with values by defaul
-    def __init__(self, fname, keys, separator=None):
+    def __init__(self, fname, roscop, keys, separator=None):
         # attibutes
         # public:
         self.fname = fname
         self.keys = keys
+        self.roscop = roscop
         self.n = 0
         self.m = 0
         self.lineHeader = 0
@@ -44,7 +45,7 @@ class FileExtractor:
         self.__data = {}
         self.__regex = {}
         # replace this constante with roscop fill value
-        self.__FillValue = 1e36
+        #self.__FillValue = 1e36
 
     # overloading operators
     def __getitem__(self, key):
@@ -82,11 +83,9 @@ class FileExtractor:
         # first pass on file(s)
         d = cfg[ti.lower()]['header']
 
-        #print(d, end='\n')
+        # fill the __regex dict with compiled regex 
         for key in d.keys():
-            print("{}: {}".format(key, d[key]))
             self.__regex[key] = re.compile(d[key])
-        print(end='\n')
 
     def first_pass(self):
         '''
@@ -105,6 +104,8 @@ class FileExtractor:
             with fileinput.input(
                     file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
                 lineData = 0
+                lineHeader = 0
+                isHeader = True
                 filesRead += 1
                 for line in f:
                     # header detection, skip header lines
@@ -116,7 +117,7 @@ class FileExtractor:
                         elif 'endHeader' in self.__regex:
                             if self.__regex['endHeader'].match(line):
                                 lineHeader += 1
-                                isHeader = False
+                                isHeader = False             
                             else:
                                 lineHeader += 1
                                 continue
@@ -163,12 +164,19 @@ class FileExtractor:
 
         # initialize arrays, move at the end of firstPass ?
         for key in variables_1D:
-            self.__data[key] = np.ones((self.n)) * self.__FillValue
+            #self.__data[key] = np.ones((self.n)) * self.__FillValue
+            if '_FillValue' in self.roscop[key]:
+                self.__data[key] = np.full((self.n, self.roscop[key]['_FillValue'])) 
+            else:
+                self.__data[key] = np.empty(self.n) 
              
         for key in self.keys:
             # mult by __fillValue next
             # the shape parameter has to be an int or sequence of ints
-            self.__data[key] = np.ones((self.n, self.m)) * self.__FillValue
+            if '_FillValue' in self.roscop[key]:
+                self.__data[key] = np.full([self.n, self.m], self.roscop[key]['_FillValue'])
+            else:
+                self.__data[key] = np.empty([self.n, self.m]) 
 
         for file in self.fname:
             with fileinput.input(
@@ -177,78 +185,87 @@ class FileExtractor:
                 for line in f:
                     if f.filelineno() < self.lineHeader + 1:
                         # read and decode header
-                        if self.__regex['DATETIME'].search(line):
-                            (month, day, year, hour, minute, second) = \
-                                self.__regex['DATETIME'].search(line).groups() 
+                        for k in self.__regex.keys():
+                            # key is DATETIME
+                            if k == "DATETIME" and self.__regex[k].search(line):
+                                (month, day, year, hour, minute, second) = \
+                                    self.__regex[k].search(line).groups() 
 
-                            # format date and time to  "May 09 2011 16:33:53"
-                            dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
+                                # format date and time to  "May 09 2011 16:33:53"
+                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
 
-                            # dateTime conversion to "09/05/2011 16:33:53"
-                            dateTime = "%s" % \
-                                (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
-                            # conversion to "20110509163353"
-                            epic_date = "%s" % \
-                                (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
+                                # dateTime conversion to "09/05/2011 16:33:53"
+                                dateTime = "%s" % \
+                                    (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                                # conversion to "20110509163353"
+                                epic_date = "%s" % \
+                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
 
-                            # conversion to julian day
-                            julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
-                            + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
+                                # conversion to julian day
+                                julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
+                                + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
 
-                            # we use julian day with origine 0
-                            julian -= 1
-                            print("{:07.4f} : {} / {}".format(julian, dateTime, epic_date))
-                            self.__data['TIME'][n] = julian  
-                            
-                        if self.__regex['DATE'].search(line):
-                            (month, day, year) = \
-                                self.__regex['DATE'].search(line).groups() 
-                        if self.__regex['TIME'].search(line):
-                            (hour, minute, second) = \
-                                self.__regex['TIME'].search(line).groups()   
+                                # we use julian day with origine 0
+                                julian -= 1
+                                self.__data['TIME'][n] = julian  
+                            # key is DATE
+                            if k == "DATE" and self.__regex[k].search(line):
+                                if device.lower() == 'ladcp':
+                                    (year, month, day) = \
+                                    self.__regex[k].search(line).groups() 
+                                else:
+                                    (month, day, year) = \
+                                    self.__regex[k].search(line).groups() 
+                            # key is TIME
+                            if k == "TIME" and self.__regex[k].search(line):
+                                (hour, minute, second) = \
+                                self.__regex[k].search(line).groups()   
                        
-                            # format date and time to  "May 09 2011 16:33:53"
-                            dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
+                                # format date and time to  "May 09 2011 16:33:53"
+                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
 
-                            # dateTime conversion to "09/05/2011 16:33:53"
-                            dateTime = "%s" % \
-                                (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
-                            # conversion to "20110509163353"
-                            epic_date = "%s" % \
-                                (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
+                                # dateTime conversion to "09/05/2011 16:33:53"
+                                dateTime = "%s" % \
+                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                                # conversion to "20110509163353"
+                                epic_date = "%s" % \
+                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
 
-                            # conversion to julian day
-                            julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
-                            + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
+                                # conversion to julian day
+                                julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
+                                + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
 
-                            # we use julian day with origine 0
-                            julian -= 1
-                            print("{:07.4f} : {} / {}".format(julian, dateTime, epic_date))
-                            self.__data['TIME'][n] = julian  
-                            
-                        if self.__regex['LATITUDE'].search(line):
-                            (lat_deg, lat_min, lat_hemi) = self.__regex['LATITUDE'].search(line).groups() 
+                                # we use julian day with origine 0
+                                julian -= 1
+                                self.__data['TIME'][n] = julian  
+                            # key is LATITUDE
+                            if k == "LATITUDE" and self.__regex[k].search(line):
+                                if device.lower() == 'ladcp':
+                                    [latitude] = self.__regex[k].search(line).groups()                                  
+                                else:
+                                    (lat_deg, lat_min, lat_hemi) = self.__regex[k].search(line).groups() 
 
-                            # format latitude to string
-                            latitude_str = "%s%c%s %s" % (lat_deg, DEGREE, lat_min, lat_hemi)
+                                    # format latitude to string
+                                    latitude_str = "%s%c%s %s" % (lat_deg, DEGREE, lat_min, lat_hemi)
 
-                            # transform to decimal using ternary operator
-                            latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
-                                (float(lat_deg) + (float(lat_min) / 60.)) * -1
-                            print("{:07.4f} : {}".format(latitude, latitude_str))
-                            self.__data['LATITUDE'][n] = latitude  
-                            
-                        if self.__regex['LONGITUDE'].search(line):
-                            (lon_deg, lon_min, lon_hemi) = self.__regex['LONGITUDE'].search(line).groups() 
+                                    # transform to decimal using ternary operator
+                                    latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
+                                        (float(lat_deg) + (float(lat_min) / 60.)) * -1
+                                self.__data['LATITUDE'][n] = latitude  
+                            # key is LONGITUDE
+                            if k == "LONGITUDE" and self.__regex[k].search(line):
+                                if device.lower() == 'ladcp':
+                                    [longitude] = self.__regex[k].search(line).groups()
+                                else:
+                                    (lon_deg, lon_min, lon_hemi) = self.__regex[k].search(line).groups() 
 
-                            # format longitude to string
-                            longitude_str = "%s%c%s %s" % (lon_deg, DEGREE, lon_min, lon_hemi)
+                                    # format longitude to string
+                                    longitude_str = "%s%c%s %s" % (lon_deg, DEGREE, lon_min, lon_hemi)
 
-                            # transform to decimal using ternary operator
-                            longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
-                                (float(lon_deg) + (float(lon_min) / 60.)) * -1
-                            print("{:07.4f} : {}".format(longitude, longitude_str))
-                            self.__data['LONGITUDE'][n] = longitude  
+                                    # transform to decimal using ternary operator
+                                    longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
+                                        (float(lon_deg) + (float(lon_min) / 60.)) * -1
+                                self.__data['LONGITUDE'][n] = longitude  
                         continue
 
                     # split the line, remove leading and trailing space before

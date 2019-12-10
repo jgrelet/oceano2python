@@ -10,6 +10,7 @@ from configparser import ConfigParser
 import os
 import distutils.util as du
 import netcdf
+from physical_parameter import Roscop
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
@@ -21,6 +22,8 @@ filesBrowsePosition_column = 1
 
 # initialize filename use to save GUI configuration
 configfile = 'oceano.cfg'
+# move to main after tests
+r = Roscop("code_roscop.csv")
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -41,7 +44,7 @@ def processArgs():
                         default='tests/test.toml')
     parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
-    parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
+    parser.add_argument('-k', '--keys', nargs='+',
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
                         help='use GUI interface')
@@ -130,12 +133,17 @@ def process(args, cfg, ti):
         n, m: array size
     '''
 
+    print('processing...')
     # check if no file selected or cancel button pressed
     logging.debug("File(s): {}, config: {}, Keys: {}".format(
         args.files, args.config, args.keys))
 
-    # fileExtractor
-    fe = FileExtractor(args.files, args.keys)
+    # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
+    if args.keys == None:
+        args.keys = cfg['split'][device.lower()].keys()
+    
+    # extract header and data from files
+    fe = FileExtractor(args.files, r, args.keys)
 
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header] 
     fe.set_regex(cfg, ti)
@@ -273,11 +281,11 @@ if __name__ == "__main__":
             parser.print_help(sys.stderr)
             sys.exit(1)
 
-        keys = cfg['split'][device.lower()].keys()
         # in command line mode (console)
         fe = process(args, cfg, device)
         #print("Dimensions: {} x {}".format(fe.m, fe.n))
         #print(fe.disp())
 
     # write the NetCDF file
-    netcdf.writeNetCDF( "netcdf/OS_{}_{}.nc".format(cfg['cruise']['cycleMesure'], device), fe,variables_1D)
+    ncfile = "netcdf/OS_{}_{}.nc".format(cfg['cruise']['cycleMesure'], device)
+    netcdf.writeNetCDF( ncfile, fe, r, variables_1D)

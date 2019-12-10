@@ -82,9 +82,14 @@ class Roscop:
                         # use the second line with key string to convert each numeric type into float
                         if theKey != 'string':
                             if self['string'][k] == 'numeric':
-                                row[k] = float(row[k])
-                        logging.debug(
-                            " {} -> {}, {} = {}".format(theKey, k, type(row[k]), row[k]))
+                                if 'float' in row['types']:
+                                   row[k] = float(row[k])
+                                elif 'int' in row['types']:
+                                   row[k] = int(row[k])
+                                else:
+                                    print('invalid type {}: {}'.format(theKey, k))
+                        #logging.debug(
+                        #    " {} -> {}, {} = {}".format(theKey, k, type(row[k]), row[k]))
                 self.__hash[theKey] = row
 
         return

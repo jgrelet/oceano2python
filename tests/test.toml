@@ -24,7 +24,6 @@ instrumentNumber  = "09P1263"
 
 [ctd.header]
 isHeader = '^[*#]'
-isDevice = '^\*\s+(Sea-Bird)'
 DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
 LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
 LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
@@ -82,7 +81,6 @@ comment        = "Extract from .colcor files"
 [ladcp]
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
-skipHeader = 10
 acquisitionSoftware = "BBTALK"
 acquisitionVersion = 3.04
 processingSoftware = "MATLAB-VISBECK"
@@ -94,19 +92,26 @@ downSn           = "24543"
 title_summary  = "IFM-GEOMAR/LDEO Matlab LADCP-Processing system adapted by FM/PR/JG"
 comment        = "Extract from .lad files"
 
+	[ladcp.header]
+	endHeader = 'Columns'
+	DATE = 'Date\s*=\s*(\d+)/(\d+)/(\d+)'
+	TIME = 'Start_Time\s*=\s*(\d+)[:hH](\d+):(\d+)'
+	LATITUDE = 'Latitude\s*[:=]\s*([-+]?\d+\.\d+)'
+	LONGITUDE = 'Longitude\s*[:=]\s*([-]?\d+.\d+)'
+
 [split]
 	[split.ctd]
-	ETDD = 2
-	PRES = 3
-	DEPTH = 4
-	TEMP = 5
-	PSAL = 18
-	DENS = 20
-	SVEL = 22
-	DOX2 = 16
-	FLU2 = 14
-	FLU3 = 15
-	TUR3 = 13
+	ETDD = 1
+	PRES = 2
+	DEPTH = 3
+	TEMP = 4
+	PSAL = 17
+	DENS = 19
+	SVEL = 21
+	DOX2 = 15
+	FLU2 = 13
+	FLU3 = 14
+	TUR3 = 12
 	NAVG = 23
 
 	[split.ctdAll]

@@ -5,7 +5,7 @@ PROFILE;int32;profile number;;1;;;;;;%4d;99999;;;Station number, a station could
 LATITUDE;float32;latitude of measurement;latitude;degrees_north;;;;;;;;Y;;;;;;WGS84;urn:ogc:crs:EPSG::4326
 LONGITUDE;float32;longitude of measurement;longitude;degrees_east;;;;;;;;X;;;;;;WGS84;urn:ogc:crs:EPSG::4327
 TIME;float64;time of measurement;time;days since 1950-01-01T00:00:00Z;Relative julian days with decimal part (as parts of the day);;;0.0;90000.0;%6.6f;;T;;;;;;;
-ETDD;float32;ellapsed time;;1;;;;0;90000;%9.5f;;;;;;;;;
+ETDD;float64;ellapsed time;;1;;;;0;90000;%9.5f;1E+36;;;;;;;;
 DEPH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
 DEPTH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
 PRES;float32;sea water pressure;sea_water_pressure;decibar;;TIME DEPTH LATITUDE LONGITUDE;;0;9000;%7.2f;1E+36;;;Pressure (dbar) of the measurement;;;;;
@@ -21,13 +21,14 @@ WMSP;float32;wind speed - max aver per 2 mn;wind_speed;meter/second;;TIME DEPTH 
 WDIR;float32;wind direction rel. true north;wind_to_direction;degree;;TIME DEPTH LATITUDE LONGITUDE;;0;360;%5.1f;1E+36;;0.001;Horizontal wind speed;;;;;
 ATMS;float32;atmospheric pressure - sea lev;air_pressure_at_sea_level;hectoPascal;;TIME DEPTH LATITUDE LONGITUDE;;940;1030;%8.3f;1E+36;;0.001;Atmospheric pressure at sea level;;;;;
 RELH;float32;relative humidity;relative_humidity;%;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%6.1f;1E+36;;0.001;Relative humidity;;;;;
-NSCT;float32;current north component;;cm/second;;TIME DEPTH LATITUDE LONGITUDE;;-100;100;%7.3f;1E+36;;0.01; Current north;;;;;
+NSCT;float32;current north component;;cm/second;;TIME DEPTH LATITUDE LONGITUDE;;-100;100;%7.3f;1E+36;;0.01;" Current north";;;;;
 EWCT;float32;current east component;;cm/second;;TIME DEPTH LATITUDE LONGITUDE;;-100;100;%7.3f;1E+36;;0.02;Current east;;;;;
 SSJT;float32;sea surface water jacket temperature;sea_water_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean temperature;;;;;
 SSTP;float32;sea surface water temperature;sea_water_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Sea surface Ocean temperature;;;;;
-SSPS;float32;sea surface practical salinity;sea_water_salinity ;pss;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean salinity;;;;;
+SSPS;float32;sea surface practical salinity;"sea_water_salinity ";pss;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean salinity;;;;;
 PCO2;float32;co2 part. pres in dry/wet gas;;microatmosphere;;TIME DEPTH LATITUDE LONGITUDE;;100;700;%7.3f;1E+36;;0.001;;;;;;
 FLU2;float32;fluorescence;;milligram/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;1;%8.4f;1E+36;;0.001;;;;;;
+FLU3;float32;secondary fluorescence;;milligram/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;1;%8.4f;1E+36;;0.001;;;;;;
 TUR1;float32;light diffusion coefficient;;m-1;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
 TUR2;float32;light attenuation coefficient;;m-1;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
 TUR3;float32;light transmission;;%;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%6.2f;1E+36;;0.001;;;;;;
@@ -54,10 +55,10 @@ DOV1;float32;dissolved oxygen primary sensor voltage;;V;;TIME DEPTH LATITUDE LON
 DOV2;float32;dissolved oxygen secondary sensor voltage;;V;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.4f;1E+36;;0.001;;;;;;
 DVT1;float32;dissolved oxygen primary sensor dv/dt;;dv/dt;;TIME DEPTH LATITUDE LONGITUDE;;-1;1;%+7.5f;1E+36;;0.001;;;;;;
 DVT2;float32;dissolved oxygen secondary sensor dv/dt;;dv/dt;;TIME DEPTH LATITUDE LONGITUDE;;-1;1;%+7.5f;1E+36;;0.002;;;;;;
-NTIW;float32;nitrite (no2-n) ;moles_of_nitrite_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%7.3f;1E+36;;0.001;;;;;;
-NTRI;float32;nitrite (no2-n) ;moles_concentration_of_nitrite_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
-NTAW;float32;nitrate (no3-n) ;moles_of_nitrate_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;90;%5.2f;1E+36;;0.001;;;;;;
-NTRA;float32;nitrate (no3-n) ;moles_concentration_of_nitrate_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;56;%6.3f;1E+36;;0.001;;;;;;
+NTIW;float32;"nitrite (no2-n) ";moles_of_nitrite_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%7.3f;1E+36;;0.001;;;;;;
+NTRI;float32;"nitrite (no2-n) ";moles_concentration_of_nitrite_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
+NTAW;float32;"nitrate (no3-n) ";moles_of_nitrate_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;90;%5.2f;1E+36;;0.001;;;;;;
+NTRA;float32;"nitrate (no3-n) ";moles_concentration_of_nitrate_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;56;%6.3f;1E+36;;0.001;;;;;;
 NTZW;float32;nitrate + nitrite;moles_of_nitrate_and_nitrite_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
 NTRZ;float32;nitrate + nitrite;moles_concentration_of_nitrate_and_nitrite_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%6.2f;1E+36;;0.001;;;;;;
 PHOW;float32;phosphate (po4-p);moles_of_phosphate_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%5.3f;1E+36;;0.001;;;;;;
@@ -65,7 +66,7 @@ PHOS;float32;phosphate (po4-p);moles_phosphate_of_nitrate_in_sea_water;millimole
 PHPT;float32;total pheophytin;;milligramm/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;99;%5.2f;1E+36;;0.01;;;;;;
 WETT;float32;wet bulb temperature;;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;0;90;%5.1f;1E+36;;0.001;;;;;;
 HEIG;float32;atmospheric height;;meter;;TIME DEPTH LATITUDE LONGITUDE;up;0;40000;%8.2f;1E+36;;0.1;;;;;;urn:ogc:crs:EPSG::5829
-NAVG;int32;averaged data cycle number;;1;;;;0;999;%3.0f;99999;;;;;;;;
+NAVG;int32;averaged data cycle number;;1;;;;0;999;%3d;9999;;;;;;;;
 BOTL;int32;sea water sample bottle number;;1;;;;1;36;%3d;99999;;;;;;;;
-TYPECAST;int32;type of cast: unknow=0, phy=1, bio=2, geo=3;;1;;;;0.0;9.0;%1d;99999;;;;;;;;
+TYPECAST;int32;type of cast: unknow=0, phy=1, bio=2, geo=3;;1;;;;0;9;%1d;99999;;;;;;;;
 BATH;float32;bathymetric depth;;meter;;;;0;11000;%6.1f;1E+36;;0.1;;;;;;

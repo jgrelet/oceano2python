@@ -1,10 +1,9 @@
 import logging
 from netCDF4 import Dataset
 from numpy import arange, dtype
-from physical_parameter import Roscop
 
 
-def writeNetCDF(fileName, fe, variables_1D):
+def writeNetCDF(fileName, fe, r, variables_1D):
 
     # ncvars is a dictionary that store a netcdf variable for each physical parameter key
     ncvars = {}
@@ -13,9 +12,6 @@ def writeNetCDF(fileName, fe, variables_1D):
     #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
     variables = variables_1D.copy()
     dims_2D = ['TIME', 'DEPTH']
-
-    # move to main after tests
-    r = Roscop("code_roscop.csv")
 
     # create netcdf file
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
@@ -49,13 +45,14 @@ def writeNetCDF(fileName, fe, variables_1D):
             hash.pop('_FillValue')
         else:
             fillvalue = None
+
         # create the variable
         if any(key in item for item in variables_1D):
             ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
         else:
             ncvars[key] = nc.createVariable(
-                key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
+            key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
         # remove from the dictionary
         hash.pop('types')
         # create dynamically variable attributes
@@ -71,10 +68,8 @@ def writeNetCDF(fileName, fe, variables_1D):
     # write the ncvars
     for key in variables:
         if any(key in item for item in variables_1D):
-            #print("Key: {}, {}".format(key,fe[key]))
             ncvars[key][:] = fe[key]
         else:
-            #print("Key: {}, {}".format(key,fe[key]))
             ncvars[key][:, :] = fe[key]
 
     # close the netcdf file
