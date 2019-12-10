@@ -5,6 +5,7 @@ PYLINT = pylint
 TEST_PATH = tests
 OPTIONS_CTD = data/CTD/cnv/dfr2900[1-3].cnv -i CTD 
 OPTIONS_XBT = data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
+OPTIONS_LADCP = data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT
 
 .PHONY: clean-pyc clean-build lint test run build
 
@@ -32,6 +33,9 @@ ctd:
 # to run program in GUI mode : make xbt GUI=-g
 xbt:
 	$(PYTHON) $(MAIN) $(OPTIONS_XBT) $(GUI)
+
+ladcp:
+	$(PYTHON) $(MAIN) $(OPTIONS_LADCP) $(GUI)
 
 build:
 	pyinstaller -wF $(MAIN)
