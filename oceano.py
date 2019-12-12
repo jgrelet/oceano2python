@@ -1,5 +1,6 @@
 import argparse
 import sys
+import re
 # import myPySimpleGUI as sg
 import PySimpleGUI as sg
 import toml
@@ -73,11 +74,11 @@ def defineGUI():
     sg.ChangeLookAndFeel('SandyBeach')
     frameLayout = {}
 
-    # define a frame layout for each instrument (device)
+    # define a frame layout for each instrument (device) with composite key as PRES_CTD, TEMP_XBT
     for d in devices:
         keys = cfg['split'][d.lower()].keys()
         # List comprehensions
-        frameLayout[d] = [[sg.Checkbox(k, key=k,
+        frameLayout[d] = [[sg.Checkbox(k, key='{:s}_{:s}'.format(k,d),
                                           tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys]
 
     # define GUI layout
@@ -96,9 +97,10 @@ def defineGUI():
                # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
     # create a local instance windows used to reload the saved config from file
-    window = sg.Window('Oceano converter').Layout(layout)
-    window.LoadFromDisk(configfile)
+    window = sg.Window('Oceano converter', layout)
     window.Finalize
+    #window.LoadFromDisk(configfile)
+   
     return window 
 
 
@@ -132,7 +134,7 @@ def process(args, cfg, ti):
         fe: FileExtractor
         n, m: array size
     '''
-
+    
     print('processing...')
     # check if no file selected or cancel button pressed
     logging.debug("File(s): {}, config: {}, Keys: {}".format(
@@ -185,6 +187,7 @@ if __name__ == "__main__":
         window = defineGUI()
         device = window.FindElement('_COMBO_').DefaultValue
         keys = cfg['split'][device.lower()].keys()
+
         # can't update combo with FindElement('_HIDDEN_').Update(), we use this function
         # with hardcoded FilesBrowseCombo position
         updateFilesBrowseCombo(
@@ -204,7 +207,7 @@ if __name__ == "__main__":
         while True:
            # display the main windows
             event, values = window.Read()
-            print(event, values)
+            #print(event, values)
 
             if event == 'Cancel' or event == None:
                 raise SystemExit("Cancelling: user exit")
@@ -238,12 +241,16 @@ if __name__ == "__main__":
         # debug return values from GUI
         logging.debug("Event: {}, Values: {}".format(event, values))
 
-        # extract selected parameters (true) from dict values
-        new_values = values.copy()
+        # extract selected parameters (true) from dict values only for selected device
+        args.keys = []
         for k in values.keys():
             if k[0] == '_' or values[k] == False:
-                del new_values[k]
-        args.keys = new_values.keys()
+                continue
+            # check if values['_COMBO_'] == device
+            if not values['_COMBO_'] in k:
+                continue
+            else:
+                args.keys.append(re.sub('_\w+$', '', k))
 
         # process of files start here
         fe = process(args, cfg, values['_COMBO_'])

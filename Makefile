@@ -38,7 +38,7 @@ ladcp:
 	$(PYTHON) $(MAIN) $(OPTIONS_LADCP) $(GUI)
 
 build:
-	pyinstaller -wF $(MAIN)
+	pyinstaller -wF --clean $(MAIN)
 
 runc:
 	dist/$(PROJECT)
