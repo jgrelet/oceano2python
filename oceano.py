@@ -90,7 +90,7 @@ def defineGUI():
                                tooltip='Choose one or more files')],    
                [sg.Combo(list(ti.keys()), enable_events = True, size=(8, 1),          # row 2
                          default_value = instrument_default_value,                    
-                         key='_COMBO_', tooltip='Select the instrument')],
+                         key='_DEVICE_', tooltip='Select the instrument')],
                [sg.Frame(d, frameLayout[d], key='_FRAME_{:s}'.format(d) , visible=True)          # row 3
                 for d in devices],                                                    
                [sg.OK(), sg.CloseButton('Cancel')]])                                  # row 4
@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
         # setup the GUI windows Layout
         window = defineGUI()
-        device = window.FindElement('_COMBO_').DefaultValue
+        device = window.FindElement('_DEVICE_').DefaultValue
         keys = cfg['split'][device.lower()].keys()
 
         # can't update combo with FindElement('_HIDDEN_').Update(), we use this function
@@ -224,11 +224,12 @@ if __name__ == "__main__":
                     continue
                 break
 
-            if event == '_COMBO_':
+            if event == '_DEVICE_':
                 # you have to go into the bowels of the pygi code, to get the instance of the Combo
                 # by the line and column number of the window to update its "fileType" property.
+                device = values['_DEVICE_']
                 updateFilesBrowseCombo(
-                    ti[values['_COMBO_']], filesBrowsePosition_column, filesBrowsePosition_row)
+                    ti[device], filesBrowsePosition_column, filesBrowsePosition_row)
 
             # update the Multilines instance from FilesBrowse return
             if event == '_HIDDEN_':
@@ -246,14 +247,14 @@ if __name__ == "__main__":
         for k in values.keys():
             if k[0] == '_' or values[k] == False:
                 continue
-            # check if values['_COMBO_'] == device
-            if not values['_COMBO_'] in k:
+            # check if device == device
+            if not device in k:
                 continue
             else:
                 args.keys.append(re.sub('_\w+$', '', k))
 
         # process of files start here
-        fe = process(args, cfg, values['_COMBO_'])
+        fe = process(args, cfg, device)
 
         # display result in popup GUI
         dims = "Dimensions: {} x {}".format(fe.n, fe.m)
