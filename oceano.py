@@ -98,8 +98,8 @@ def defineGUI():
 
     # create a local instance windows used to reload the saved config from file
     window = sg.Window('Oceano converter', layout)
-    window.Finalize
-    #window.LoadFromDisk(configfile)
+    window.Finalize()
+    window.LoadFromDisk(configfile)
    
     return window 
 
@@ -207,6 +207,7 @@ if __name__ == "__main__":
         while True:
            # display the main windows
             event, values = window.Read()
+
             #print(event, values)
 
             if event == 'Cancel' or event == None:
@@ -230,6 +231,7 @@ if __name__ == "__main__":
                 device = values['_DEVICE_']
                 updateFilesBrowseCombo(
                     ti[device], filesBrowsePosition_column, filesBrowsePosition_row)
+                # TODOS: reset checkbox
 
             # update the Multilines instance from FilesBrowse return
             if event == '_HIDDEN_':
