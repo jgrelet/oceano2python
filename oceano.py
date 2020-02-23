@@ -23,8 +23,12 @@ filesBrowsePosition_column = 1
 
 # initialize filename use to save GUI configuration
 configfile = 'oceano.cfg'
-# move to main after tests
-r = Roscop("code_roscop.csv")
+# default file name for ROSCOP csv 
+defaultRoscop = 'code_roscop.csv'
+
+# example, PIRATA cruises:
+# FR30:
+# python oceano.py /m/PIRATA-FR30/data-processing/CTD/data/cnv/d*.cnv -i CTD -k PRES TEMP PSAL DOX2 FLU2 -r code_roscop.csv 
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -36,7 +40,7 @@ def processArgs():
         'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
         'python oceano.py data/LADCP/*.lad - i LADCP - k DEPTH EWCT NSCT\n'
         ' \n',
-        epilog='J. Grelet IRD US191 - March 2019')
+        epilog='J. Grelet IRD US191 - March 2019 / Feb 2020')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     parser.add_argument('--demo', nargs='?', choices=ti.keys(),
@@ -45,6 +49,8 @@ def processArgs():
                         default='tests/test.toml')
     parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
+    parser.add_argument('-r', '--roscop', nargs='?',
+                        help='specify location and ROSCOP file name, (default: code_roscop.csv)')
     parser.add_argument('-k', '--keys', nargs='+',
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
@@ -174,6 +180,9 @@ if __name__ == "__main__":
     if args.debug:
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
+        
+    # get roscop file
+    r = Roscop("code_roscop.csv")
 
     # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
@@ -269,6 +278,9 @@ if __name__ == "__main__":
         # print = sg.Print(size=(80,40))
 
     else:
+        if args.roscop != None:
+            defaultRoscop = args.roscop
+        r = Roscop(defaultRoscop)
         # demo mode, only in command line
         if args.demo != None:
             print('demo mode: {}'.format(args.demo))
