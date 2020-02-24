@@ -23,12 +23,13 @@ filesBrowsePosition_column = 1
 
 # initialize filename use to save GUI configuration
 configfile = 'oceano.cfg'
-# default file name for ROSCOP csv 
+# default file name for ROSCOP csv
 defaultRoscop = 'code_roscop.csv'
 
 # example, PIRATA cruises:
 # FR30:
-# python oceano.py /m/PIRATA-FR30/data-processing/CTD/data/cnv/d*.cnv -i CTD -k PRES TEMP PSAL DOX2 FLU2 -r code_roscop.csv 
+# python oceano.py /m/PIRATA-FR30/data-processing/CTD/data/cnv/d*.cnv -i CTD -k PRES TEMP PSAL DOX2 FLU2 -r code_roscop.csv
+
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -84,8 +85,8 @@ def defineGUI():
     for d in devices:
         keys = cfg['split'][d.lower()].keys()
         # List comprehensions
-        frameLayout[d] = [[sg.Checkbox(k, key='{:s}_{:s}'.format(k,d),
-                                          tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys]
+        frameLayout[d] = [[sg.Checkbox(k, key='{:s}_{:s}'.format(k, d),
+                                       tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys]
 
     # define GUI layout
     layout = ([[sg.Text('File(s) to read and convert')],                              # row 0
@@ -93,21 +94,21 @@ def defineGUI():
                 sg.Input(key='_HIDDEN_', visible=False,                               # row 1, col 1
                          enable_events=True),
                 sg.FilesBrowse(key='_HIDDEN_', initial_folder=None,                   # row 1, col 2
-                               tooltip='Choose one or more files')],    
-               [sg.Combo(list(ti.keys()), enable_events = True, size=(8, 1),          # row 2
-                         default_value = instrument_default_value,                    
+                               tooltip='Choose one or more files')],
+               [sg.Combo(list(ti.keys()), enable_events=True, size=(8, 1),          # row 2
+                         default_value=instrument_default_value,
                          key='_DEVICE_', tooltip='Select the instrument')],
-               [sg.Frame(d, frameLayout[d], key='_FRAME_{:s}'.format(d) , visible=True)          # row 3
-                for d in devices],                                                    
+               [sg.Frame(d, frameLayout[d], key='_FRAME_{:s}'.format(d), visible=True)          # row 3
+                for d in devices],
                [sg.OK(), sg.CloseButton('Cancel')]])                                  # row 4
-               # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
+    # [sg.CloseButton('Run'), sg.CloseButton('Cancel')]])
 
     # create a local instance windows used to reload the saved config from file
     window = sg.Window('Oceano converter', layout)
     window.Finalize()
     window.LoadFromDisk(configfile)
-   
-    return window 
+
+    return window
 
 
 def updateFilesBrowseCombo(extentions, x, y):
@@ -140,7 +141,7 @@ def process(args, cfg, ti):
         fe: FileExtractor
         n, m: array size
     '''
-    
+
     print('processing...')
     # check if no file selected or cancel button pressed
     logging.debug("File(s): {}, config: {}, Keys: {}".format(
@@ -149,16 +150,16 @@ def process(args, cfg, ti):
     # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
     if args.keys == None:
         args.keys = cfg['split'][device.lower()].keys()
-    
+
     # extract header and data from files
     fe = FileExtractor(args.files, r, args.keys)
 
-    # prepare (compile) each regular expression inside toml file under section [<device=ti>.header] 
+    # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
     fe.set_regex(cfg, ti)
-    
+
     # the first pass skip headers and return data dimensions size
     fe.first_pass()
-    
+
     # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
     fe.second_pass(cfg, ti, variables_1D)
     # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
@@ -185,13 +186,12 @@ if __name__ == "__main__":
     cfg = toml.load(args.config)
     # this the select device from command line !
     device = str(args.instrument)  # convert one element list to str
-    
+
     # get roscop file
     if cfg['global']['codeRoscop'] != None:
         defaultRoscop = Path(cfg['global']['codeRoscop'])
     if args.roscop != None:
         defaultRoscop = args.roscop
-    print(defaultRoscop)
     r = Roscop(defaultRoscop)
 
     # test arguements from sys.argv, args is never to None with default option set
@@ -308,8 +308,8 @@ if __name__ == "__main__":
         # in command line mode (console)
         fe = process(args, cfg, device)
         #print("Dimensions: {} x {}".format(fe.m, fe.n))
-        #print(fe.disp())
+        # print(fe.disp())
 
     # write the NetCDF file
     ncfile = "netcdf/OS_{}_{}.nc".format(cfg['cruise']['cycleMesure'], device)
-    netcdf.writeNetCDF( ncfile, fe, r, variables_1D)
+    netcdf.writeNetCDF(ncfile, fe, r, variables_1D)

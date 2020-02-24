@@ -2,7 +2,8 @@
 author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
 debug          = false
 echo           = true
-codeRoscop     = 'C:\git\python\oceano2python\code_roscop.csv'
+#codeRoscop     = 'C:\git\python\oceano2python\code_roscop.csv'
+codeRoscop     = '/home/jgrelet/git/oceano2python/code_roscop.csv'
 
 [cruise]
 cycleMesure    = "PIRATA-FR29"
