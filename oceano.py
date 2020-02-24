@@ -6,7 +6,7 @@ import PySimpleGUI as sg
 import toml
 import logging
 from file_extractor import FileExtractor
-import pathlib
+from pathlib import Path
 from configparser import ConfigParser
 import os
 import distutils.util as du
@@ -180,14 +180,19 @@ if __name__ == "__main__":
     if args.debug:
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
-        
-    # get roscop file
-    r = Roscop("code_roscop.csv")
 
     # read config Toml file and get the physical parameter list (Roscop code) for the specified instrument
     cfg = toml.load(args.config)
     # this the select device from command line !
     device = str(args.instrument)  # convert one element list to str
+    
+    # get roscop file
+    if cfg['global']['codeRoscop'] != None:
+        defaultRoscop = Path(cfg['global']['codeRoscop'])
+    if args.roscop != None:
+        defaultRoscop = args.roscop
+    print(defaultRoscop)
+    r = Roscop(defaultRoscop)
 
     # test arguements from sys.argv, args is never to None with default option set
     if args.gui or len(sys.argv) == 1:
@@ -278,9 +283,6 @@ if __name__ == "__main__":
         # print = sg.Print(size=(80,40))
 
     else:
-        if args.roscop != None:
-            defaultRoscop = args.roscop
-        r = Roscop(defaultRoscop)
         # demo mode, only in command line
         if args.demo != None:
             print('demo mode: {}'.format(args.demo))
