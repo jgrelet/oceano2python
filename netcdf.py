@@ -1,9 +1,10 @@
 import logging
 from netCDF4 import Dataset
 from numpy import arange, dtype
+import os
 
 
-def writeNetCDF(fileName, fe, r, variables_1D):
+def writeNetCDF(cfg, device, fe, r, variables_1D):
 
     # ncvars is a dictionary that store a netcdf variable for each physical parameter key
     ncvars = {}
@@ -14,6 +15,9 @@ def writeNetCDF(fileName, fe, r, variables_1D):
     dims_2D = ['TIME', 'DEPTH']
 
     # create netcdf file
+    fileName = "{}/OS_{}_{}.nc".format(cfg['global']['netcdf'], cfg['cruise']['cycleMesure'], device)
+    if not os.path.exists(cfg['global']['ascii']):
+        os.makedirs(cfg['global']['netcdf'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
     print('writing netCDF file: {}'.format(fileName))

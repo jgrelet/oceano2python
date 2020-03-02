@@ -11,6 +11,7 @@ from configparser import ConfigParser
 import os
 import distutils.util as du
 import netcdf
+import ascii
 from physical_parameter import Roscop
 
 # typeInstrument is a dictionary as key: files extension
@@ -169,9 +170,8 @@ def process(args, cfg, ti):
 if __name__ == "__main__":
     '''
     usage:
-    > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -d
-    > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
-    > python oceano.py data/CTD/cnv/dfr29*.cnv -d
+    > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD
+    > python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -k PRES TEMP PSAL DOX2 DENS -d
     '''
     # recover and process line arguments
     parser = processArgs()
@@ -311,5 +311,8 @@ if __name__ == "__main__":
         # print(fe.disp())
 
     # write the NetCDF file
-    ncfile = "netcdf/OS_{}_{}.nc".format(cfg['cruise']['cycleMesure'], device)
-    netcdf.writeNetCDF(ncfile, fe, r, variables_1D)
+    netcdf.writeNetCDF(cfg, device, fe, r, variables_1D)
+    
+    # write ASCII hdr and data files
+    ascii.writeAscii(cfg, device, fe, r, variables_1D)
+
