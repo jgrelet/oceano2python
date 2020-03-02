@@ -10,6 +10,10 @@
 *_ctd
 *.btl
 *_btl
+*.ladcp
+*_ladcp
+*.xbt
+*_xbt
 *.nc
 *.xml
 *.stackdump
@@ -24,3 +28,6 @@ oceano.spec
 oceano.cfg
 basemap
 /dist
+/ascii
+/netcdf
+/odv
