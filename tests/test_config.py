@@ -15,7 +15,8 @@ class testConfig(unittest.TestCase):
         self.cfg = toml.load('tests/test.toml')
         
         self.glob = {'author': 'jgrelet IRD March 2019 PIRATA-FR29 cruise',
-                     'debug': False, 'echo': True}
+                     'debug': False, 'echo': True, 'codeRoscop': 'C:\git\python\oceano2python\code_roscop.csv',
+                    'ascii': "ascii", 'netcdf': "netcdf", 'odv': "odv"}
         
         self.cruise = {'cycleMesure': 'PIRATA-FR29', 'plateforme': 'THALASSA', 'callsign': 'FNFP', 'institute': 'IRD',
                        'timezone': 'GMT', 'beginDate': '01/03/2019', 'endDate': '04/04/2019', 'pi': 'BOURLES',
