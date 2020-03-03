@@ -9,6 +9,7 @@ import argparse
 import numpy as np
 import re
 from datetime import datetime
+import tools
 
 DEGREE        = 176
 
@@ -58,7 +59,7 @@ class FileExtractor:
 
     def __str__(self):
         ''' overload string representation '''
-        return 'Class FileExtractor, file: %s, size = %d' % (self.fname, len(self))
+        return 'Class FileExtractor, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
 
     def disp(self):
         # for key in keys:
@@ -192,22 +193,24 @@ class FileExtractor:
                                     self.__regex[k].search(line).groups() 
 
                                 # format date and time to  "May 09 2011 16:33:53"
-                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
+                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)  
+                                # set datetime object                              
+                                dt = dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")
 
-                                # dateTime conversion to "09/05/2011 16:33:53"
-                                dateTime = "%s" % \
-                                    (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
-                                # conversion to "20110509163353"
-                                epic_date = "%s" % \
-                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
+                                # dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")# dateTime conversion to "09/05/2011 16:33:53"
+                                # dateTime = "%s" % \
+                                #     (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                                # # conversion to "20110509163353"
+                                # epic_date = "%s" % \
+                                #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
 
-                                # conversion to julian day
-                                julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
-                                + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
+                                # # conversion to julian day
+                                # julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
+                                # + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
 
-                                # we use julian day with origine 0
-                                julian -= 1
-                                self.__data['TIME'][n] = julian  
+                                # # we use julian day with origine 0
+                                # julian -= 1
+                                self.__data['TIME'][n] = tools.dt2julian(dt)  
                             # key is DATE
                             if k == "DATE" and self.__regex[k].search(line):
                                 if device.lower() == 'ladcp':
@@ -223,21 +226,23 @@ class FileExtractor:
                        
                                 # format date and time to  "May 09 2011 16:33:53"
                                 dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
+                                # set datetime object     
+                                dt = dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")
 
-                                # dateTime conversion to "09/05/2011 16:33:53"
-                                dateTime = "%s" % \
-                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
-                                # conversion to "20110509163353"
-                                epic_date = "%s" % \
-                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
+                                # # dateTime conversion to "09/05/2011 16:33:53"
+                                # dateTime = "%s" % \
+                                #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                                # # conversion to "20110509163353"
+                                # epic_date = "%s" % \
+                                #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
 
-                                # conversion to julian day
-                                julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
-                                + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
+                                # # conversion to julian day
+                                # julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
+                                # + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
 
-                                # we use julian day with origine 0
-                                julian -= 1
-                                self.__data['TIME'][n] = julian  
+                                # # we use julian day with origine 0
+                                # julian -= 1
+                                self.__data['TIME'][n] = tools.dt2julian(dt)    
                             # key is LATITUDE
                             if k == "LATITUDE" and self.__regex[k].search(line):
                                 if device.lower() == 'ladcp':
