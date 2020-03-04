@@ -48,6 +48,8 @@ comment        = "CTD bottles water sampling with temperature, salinity and oxyg
 
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
+typeInstrument   = "SIPPICAN+"
+instrumentNumber  = "N/A"
 acquisitionSoftware = "WinMK21"
 acquisitionVersion = "2.10.1" 
 processingSoftware = ""
@@ -86,6 +88,8 @@ comment        = "Extract from .colcor files"
 [ladcp]
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
+typeInstrument   = "LADCP 150/300"
+instrumentNumber  = "12817"
 acquisitionSoftware = "BBTALK"
 acquisitionVersion = 3.04
 processingSoftware = "MATLAB-VISBECK"
