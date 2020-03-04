@@ -6,7 +6,7 @@ from datetime import datetime
 import julian
 
 JULIAN        = 33282
-DEGREE        = u"\u00B0"
+DEGREE        = u"\u00B0"  # u"\N{DEGREE SIGN}"
 #DEGREE        = 176
 
 def dateTime2julian(month, day, year, hour, minute, second):

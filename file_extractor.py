@@ -224,12 +224,13 @@ class FileExtractor:
                        
                                 # format date and time to  "May 09 2011 16:33:53"
                                 dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
-                                # set datetime object     
-                                dt = dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")
 
-                                # # dateTime conversion to "09/05/2011 16:33:53"
-                                # dateTime = "%s" % \
-                                #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                                # dateTime conversion to "09/05/2011 16:33:53"
+                                dateTime = "%s" % \
+                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
+                                    
+                                # set datetime object     
+                                dt = dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S")
                                 # # conversion to "20110509163353"
                                 # epic_date = "%s" % \
                                 #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
