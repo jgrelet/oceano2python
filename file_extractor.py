@@ -11,8 +11,6 @@ import re
 from datetime import datetime
 import tools
 
-DEGREE        = 176
-
 class FileExtractor:
 
     '''
@@ -251,7 +249,7 @@ class FileExtractor:
                                     (lat_deg, lat_min, lat_hemi) = self.__regex[k].search(line).groups() 
 
                                     # format latitude to string
-                                    latitude_str = "%s%c%s %s" % (lat_deg, DEGREE, lat_min, lat_hemi)
+                                    latitude_str = "%s%c%s %s" % (lat_deg, tools.DEGREE, lat_min, lat_hemi)
 
                                     # transform to decimal using ternary operator
                                     latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
@@ -265,7 +263,7 @@ class FileExtractor:
                                     (lon_deg, lon_min, lon_hemi) = self.__regex[k].search(line).groups() 
 
                                     # format longitude to string
-                                    longitude_str = "%s%c%s %s" % (lon_deg, DEGREE, lon_min, lon_hemi)
+                                    longitude_str = "%s%c%s %s" % (lon_deg, tools.DEGREE, lon_min, lon_hemi)
 
                                     # transform to decimal using ternary operator
                                     longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
