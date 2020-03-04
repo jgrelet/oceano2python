@@ -5,7 +5,9 @@ import math
 from datetime import datetime
 import julian
 
-JULIAN = 33282
+JULIAN        = 33282
+DEGREE        = u"\u00B0"
+#DEGREE        = 176
 
 def dateTime2julian(month, day, year, hour, minute, second):
     
@@ -95,9 +97,9 @@ def Dec2dmc(position, hemi):
     intg = abs(intg)
 
     if re.match('[EW]', hemi):
-        str = "{:0>3.0f}°{:0>7.4f} {}".format(intg, (dec / 100 ) * 6000, geo)
+        str = "{:0>3.0f}{:s}{:0>7.4f} {}".format(intg, DEGREE, (dec / 100 ) * 6000, geo)
     else:
-        str = "{:0>2.0f}°{:0>7.4f} {}".format(intg, (dec / 100 ) * 6000, geo)
+        str = "{:0>2.0f}{:s}{:0>7.4f} {}".format(intg, DEGREE, (dec / 100 ) * 6000,geo)
 
     return str
 
@@ -124,8 +126,8 @@ def Dec2dms(position, hemi):
     sec, min = math.modf((dec / 100) * 6000)
 
     if re.match('[EW]', hemi):
-        str = "{:0>3.0f}°{:2.4f} {}".format(intg, min + sec/100*60, geo)
+        str = "{:0>3.0f}{:s}{:2.4f} {}".format(intg, DEGREE, min + sec/100*60, geo)
     else:
-        str = "{:0>2.0f}°{:2.4f} {}".format(intg, min + sec/100*60, geo)
+        str = "{:0>2.0f}{:s}{:2.4f} {}".format(intg, DEGREE, min + sec/100*60, geo)
 
     return str
