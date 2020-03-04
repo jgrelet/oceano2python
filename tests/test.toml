@@ -27,16 +27,16 @@ titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
 typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
 
-[ctd.header]
-isHeader = '^[*#]'
-DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
-LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
-LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
-DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
-TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
-bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
-operator = 'Operator\s*:\s*(.*)'
-type = 'Type\s*:\s*(.*)'
+	[ctd.header]
+	isHeader = '^[*#]'
+	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
+	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+	DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
+	TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
+	bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+	operator = 'Operator\s*:\s*(.*)'
+	type = 'Type\s*:\s*(.*)'
 
 [btl]
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
@@ -120,27 +120,27 @@ comment        = "Extract from .lad files"
 	NAVG = 23
 
 	[split.ctdAll]
-	ETDD = 2
-	PRES = 3
-	DEPTH = 4
-	TE01 = 5
-	TE02 = 6
-	CND1 = 7
-	CND2 = 8
-	DOV1 = 9
-	DOV2 = 10
-	DVT1 = 11
-	DVT2 = 12
-	TUR3 = 13
-	FLU2 = 14
-	FLU3 = 15
-	DO12 = 16
-	DO22 = 17
-	PSA1 = 18
-	PSA2 = 19
-	DEN1 = 20
-	DEN2 = 21
-	SVEL = 22
+	ETDD = 1
+	PRES = 2
+	DEPTH = 3
+	TE01 = 4
+	TE02 = 5
+	CND1 = 6
+	CND2 = 7
+	DOV1 = 8
+	DOV2 = 9
+	DVT1 = 10
+	DVT2 = 11
+	TUR3 = 12
+	FLU2 = 13
+	FLU3 = 14
+	DO12 = 15
+	DO22 = 16
+	PSA1 = 17
+	PSA2 = 18
+	DEN1 = 19
+	DEN2 = 20
+	SVEL = 21
 	NAVG = 23
 
 	[split.btl]
