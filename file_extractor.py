@@ -165,7 +165,7 @@ class FileExtractor:
         for key in variables_1D:
             #self.__data[key] = np.ones((self.n)) * self.__FillValue
             if '_FillValue' in self.roscop[key]:
-                self.__data[key] = np.full((self.n, self.roscop[key]['_FillValue'])) 
+                self.__data[key] = np.full(self.n, self.roscop[key]['_FillValue']) 
             else:
                 self.__data[key] = np.empty(self.n) 
              
@@ -270,6 +270,10 @@ class FileExtractor:
                                     longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
                                         (float(lon_deg) + (float(lon_min) / 60.)) * -1
                                 self.__data['LONGITUDE'][n] = longitude  
+                            # key is BATH
+                            if k == "BATH" and self.__regex[k].search(line):
+                                [bath] = self.__regex[k].search(line).groups() 
+                                self.__data['BATH'][n] = bath
                         continue
 
                     # split the line, remove leading and trailing space before
