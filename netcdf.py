@@ -52,8 +52,14 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
 
         # create the variable
         if any(key in item for item in variables_1D):
-            ncvars[key] = nc.createVariable(
-                key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
+            try:
+                # create variable whit same dimension name, as TIME(TIME)
+                ncvars[key] = nc.createVariable(
+                    key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
+            except:
+                # for BATH(TIME), it's a mess !
+                ncvars[key] = nc.createVariable(
+                    key, dtype(hash['types']).char, 'TIME', fill_value=fillvalue)
         else:
             ncvars[key] = nc.createVariable(
             key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)

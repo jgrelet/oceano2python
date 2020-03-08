@@ -31,10 +31,10 @@ def writeHeader(hdrFile, cfg, fe, r, variables_1D, device):
     # 00001 18/02/2020 19:04:19 18/02/2020 22:41:07 11°28.85 N 023°00.59 W  4063  5083 fr30001
     # add PROFILE and END_PROFILE_TIME, BATH
     for i in range(fe.n):
-        print("{:0>5d}  {}  {}  {}".format(i+1, tools.julian2dt(fe['TIME'][i]).strftime("%d/%m/%Y %H:%M:%S"), 
-              tools.Dec2dmc(fe['LATITUDE'][i],'N'), tools.Dec2dmc(fe['LONGITUDE'][i],'W')))
-        f.write("{:0>5d}  {}  {}  {}\n".format(i+1, tools.julian2dt(fe['TIME'][i]).strftime("%d/%m/%Y %H:%M:%S"), 
-              tools.Dec2dmc(fe['LATITUDE'][i],'N'), tools.Dec2dmc(fe['LONGITUDE'][i],'W')))
+        print("{:0>5d}  {}  {}  {}  {}".format(i+1, tools.julian2dt(fe['TIME'][i]).strftime("%d/%m/%Y %H:%M:%S"), 
+              tools.Dec2dmc(fe['LATITUDE'][i],'N'), tools.Dec2dmc(fe['LONGITUDE'][i],'W'), fe['BATH'][i]))
+        f.write("{:0>5d}  {}  {}  {}  {}\n".format(i+1, tools.julian2dt(fe['TIME'][i]).strftime("%d/%m/%Y %H:%M:%S"), 
+              tools.Dec2dmc(fe['LATITUDE'][i],'N'), tools.Dec2dmc(fe['LONGITUDE'][i],'W'), fe['BATH'][i]))
     f.close()
     
     

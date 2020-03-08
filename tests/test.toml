@@ -34,7 +34,7 @@ instrumentNumber  = "09P1263"
 	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
 	DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
 	TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
-	bottomDepth = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+	BATH = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
 	operator = 'Operator\s*:\s*(.*)'
 	type = 'Type\s*:\s*(.*)'
 
