@@ -15,13 +15,14 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
     dims_2D = ['TIME', 'DEPTH']
 
     # create netcdf file
-    fileName = "{}/OS_{}_{}.nc".format(cfg['global']['netcdf'], cfg['cruise']['cycleMesure'], device)
+    fileName = "{}/OS_{}_{}.nc".format(cfg['global']
+                                       ['netcdf'], cfg['cruise']['cycleMesure'], device)
     if not os.path.exists(cfg['global']['ascii']):
-        os.makedirs(cfg['global']['netcdf'])
+        os.makedirs(cfg['global']['ascii'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
     print('writing netCDF file: {}'.format(fileName))
-    
+
     # create dimensions
     # n is number of profiles, m the max size of profiles
     time = nc.createDimension("TIME", fe.n)
@@ -62,7 +63,7 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
                     key, dtype(hash['types']).char, 'TIME', fill_value=fillvalue)
         else:
             ncvars[key] = nc.createVariable(
-            key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
+                key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
         # remove from the dictionary
         hash.pop('types')
         # create dynamically variable attributes
