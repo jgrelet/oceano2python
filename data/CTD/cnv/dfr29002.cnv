@@ -43,8 +43,8 @@
 # name 16 = sbox1Mm/Kg: Oxygen, SBE 43, 2 [umol/kg], WS = 2
 # name 17 = sal00: Salinity, Practical [PSU]
 # name 18 = sal11: Salinity, Practical, 2 [PSU]
-# name 19 = sigma-é00: Density [sigma-theta, kg/m^3]
-# name 20 = sigma-é11: Density, 2 [sigma-theta, kg/m^3]
+# name 19 = sigma-ï¿½00: Density [sigma-theta, kg/m^3]
+# name 20 = sigma-ï¿½11: Density, 2 [sigma-theta, kg/m^3]
 # name 21 = svCM: Sound Velocity [Chen-Millero, m/s]
 # name 22 = svCM1: Sound Velocity, 2 [Chen-Millero, m/s]
 # name 23 = nbin: number of scans per bin
