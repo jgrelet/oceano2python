@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
         # setup the GUI windows Layout
         window = defineGUI()
-        device = window.FindElement('_DEVICE_').DefaultValue
+        device = window.find_element('_DEVICE_').DefaultValue
         keys = cfg['split'][device.lower()].keys()
 
         # can't update combo with FindElement('_HIDDEN_').Update(), we use this function
