@@ -180,6 +180,7 @@ class FileExtractor:
         for file in self.fname:
             with fileinput.input(
                 file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
+                logging.debug(file)
                 day = month = year = hour = minute = second = 0
                 for line in f:
                     if f.filelineno() < self.lineHeader + 1:
