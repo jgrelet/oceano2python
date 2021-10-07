@@ -10,7 +10,7 @@ DEPH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;
 DEPTH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
 PRES;float32;sea water pressure;sea_water_pressure;decibar;;TIME DEPTH LATITUDE LONGITUDE;;0;9000;%7.2f;1E+36;;;Pressure (dbar) of the measurement;;;;;
 TEMP;float32;sea water temperature;sea_water_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean temperature in Degrees Celsius;;;;;
-PSAL;float32;practical salinity;sea_water_salinity;;PSU;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean practical salinity (PSS-78);;;;;
+PSAL;float32;practical salinity;sea_water_salinity;1;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean practical salinity (PSS-78);;;;;
 CNDC;float32;electrical conductivity;;mS/cm;;TIME DEPTH LATITUDE LONGITUDE;;30;70;%6.3f;1E+36;;0.002;;;;;;
 DOX1;float32;dissolved oxygen;volume_fraction_of_oxygen_in_sea_water;ml/l;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%5.3f;1E+36;;0.001;Ocean oxygen in ml per liter;;;;;
 DOX2;float32;dissolved oxygen;moles_of_oxygen_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;450;%7.3f;1E+36;;0.001;Ocean oxygen in micromole by kg;;;;;
