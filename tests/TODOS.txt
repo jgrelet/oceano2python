@@ -2,3 +2,4 @@
 - Add PySimpleGui to conda, cf PYTHONPATH, idem on Windows
 - Normalize path between Unix and Windows
 - Update codeRoscop to be CF compliant
+    https://pumatest.nerc.ac.uk/cgi-bin/cf-checker-3.1.1.pl
