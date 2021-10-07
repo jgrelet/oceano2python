@@ -1,0 +1,3 @@
+- Create conda env with installation steps
+- Add PySimpleGui to conda, cf PYTHONPATH, idem on Windows
+- Normalize path between Unix and Windows
