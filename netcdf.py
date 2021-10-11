@@ -2,6 +2,7 @@ import logging
 from netCDF4 import Dataset
 from numpy import arange, dtype
 import os
+from datetime import datetime
 
 
 def writeNetCDF(cfg, device, fe, r, variables_1D):
@@ -70,6 +71,23 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
         for k in hash.keys():
             setattr(ncvars[key], k, hash[k])
     nc._enddef()
+
+    # add global attributes
+    nc.data_type = "OceanSITES profile data"
+    nc.Conventions = "CF-1.8"
+    nc.cycle_mesure = cfg['cruise']['cycleMesure']
+    nc.time_coverage_start = cfg['cruise']['beginDate']
+    nc.time_coverage_end = cfg['cruise']['endDate']
+    nc.timezone = cfg['cruise']['timezone']
+    nc.data_assembly_center = cfg['cruise']['institute']
+    nc.type_instrument = cfg[device.lower()]['typeInstrument']
+    nc.instrument_number = cfg[device.lower()]['instrumentNumber']
+    nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
+    nc.pi_name = cfg['cruise']['pi']
+    nc.processing_state = "1A"
+    nc.codification = "OOPC"
+    nc.format_version = "1.2"
+    nc.Netcdf_version = "3.6"
 
     # debug
     for key in variables:
