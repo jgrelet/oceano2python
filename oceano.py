@@ -8,11 +8,14 @@ import logging
 from file_extractor import FileExtractor
 from pathlib import Path
 from configparser import ConfigParser
-import os
+from glob import glob
 import distutils.util as du
 import netcdf
 import ascii
 from physical_parameter import Roscop
+
+EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
@@ -57,8 +60,9 @@ def processArgs():
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
                         help='use GUI interface')
-    parser.add_argument('files', nargs='*', type=argparse.FileType('r', encoding='ISO-8859-1'),
-                        help='ASCII file(s) to parse')
+    # type=argparse.FileType('r') don't work with under DOS 
+    parser.add_argument('files', nargs='+',
+                        help='ASCII file(s) to parse')                        
     return parser
 
 # TODOS:
@@ -177,6 +181,12 @@ if __name__ == "__main__":
     parser = processArgs()
     args = parser.parse_args()
 
+    # if not args.files:
+    #     print('Ok')
+    #     parser.print_usage()
+    #     sys.exit(EXIT_FAILURE)
+
+
     # set looging mode if debug
     if args.debug:
         logging.basicConfig(
@@ -294,11 +304,13 @@ if __name__ == "__main__":
                     'Error, you need to specify one or more files to process !!!', end='\n\n')
                 parser.print_help(sys.stderr)
                 sys.exit(1)
-            else:
-                files = []
-                for f in args.files:
-                    files.append(f.name)
-                args.files = files
+            
+            # work with DOs, Git bash and Linux
+            files = []
+            for file in args.files:  
+                files += glob(file)  
+            args.files = files
+   
         if device == 'None':
             print(
                 'Error: missing option -i or --instrument, instrument = {}\n'.format(device))
