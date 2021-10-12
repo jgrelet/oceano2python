@@ -1,7 +1,6 @@
 import argparse
 import sys
 import re
-# import myPySimpleGUI as sg
 import PySimpleGUI as sg
 import toml
 import logging
@@ -272,12 +271,6 @@ if __name__ == "__main__":
     parser = processArgs()
     args = parser.parse_args()
 
-    # if not args.files:
-    #     print('Ok')
-    #     parser.print_usage()
-    #     sys.exit(EXIT_FAILURE)
-
-
     # set looging mode if debug
     if args.debug:
         logging.basicConfig(
@@ -295,7 +288,8 @@ if __name__ == "__main__":
         defaultRoscop = args.roscop
     r = Roscop(defaultRoscop)
 
-    # test arguments from sys.argv, args is never to None with default option set
+    # test arguments from sys.argv, args is never to None with default option set, without option
+    # or -g, call GUI
     if args.gui or len(sys.argv) == 1:
         # define graphical interface
         window, fe, device = process_gui()
