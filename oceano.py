@@ -61,7 +61,7 @@ def processArgs():
     parser.add_argument('-g', '--gui', action='store_true',
                         help='use GUI interface')
     # type=argparse.FileType('r') don't work with under DOS 
-    parser.add_argument('files', nargs='+',
+    parser.add_argument('files', nargs='*',
                         help='ASCII file(s) to parse')                        
     return parser
 
@@ -72,7 +72,9 @@ def processArgs():
 
 
 def defineGUI():
-
+    '''
+    function to define and create the graphical interface, written with PySimpleGUI
+    '''
     # check if GUI config file exist
     if args.instrument != None:
         instrument_default_value = args.instrument
@@ -116,9 +118,10 @@ def defineGUI():
     return window
 
 
-def updateFilesBrowseCombo(extentions, x, y):
-    '''# special function used to update the FilesBrowseCombo with canvas poisition
-    # instead of key because the same key is assign to shadow input object
+def updateFilesBrowseCombo(window, extentions, x, y):
+    '''
+    special function used to update the FilesBrowseCombo with canvas poisition
+    instead of key because the same key is assign to shadow input object
     '''
     e = window.Rows[x][y]    # hardcoded
     e.FileTypes = []         # init to empty list
@@ -127,6 +130,94 @@ def updateFilesBrowseCombo(extentions, x, y):
 
     e.initial_folder = 'data/{}'.format(extentions[0])
     window.Finalize
+
+def process_gui():
+          # setup the GUI windows Layout
+        window = defineGUI()
+        device = window.find_element('_DEVICE_').DefaultValue
+        keys = cfg['split'][device.lower()].keys()
+
+        # can't update combo with FindElement('_HIDDEN_').Update(), we use this function
+        # with hardcoded FilesBrowseCombo position
+        updateFilesBrowseCombo(window,
+            ti[device], filesBrowsePosition_column, filesBrowsePosition_row)
+
+        # set the rigth frame for device visible, dosn't work
+        #  File "C:\git\python\PySimpleGUI\PySimpleGUI.py", line 2362, in Update
+        #  self.TKFrame.pack()
+        #  AttributeError: 'NoneType' object has no attribute 'pack'
+        # for d in list(ti.keys()):
+        #     print(d)
+        #     if d == device:
+        #         window.FindElement(
+        #             '_FRAME_{:s}'.format(d)).Update(visible=True)
+
+        # main GUI loop
+        while True:
+           # display the main windows
+            event, values = window.Read()
+
+            #print(event, values)
+
+            if event == 'Cancel' or event == None:
+                raise SystemExit("Cancelling: user exit")
+
+            if event == 'OK':  # end of initialization, process data now
+                # values['_HIDDEN_'] is a string with files separated by ';' and fileExtractor need a list
+                files = values['_HIDDEN_'].split(';')
+                args.files = files
+
+                # test if a or more file are selected
+                if not all(args.files):
+                    sg.Popup("Cancel", "No filename supplied")
+                    # raise SystemExit("Cancelling: no filename supplied")
+                    continue
+                break
+
+            if event == '_DEVICE_':
+                # you have to go into the bowels of the pygi code, to get the instance of the Combo
+                # by the line and column number of the window to update its "fileType" property.
+                device = values['_DEVICE_']
+                updateFilesBrowseCombo(window,
+                    ti[device], filesBrowsePosition_column, filesBrowsePosition_row)
+                # TODOS: reset checkbox
+
+            # update the Multilines instance from FilesBrowse return
+            if event == '_HIDDEN_':
+                window.Element('_IN_').Update(
+                    values['_HIDDEN_'].split(';'))
+
+        # save program configuration
+        window.SaveToDisk(configfile)
+
+        # debug return values from GUI
+        logging.debug("Event: {}, Values: {}".format(event, values))
+
+        # extract selected parameters (true) from dict values only for selected device
+        args.keys = []
+        for k in values.keys():
+            if k[0] == '_' or values[k] == False:
+                continue
+            # check if device == device
+            if not device in k:
+                continue
+            else:
+                args.keys.append(re.sub('_\w+$', '', k))
+
+        # process of files start here
+        fe = process(args, cfg, device)
+
+        # display result in popup GUI
+        dims = "Dimensions: {} x {}".format(fe.n, fe.m)
+        sg.PopupScrolled('Oceano2python', dims,
+                         fe.disp(),  size=(80, 40))
+
+        # It will output to a debug window. Bug ? debug windows xas closed before exiting program
+        # print = sg.Print
+        # or
+        # print = sg.Print(size=(80,40))
+
+        return window, fe, device
 
 
 def process(args, cfg, ti):
@@ -204,93 +295,10 @@ if __name__ == "__main__":
         defaultRoscop = args.roscop
     r = Roscop(defaultRoscop)
 
-    # test arguements from sys.argv, args is never to None with default option set
+    # test arguments from sys.argv, args is never to None with default option set
     if args.gui or len(sys.argv) == 1:
-
-        # setup the GUI windows Layout
-        window = defineGUI()
-        device = window.find_element('_DEVICE_').DefaultValue
-        keys = cfg['split'][device.lower()].keys()
-
-        # can't update combo with FindElement('_HIDDEN_').Update(), we use this function
-        # with hardcoded FilesBrowseCombo position
-        updateFilesBrowseCombo(
-            ti[device], filesBrowsePosition_column, filesBrowsePosition_row)
-
-        # set the rigth frame for device visible, dosn't work
-        #  File "C:\git\python\PySimpleGUI\PySimpleGUI.py", line 2362, in Update
-        #  self.TKFrame.pack()
-        #  AttributeError: 'NoneType' object has no attribute 'pack'
-        # for d in list(ti.keys()):
-        #     print(d)
-        #     if d == device:
-        #         window.FindElement(
-        #             '_FRAME_{:s}'.format(d)).Update(visible=True)
-
-        # main GUI loop
-        while True:
-           # display the main windows
-            event, values = window.Read()
-
-            #print(event, values)
-
-            if event == 'Cancel' or event == None:
-                raise SystemExit("Cancelling: user exit")
-
-            if event == 'OK':  # end of initialization, process data now
-                # values['_HIDDEN_'] is a string with files separated by ';' and fileExtractor need a list
-                files = values['_HIDDEN_'].split(';')
-                args.files = files
-
-                # test if a or more file are selected
-                if not all(args.files):
-                    sg.Popup("Cancel", "No filename supplied")
-                    # raise SystemExit("Cancelling: no filename supplied")
-                    continue
-                break
-
-            if event == '_DEVICE_':
-                # you have to go into the bowels of the pygi code, to get the instance of the Combo
-                # by the line and column number of the window to update its "fileType" property.
-                device = values['_DEVICE_']
-                updateFilesBrowseCombo(
-                    ti[device], filesBrowsePosition_column, filesBrowsePosition_row)
-                # TODOS: reset checkbox
-
-            # update the Multilines instance from FilesBrowse return
-            if event == '_HIDDEN_':
-                window.Element('_IN_').Update(
-                    values['_HIDDEN_'].split(';'))
-
-        # save program configuration
-        window.SaveToDisk(configfile)
-
-        # debug return values from GUI
-        logging.debug("Event: {}, Values: {}".format(event, values))
-
-        # extract selected parameters (true) from dict values only for selected device
-        args.keys = []
-        for k in values.keys():
-            if k[0] == '_' or values[k] == False:
-                continue
-            # check if device == device
-            if not device in k:
-                continue
-            else:
-                args.keys.append(re.sub('_\w+$', '', k))
-
-        # process of files start here
-        fe = process(args, cfg, device)
-
-        # display result in popup GUI
-        dims = "Dimensions: {} x {}".format(fe.n, fe.m)
-        sg.PopupScrolled('Oceano2python', dims,
-                         fe.disp(),  size=(80, 40))
-
-        # It will output to a debug window. Bug ? debug windows xas closed before exiting program
-        # print = sg.Print
-        # or
-        # print = sg.Print(size=(80,40))
+        # define graphical interface
+        window, fe, device = process_gui()
 
     else:
         # demo mode, only in command line
@@ -322,9 +330,11 @@ if __name__ == "__main__":
         #print("Dimensions: {} x {}".format(fe.m, fe.n))
         # print(fe.disp())
 
+    # write ASCII hdr and data files
+    ascii.writeAscii(cfg, device, fe, r, variables_1D)
+
     # write the NetCDF file
     netcdf.writeNetCDF(cfg, device, fe, r, variables_1D)
     
-    # write ASCII hdr and data files
-    ascii.writeAscii(cfg, device, fe, r, variables_1D)
+    
 
