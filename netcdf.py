@@ -13,7 +13,7 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
     # variables and dimensions use for 1D and 2D variables
     #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
     variables = variables_1D.copy()
-    dims_2D = ['TIME', 'DEPTH']
+    dims_2D = ['TIME', 'depth']
 
     # create netcdf file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
@@ -29,7 +29,7 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
     time = nc.createDimension("TIME", fe.n)
     lat = nc.createDimension("LATITUDE", fe.n)
     lon = nc.createDimension("LONGITUDE", fe.n)
-    depth = nc.createDimension('DEPTH', fe.m)
+    depth = nc.createDimension('depth', fe.m)
 
     # debug
     logging.debug(" depth: {}, time: {}, lat: {}, lon: {}".format(

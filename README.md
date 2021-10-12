@@ -10,7 +10,7 @@ The program works under Windows (terminal) or Git bash as well as under Linux. I
 ``` bash
 conda create -n oceano2python python=3.9
 conda activate oceano2python
-conda install -c conda-forge netCDF4 toml matplotlib seawater PyInstaller pysimplegui
+conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller pysimplegui
 pip install julian
 ```
 
