@@ -13,9 +13,9 @@ def writeAscii(cfg, device, fe, r, variables_1D):
     writeHeader(fileName, cfg, fe, r, variables_1D, device.lower())
     
     fileName = "{}/{}_{}".format(cfg['global']['ascii'], cfg['cruise']['cycleMesure'], device.lower())
-    print('writing  data  file: {}'.format(fileName))
+    print('writing  data  file: {}'.format(fileName), end='')
     writeData(fileName, cfg, fe, r, variables_1D)
-    print('done...')
+    print(' done...')
     
 def writeHeader(hdrFile, cfg, fe, r, variables_1D, device):
     f = open(hdrFile, 'w')
