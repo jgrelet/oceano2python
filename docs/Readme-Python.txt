@@ -1,6 +1,23 @@
 Aide mémoire Python
 -------------------
-J Grelet June 2011 - March 2019
+J Grelet June 2011 - March 2019 - Avril 2021
+
+Conda:
+-------
+Installer mini conda
+
+
+
+> conda config --add channels conda-forge
+
+Once the conda-forge channel has been enabled, matplotlib, matplotlib-base, mpl_sample_data can be installed with:
+
+> conda install matplotlib matplotlib-base mpl_sample_data
+
+It is possible to list all of the versions of matplotlib available on your platform with:
+
+> conda search matplotlib --channel conda-forge
+
 
 Les listes:
 -----------
