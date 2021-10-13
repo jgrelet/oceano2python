@@ -1,6 +1,6 @@
 import logging
 from netCDF4 import Dataset
-from numpy import arange, dtype
+from numpy import arange, complexfloating, dtype
 import os
 from datetime import datetime
 
@@ -13,7 +13,7 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
     # variables and dimensions use for 1D and 2D variables
     #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
     variables = variables_1D.copy()
-    dims_2D = ['TIME', 'depth']
+    dims_2D = ['time', 'depth']
 
     # create netcdf file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
@@ -22,13 +22,13 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
         os.makedirs(cfg['global']['ascii'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
-    print('writing netCDF file: {}'.format(fileName))
+    print('writing netCDF file: {}'.format(fileName), end='')
 
     # create dimensions
     # n is number of profiles, m the max size of profiles
-    time = nc.createDimension("TIME", fe.n)
-    lat = nc.createDimension("LATITUDE", fe.n)
-    lon = nc.createDimension("LONGITUDE", fe.n)
+    time = nc.createDimension("time", fe.n)
+    lat = nc.createDimension("latitude", fe.n)
+    lon = nc.createDimension("longitude", fe.n)
     depth = nc.createDimension('depth', fe.m)
 
     # debug
@@ -55,13 +55,13 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
         # create the variable
         if any(key in item for item in variables_1D):
             try:
-                # create variable whit same dimension name, as TIME(TIME)
+                # create variable whit same dimension name, as TIME(time)
                 ncvars[key] = nc.createVariable(
                     key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
             except:
-                # for BATH(TIME), it's a mess !
+                # for BATH(time), it's a mess !
                 ncvars[key] = nc.createVariable(
-                    key, dtype(hash['types']).char, 'TIME', fill_value=fillvalue)
+                    key, dtype(hash['types']).char, 'time', fill_value=fillvalue)
         else:
             ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
@@ -74,7 +74,12 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
 
     # add global attributes
     nc.data_type = "OceanSITES profile data"
-    nc.Conventions = "CF-1.8"
+    nc.Conventions = "CF-1.7"
+    nc.title = cfg['global']['title']
+    nc.institution = cfg['global']['institution']
+    nc.source = cfg['global']['source']
+    nc.comment = cfg['global']['comment']
+    nc.references = cfg['global']['references']
     nc.cycle_mesure = cfg['cruise']['cycleMesure']
     nc.time_coverage_start = cfg['cruise']['beginDate']
     nc.time_coverage_end = cfg['cruise']['endDate']
@@ -103,4 +108,4 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
 
     # close the netcdf file
     nc.close()
-    print('done...')
+    print(' done...')

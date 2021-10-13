@@ -2,11 +2,17 @@
 author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
 debug          = false
 echo           = true
-#codeRoscop     = 'C:\git\python\oceano2python\code_roscop.csv'
-codeRoscop     = 'd:\Users\jgrelet\Documents\git\Python\oceano2python\code_roscop.csv'
+codeRoscop     = 'C:\git\python\oceano2python\code_roscop.csv'
+#codeRoscop     = 'd:\Users\jgrelet\Documents\git\Python\oceano2python\code_roscop.csv'
 ascii          = "ascii"
 netcdf         = "netcdf"
 odv            = "odv"
+title			= ''
+history		= ''
+institution = 'IRD'
+source = ''
+comment = ''
+references = ''
 
 [cruise]
 cycleMesure    = "PIRATA-FR29"
