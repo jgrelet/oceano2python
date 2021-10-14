@@ -14,7 +14,7 @@
 *_ladcp
 *.xbt
 *_xbt
-*.nc
+#*.nc
 *.xml
 *.yml
 *.stackdump
@@ -30,5 +30,5 @@ oceano.cfg
 basemap
 /dist
 /ascii
-/netcdf
+#/netcdf
 /odv
