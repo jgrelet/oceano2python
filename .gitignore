@@ -16,6 +16,7 @@
 *_xbt
 *.nc
 *.xml
+*.yml
 *.stackdump
 *_tmp
 __pycache__/
