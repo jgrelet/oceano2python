@@ -76,3 +76,17 @@ with
 ``` bash
 import PySimpleGUIQt as gs
 ```
+
+## Export and create from environments
+
+Duplicate your environment on another machine, just export it to a YAML file:
+
+``` bash
+conda env export > environment.yml
+```
+
+Deploy to a new instance:
+
+``` bash
+conda env create -f environment.yml -n <new_env_name>
+```
