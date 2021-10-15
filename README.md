@@ -3,7 +3,7 @@
 This program read ASCII file(s) from oceanographic instruments (Seabird CTD, Sippican XBT, RDI LADCP, etc), extract data from header files and write result into one ASCII and NetCDF OceanSITES file.
 Work in progress.
 
-## installation
+## Installation from scratch with conda
 
 The program works under Windows (terminal) or Git bash as well as under Linux. It is recommended to install miniconda and to create a virtual environment oceano2python.
 
@@ -14,7 +14,21 @@ conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller
 pip install julian
 ```
 
-## usage
+## Create an environment based on an YAML environment file
+
+``` bash
+conda env create -f environment.yml -n <new_env_name>
+```
+
+## Export your environment
+
+Duplicate your environment on another machine, just export it to a YAML file:
+
+``` bash
+conda env export > environment.yml
+```
+
+## Usage
 
 ``` bash
 python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
@@ -49,11 +63,11 @@ optional arguments:
 
 The user must describe in the TOML configuration file the metadata and the structure of the files to be read, see [tests/test.toml](https://github.com/jgrelet/oceano2python/blob/master/tests/test.toml)
 
-## dev
+## Developpment tools
 
 We use Visual Studio Code (VSC) with Python, better TOML, markdownlint and makefile extensions
 
-## build and run
+## Build and run
 
 To build, run tests, build (compiled version), test examples (CTD/XBT), with GUI, you can use make:
 
@@ -62,10 +76,11 @@ make test
 make build
 make ctd
 make xbt
+make ladcp
 make ctd GUI=-g
 ```
 
-If you want use QT instead of Tk, replace:
+If you want use QT instead of Tk, replace in oceano.py:
 
 ``` bash
 import PySimpleGUI as gs
@@ -75,18 +90,4 @@ with
 
 ``` bash
 import PySimpleGUIQt as gs
-```
-
-## Export and create from environments
-
-Duplicate your environment on another machine, just export it to a YAML file:
-
-``` bash
-conda env export > environment.yml
-```
-
-Deploy to a new instance:
-
-``` bash
-conda env create -f environment.yml -n <new_env_name>
 ```
