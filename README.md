@@ -28,10 +28,26 @@ Duplicate your environment on another machine, just export it to a YAML file:
 conda env export > environment.yml
 ```
 
-## Usage
+## Build and run
+
+To build, run tests, build (compiled version), test examples (CTD/XBT), with GUI, you can use make:
 
 ``` bash
-python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
+make test
+make build
+make ctd
+make xbt
+make ladcp
+make ctd GUI=-g
+```
+
+## Usage
+
+By default, the program uses the configuration file under: tests/test.toml, should change in future versions.
+
+``` bash
+python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD 
+python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -c <config.toml> -i CTD -d
 python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS
 python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -d
 python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
@@ -67,18 +83,7 @@ The user must describe in the TOML configuration file the metadata and the struc
 
 We use Visual Studio Code (VSC) with Python, better TOML, markdownlint and makefile extensions
 
-## Build and run
 
-To build, run tests, build (compiled version), test examples (CTD/XBT), with GUI, you can use make:
-
-``` bash
-make test
-make build
-make ctd
-make xbt
-make ladcp
-make ctd GUI=-g
-```
 
 If you want use QT instead of Tk, replace in oceano.py:
 
