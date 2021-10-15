@@ -15,6 +15,10 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
     variables = variables_1D.copy()
     dims_2D = ['time', 'depth']
 
+    # create the output directory if it does not exist
+    if not os.path.exists(cfg['global']['netcdf']):
+        os.makedirs(cfg['global']['netcdf'])
+
     # create netcdf file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
                                        ['netcdf'], cfg['cruise']['cycleMesure'], device)
