@@ -3,6 +3,18 @@
 This program read ASCII file(s) from oceanographic instruments (Seabird CTD, Sippican XBT, RDI LADCP, etc), extract data from header files and write result into one ASCII and NetCDF OceanSITES file.
 Work in progress.
 
+## Installation based on an YAML environment file
+
+``` bash
+conda env create -f environment.yml -n <new_env_name>
+```
+
+example:
+
+``` bash
+conda env create -f environment.yml -n oceano2python
+```
+
 ## Installation from scratch with conda
 
 The program works under Windows (terminal) or Git bash as well as under Linux. It is recommended to install miniconda and to create a virtual environment oceano2python.
@@ -12,12 +24,6 @@ conda create -n oceano2python python=3.9
 conda activate oceano2python
 conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller pysimplegui
 pip install julian
-```
-
-## Create an environment based on an YAML environment file
-
-``` bash
-conda env create -f environment.yml -n <new_env_name>
 ```
 
 ## Export your environment
