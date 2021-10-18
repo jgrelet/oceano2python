@@ -4,9 +4,7 @@ J Grelet June 2011 - March 2019 - Avril 2021
 
 Conda:
 -------
-Installer mini conda
-
-
+Installer miniconda
 
 > conda config --add channels conda-forge
 
@@ -17,6 +15,20 @@ Once the conda-forge channel has been enabled, matplotlib, matplotlib-base, mpl_
 It is possible to list all of the versions of matplotlib available on your platform with:
 
 > conda search matplotlib --channel conda-forge
+
+Installation based on an YAML environment file
+
+> conda env create -f environment<OS>.yml -n <new_env_name>
+
+example:
+
+> conda env create -f environment-windows.yml -n ms1
+
+Export your environment
+
+Duplicate your environment on other computer or OS, just export it to a YAML file:
+
+>conda env export --no-builds > environment-windows.yml
 
 
 Les listes:
