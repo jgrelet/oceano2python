@@ -12,7 +12,7 @@ conda env create -f environment.yml -n <new_env_name>
 example:
 
 ``` bash
-conda env create -f environment.yml -n oceano2python
+conda env create -f environment-windows.yml -n oceano2python
 ```
 
 ## Installation from scratch with conda
@@ -28,10 +28,10 @@ pip install julian
 
 ## Export your environment
 
-Duplicate your environment on another machine, just export it to a YAML file:
+Duplicate your environment on another machine, just export it to a YAML file, replace "OS" with linux or windows:
 
 ``` bash
-conda env export --no-builds > environment.yml
+conda env export --no-builds > environment-<OS>.yml
 ```
 
 ## Build and run
