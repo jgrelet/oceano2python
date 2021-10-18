@@ -3,6 +3,15 @@
 This program read ASCII file(s) from oceanographic instruments (Seabird CTD, Sippican XBT, RDI LADCP, etc), extract data from header files and write result into one ASCII and NetCDF OceanSITES file.
 Work in progress.
 
+## Prequisites for Windows
+
+You must install the following tools:
+
+- Visual Studio Code (<https://code.visualstudio.com/>)
+- Git (<https://git-scm.com/downloads>)
+- miniconda3 (<https://docs.conda.io/en/latest/miniconda.html>)
+- chocolatey (<https://chocolatey.org/install>) and install GNU Make package (<https://community.chocolatey.org/packages/make>)
+  
 ## Installation based on an YAML environment file
 
 ``` bash
