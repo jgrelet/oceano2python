@@ -17,6 +17,7 @@
 *.nc
 *.xml
 *.yml
+!environment.yml
 *.stackdump
 *_tmp
 __pycache__/
