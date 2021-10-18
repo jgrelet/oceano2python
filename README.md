@@ -31,7 +31,7 @@ pip install julian
 Duplicate your environment on another machine, just export it to a YAML file:
 
 ``` bash
-conda env export > environment.yml
+conda env export --no-builds > environment.yml
 ```
 
 ## Build and run
