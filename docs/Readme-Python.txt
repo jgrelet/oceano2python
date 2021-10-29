@@ -149,6 +149,24 @@ The objects returned from dict.keys(), dict.values(), and dict.items() are calle
 They provide a dynamic view on the dictionary’s entries, which means that when the dictionary changes, 
 the view reflects these changes. To force the dictionary view to become a full list use list(dictview). 
 
+Python range() function:
+-------------------------
+
+The range() function is used to generate a sequence of numbers over time. At its simplest, it accepts an integer and returns a range object (a type of iterable). 
+
+>>> r = range(1, 100, 3)
+>>> r.start
+1
+>>> r.stop
+100
+>>> r.step
+3
+
+Initialize a list of 4 points [x,y] to zero:
+
+>>> coords = [[0,0] for _ in range(4)]
+>>> coords
+[[0, 0], [0, 0], [0, 0], [0, 0]]
 
 Fonctions spéciales:
 --------------------
