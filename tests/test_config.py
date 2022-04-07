@@ -16,11 +16,17 @@ class testConfig(unittest.TestCase):
 
         self.glob = {'author': 'jgrelet IRD March 2019 PIRATA-FR29 cruise',
                      'debug': False, 'echo': True,
-                     # 'codeRoscop': 'C:\git\python\oceano2python\code_roscop.csv',
-                     'codeRoscop': '/home/jgrelet/git/oceano2python/code_roscop.csv',
+                     'codeRoscop': 'C:\git\python\oceano2python\code_roscop.csv',
+                     #'codeRoscop': '/home/jgrelet/git/oceano2python/code_roscop.csv',
                      'ascii': "ascii",
                      'netcdf': "netcdf",
-                     'odv': "odv"}
+                     'odv': "odv",
+                     'title':'',
+                     'history':'',
+                     'institution':'IRD',
+                    'source':'',
+                    'comment':'',
+                    'references':''}
 
         self.cruise = {'cycleMesure': 'PIRATA-FR29',
                        'plateforme': 'THALASSA',
