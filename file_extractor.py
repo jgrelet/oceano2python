@@ -10,6 +10,7 @@ import numpy as np
 import re
 from datetime import datetime
 import tools
+from physical_parameter import Roscop
 
 class FileExtractor:
 
@@ -299,10 +300,14 @@ class FileExtractor:
 # ---------------------------------
 if __name__ == "__main__":
 
-    # usage:
-    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -d
-    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -k PRES TEMP PSAL DOX2 DENS
-    # > python file_extractor.py data/CTD/cnv/dfr29*.cnv -d
+    # usage Unix:
+    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -d -i CTD
+    # > python file_extractor.py data/CTD/cnv/dfr2900*.cnv -k PRES TEMP PSAL DOX2 DENS -i CTD
+    # 
+    # usage DOS:
+    # > python file_extractor.py data/CTD/cnv/dfr2900?.cnv -d -i CTD
+    # > python file_extractor.py data/CTD/cnv/dfr2900?.cnv -k PRES TEMP PSAL DOX2 DENS -i CTD
+    #
     parser = argparse.ArgumentParser(
         description='This class read multiple ASCII file, extract physical parameter \
             from ROSCOP codification at the given column and fill arrays ',
@@ -311,6 +316,8 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
+    parser.add_argument('-i', '--instrument', nargs='?', choices=['CTD','XBT'],
+                        help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('fname', nargs='*',
@@ -324,11 +331,14 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-    fe = FileExtractor(args.fname, args.keys)
+    fe = FileExtractor(args.fname, Roscop('code_roscop.csv'), args.keys)
     print("File(s): {}, Config: {}".format(args.fname, args.config))
     cfg = toml.load(args.config)
+    fe.set_regex(cfg, args.instrument)
     fe.first_pass()
     print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
-    fe.second_pass(cfg, 'ctd')
+    fe.second_pass(cfg, args.instrument, ['TIME', 'LATITUDE', 'LONGITUDE','BATH'])
     # debug
-    # print(fe.disp())
+    print(fe['PRES'])
+    print(fe['TEMP'])
+    print(fe['PSAL'])
