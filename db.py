@@ -6,6 +6,8 @@ from notanorm import SqliteDb
 # https://www.sqlite.org
 # https://stackoverflow.com/questions/1309989/parameter-substitution-for-a-sqlite-in-clause
 # https://www.sqlitetutorial.net/sqlite-autoincrement/
+# https://pymotw.com/2/sqlite3/
+# https://sebastianraschka.com/Articles/2014_sqlite_in_python_tutorial.html
 
 def main():
  

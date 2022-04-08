@@ -2,6 +2,7 @@
 file_extractor.py
 '''
 import fileinput
+import linecache
 import logging
 import toml
 import sys
@@ -11,6 +12,30 @@ import re
 from datetime import datetime
 import tools
 from physical_parameter import Roscop
+from notanorm import SqliteDb 
+
+# define SQL station table
+table_station = """
+        CREATE TABLE station (
+	    id INTEGER PRIMARY KEY,
+        header TEXT,
+	    date_time TEXT NOT NULL UNIQUE,
+	    julian_day REAL NOT NULL UNIQUE,
+	    latitude REAL NOT NULL,
+	    longitude REAL NOT NULL,
+        max_depth REAL,
+        bottom_depth REAL
+        );"""
+
+# define the profile table
+# the id is actually the rowid AUTOINCREMENT column.
+table_profile = """
+        CREATE TABLE profile (
+        id INTEGER PRIMARY KEY,
+        station_id INTEGER,
+        FOREIGN KEY (station_id) 
+            REFERENCES station (id) 
+        ); """
 
 class FileExtractor:
 
@@ -29,7 +54,7 @@ class FileExtractor:
     '''
 
     # constructor with values by defaul
-    def __init__(self, fname, roscop, keys, separator=None):
+    def __init__(self, fname, roscop, keys, separator=None, dbname=":memory:"):
         # attibutes
         # public:
         self.fname = fname
@@ -38,10 +63,11 @@ class FileExtractor:
         self.n = 0
         self.m = 0
         self.lineHeader = 0
+        self.db = SqliteDb(dbname) 
 
         # private:
         self.__separator = separator
-        self.__header = {}
+        self.__header = ''
         self.__data = {}
         self.__regex = {}
         # replace this constante with roscop fill value
@@ -87,213 +113,68 @@ class FileExtractor:
         for key in d.keys():
             self.__regex[key] = re.compile(d[key])
 
-    def first_pass(self):
-        '''
-        Returns
-         ------
-        out : [n,m]
-        The size of array.
-        '''
-        lineHeader = 0
-        lineData = 0
-        filesRead = 0
-        indMax = 0
-        isHeader = True
+    def read_files(self, cfg, device):
 
-        for file in self.fname:
-            with fileinput.input(
-                    file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
-                lineData = 0
-                lineHeader = 0
-                isHeader = True
-                filesRead += 1
-                for line in f:
-                    # header detection, skip header lines
-                    if isHeader:
-                        if 'isHeader' in self.__regex: 
-                            if  self.__regex['isHeader'].match(line):
-                                lineHeader += 1
-                                continue
-                        elif 'endHeader' in self.__regex:
-                            if self.__regex['endHeader'].match(line):
-                                lineHeader += 1
-                                isHeader = False             
-                            else:
-                                lineHeader += 1
-                                continue
-    
-                    # increment the line number
-                    lineData += 1
+        print('Create table station')
+        #db.query("DROP DATABASE IF EXISTS '{}'".format(fname))
+        self.db.query(table_station)
 
-                if lineData > indMax:
-                    indMax = lineData
-                logging.debug(
-                    " {} -> header: {:>{w}} data: {:>{w2}}".format(
-                        file, lineHeader, lineData, w=3, w2=6))
-        # the size of arrays
-        self.n = filesRead
-        self.m = indMax
-        self.lineHeader = lineHeader
+        print('Create table profile')
+        self.db.query(table_profile)
 
-    # second pass, extract data from roscop code in fname and fill array
-    def second_pass(self, cfg, device, variables_1D):
-        '''
-        Read the file to its internal dict
+        for pm in self.keys:
+            print('\tUpdate table profile with new column {}'.format(pm))
+            addColumn = "ALTER TABLE profile ADD COLUMN {} REAL NOT NULL".format(pm)
+            self.db.query(addColumn)
 
-        Parameters
-        ----------
-        keys: sequence, a list of physical parameter to read.
-            ex: ['PRES', 'TEMP', 'PSAL']
-        cfg: toml.load() instance, configuration file
-        device: str, instrument
-            ex: CTD,XBT or LADCP
-        '''
-        n = 0
-        m = 0
-        # initialize datetime object
-        dt = datetime
+        # get the dictionary from toml block, device must be is in lower case
+        hash = cfg['split'][device.lower()]
 
         # set separator field if declared in toml section, none by default
         if 'separator' in cfg[device.lower()]:
             self.__separator = cfg[device.lower()]['separator']
 
-        # set skipHeader is declared in toml section, 0 by default
-
-        # get the dictionary from toml block, device must be is in lower case
-        hash = cfg['split'][device.lower()]
-
-        # initialize arrays, move at the end of firstPass ?
-        for key in variables_1D:
-            #self.__data[key] = np.ones((self.n)) * self.__FillValue
-            if '_FillValue' in self.roscop[key]:
-                self.__data[key] = np.full(self.n, self.roscop[key]['_FillValue']) 
-            else:
-                self.__data[key] = np.empty(self.n) 
-             
-        for key in self.keys:
-            # mult by __fillValue next
-            # the shape parameter has to be an int or sequence of ints
-            if '_FillValue' in self.roscop[key]:
-                self.__data[key] = np.full([self.n, self.m], self.roscop[key]['_FillValue'])
-            else:
-                self.__data[key] = np.empty([self.n, self.m]) 
-
         for file in self.fname:
             with fileinput.input(
-                file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f:
-                logging.debug(file)
-                day = month = year = hour = minute = second = 0
+                file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
                 for line in f:
-                    if f.filelineno() < self.lineHeader + 1:
+                    if self.__regex['isHeader'].match(line):
+                        self.__header += line
+                        continue
+                    if self.__regex['endHeader'].match(line):
                         # read and decode header
-                        for k in self.__regex.keys():
-                            # key is DATETIME
-                            if k == "DATETIME" and self.__regex[k].search(line):
-                                (month, day, year, hour, minute, second) = \
-                                    self.__regex[k].search(line).groups() 
-
-                                # format date and time to  "May 09 2011 16:33:53"
-                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)  
-                                # set datetime object                              
-                                dt = dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")
-
-                                # dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")# dateTime conversion to "09/05/2011 16:33:53"
-                                # dateTime = "%s" % \
-                                #     (dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
-                                # # conversion to "20110509163353"
-                                # epic_date = "%s" % \
-                                #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
-
-                                # # conversion to julian day
-                                # julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
-                                # + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
-
-                                # # we use julian day with origine 0
-                                # julian -= 1
-                                self.__data['TIME'][n] = tools.dt2julian(dt)  
-                            # key is DATE
-                            if k == "DATE" and self.__regex[k].search(line):
-                                if device.lower() == 'ladcp':
-                                    (year, month, day) = \
-                                    self.__regex[k].search(line).groups() 
-                                else:
-                                    (month, day, year) = \
-                                    self.__regex[k].search(line).groups() 
-                            # key is TIME
-                            if k == "TIME" and self.__regex[k].search(line):
-                                (hour, minute, second) = \
-                                self.__regex[k].search(line).groups()   
-                       
-                                # format date and time to  "May 09 2011 16:33:53"
-                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)
-
-                                # dateTime conversion to "09/05/2011 16:33:53"
-                                dateTime = "%s" % \
-                                    (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))  
-                                    
-                                # set datetime object     
-                                dt = dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S")
-                                # # conversion to "20110509163353"
-                                # epic_date = "%s" % \
-                                #     (dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))  
-
-                                # # conversion to julian day
-                                # julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
-                                # + ((float(hour) * 3600.) + (float(minute) * 60.) + float(second) ) / 86400.
-
-                                # # we use julian day with origine 0
-                                # julian -= 1
-                                self.__data['TIME'][n] = tools.dt2julian(dt)    
-                            # key is LATITUDE
-                            if k == "LATITUDE" and self.__regex[k].search(line):
-                                if device.lower() == 'ladcp':
-                                    [latitude] = self.__regex[k].search(line).groups()                                  
-                                else:
-                                    (lat_deg, lat_min, lat_hemi) = self.__regex[k].search(line).groups() 
-
-                                    # format latitude to string
-                                    latitude_str = "%s%c%s %s" % (lat_deg, tools.DEGREE, lat_min, lat_hemi)
-
-                                    # transform to decimal using ternary operator
-                                    latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
-                                        (float(lat_deg) + (float(lat_min) / 60.)) * -1
-                                self.__data['LATITUDE'][n] = latitude  
-                            # key is LONGITUDE
-                            if k == "LONGITUDE" and self.__regex[k].search(line):
-                                if device.lower() == 'ladcp':
-                                    [longitude] = self.__regex[k].search(line).groups()
-                                else:
-                                    (lon_deg, lon_min, lon_hemi) = self.__regex[k].search(line).groups() 
-
-                                    # format longitude to string
-                                    longitude_str = "%s%c%s %s" % (lon_deg, tools.DEGREE, lon_min, lon_hemi)
-
-                                    # transform to decimal using ternary operator
-                                    longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
-                                        (float(lon_deg) + (float(lon_min) / 60.)) * -1
-                                self.__data['LONGITUDE'][n] = longitude  
-                            # key is BATH
-                            if k == "BATH" and self.__regex[k].search(line):
-                                [bath] = self.__regex[k].search(line).groups() 
-                                self.__data['BATH'][n] = bath
+                        #for k in self.__regex.keys():
+                        # fake
+                        print("insert station")
+                        
+                        self.db.insert("station", id = 1, header = self.__header,
+                            date_time = "2022-04-06 12:00:00.000",
+                            julian_day = 10.5, latitude = -10.2, longitude = 23.6)
                         continue
 
+                    print(line)        
                     # split the line, remove leading and trailing space before
                     p = line.strip().split(self.__separator)
-
-                    str = ' '
-                    # fill array with extracted value of line for eack key (physical parameter)
+                    sql = 'station_id = 1'
+                    # for key in self.keys:
+                    #     # Insert data in profile table
+                    #     sql += ", {} = {}".format(key, p[hash[key]])
+                    # print(sql)
+                    #sql = ', '.join(['{} = {}'.format(key, p[hash[key]]) for key in self.keys])
+                    #print(sql)
+                    sql = {}
+                    #[sql[key] = p[hash[key]]  for key in self.keys]
+                    sql['station_id'] = 1
                     for key in self.keys:
-                        self.__data[key][n, m] = p[hash[key]]
-                        # debug info
-                        str += "{:>{width}}".format(
-                            p[hash[key]], width=8)
-                    logging.debug(str)
+                        sql[key] = p[hash[key]] 
+                    print(sql)
+                    self.db.insert("profile",  sql )
+                    #self.db.insert("profile", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
 
-                    # increment m indice (the line number)
-                    m += 1
-            n += 1
-            m = 0
+        print('get sizes:')
+        st = self.db.query('SELECT COUNT(id) FROM station')
+        max_press = self.db.query('SELECT count(PRES) FROM profile')
+        print(st, max_press)
 
 
 # for testing in standalone context
@@ -335,10 +216,10 @@ if __name__ == "__main__":
     print("File(s): {}, Config: {}".format(args.fname, args.config))
     cfg = toml.load(args.config)
     fe.set_regex(cfg, args.instrument)
-    fe.first_pass()
-    print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
-    fe.second_pass(cfg, args.instrument, ['TIME', 'LATITUDE', 'LONGITUDE','BATH'])
-    # debug
-    print(fe['PRES'])
-    print(fe['TEMP'])
-    print(fe['PSAL'])
+    fe.read_files(cfg, args.instrument)
+    # print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
+    # fe.second_pass(cfg, args.instrument, ['TIME', 'LATITUDE', 'LONGITUDE','BATH'])
+    # # debug
+    # print(fe['PRES'])
+    # print(fe['TEMP'])
+    # print(fe['PSAL'])

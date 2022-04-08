@@ -34,7 +34,8 @@ typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
 
 	[ctd.header]
-	isHeader = '^[*#]'
+	isHeader = '^[*#]+\s+'
+	endHeader = '^[*]END[*]'
 	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
 	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
 	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
