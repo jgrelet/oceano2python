@@ -27,7 +27,6 @@ creator        = "Jacques.Grelet@ird.fr"
 
 [ctd]
 cruisePrefix   = "fr29"
-station = 'Station\s*:\s*\D*(\d*)'
 stationPrefixLength  = 3
 titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
 typeInstrument   = "SBE911+"
@@ -36,6 +35,7 @@ instrumentNumber  = "09P1263"
 	[ctd.header]
 	isHeader = '^[*#]+\s+'
 	endHeader = '^[*]END[*]'
+	station = 'Station\s*:\s*\D*(\d*)'
 	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
 	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
 	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
