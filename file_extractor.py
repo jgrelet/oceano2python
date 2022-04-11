@@ -9,6 +9,7 @@ import sys
 import argparse
 import numpy as np
 import re
+from glob import glob
 from datetime import datetime
 import tools
 from physical_parameter import Roscop
@@ -20,11 +21,17 @@ table_station = """
 	    id INTEGER PRIMARY KEY,
         header TEXT,
 	    date_time TEXT NOT NULL UNIQUE,
+        end_date_time TEXT,
 	    julian_day REAL NOT NULL UNIQUE,
 	    latitude REAL NOT NULL,
+        lat TEXT,
 	    longitude REAL NOT NULL,
+        lon TEXT,
         max_depth REAL,
-        bottom_depth REAL
+        bath REAL,
+        patm REAL,
+        tair REAL,
+        operator
         );"""
 
 # define the profile table
@@ -96,7 +103,7 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-    def set_regex(self, cfg, ti):
+    def set_regex(self, cfg, ti, table):
         ''' prepare (compile) each regular expression inside toml file under section [<device>.header] 
         	[ctd.header]
 	        isHeader = '^[*#]'
@@ -107,13 +114,16 @@ class FileExtractor:
         '''
 
         # first pass on file(s)
-        d = cfg[ti.lower()]['header']
+        d = cfg[ti.lower()][table]
 
         # fill the __regex dict with compiled regex 
         for key in d.keys():
             self.__regex[key] = re.compile(d[key])
 
     def read_files(self, cfg, device):
+
+        # initialize datetime object
+        dt = datetime
 
         print('Create table station')
         #db.query("DROP DATABASE IF EXISTS '{}'".format(fname))
@@ -134,28 +144,93 @@ class FileExtractor:
         if 'separator' in cfg[device.lower()]:
             self.__separator = cfg[device.lower()]['separator']
 
+        # read each file and extract header and data and fill sqlite tables
         for file in self.fname:
             with fileinput.input(
                 file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
+                sql = {}
+                self.__header = ''
+                print("Reading file: {}".format(file))
+                # read all lines in file 
                 for line in f:
+                    # 
                     if self.__regex['isHeader'].match(line):
                         self.__header += line
                         continue
+                    # at the end of header, extract information from regex, insert data
+                    # to the table station and go to next line
                     if self.__regex['endHeader'].match(line):
-                        # read and decode header
-                        #for k in self.__regex.keys():
-                        # fake
-                        print("insert station")
                         
-                        self.db.insert("station", id = 1, header = self.__header,
-                            date_time = "2022-04-06 12:00:00.000",
-                            julian_day = 10.5, latitude = -10.2, longitude = 23.6)
+                        # read and decode header
+                        for k in self.__regex.keys():
+
+                            # extract STATION number
+                            if k == "station" and self.__regex[k].search(self.__header):
+                                [station] = self.__regex[k].search(self.__header).groups() 
+                                sql['id'] = station
+                                #print('station {}'.format(station))
+
+                            # key is DATETIME
+                            if k == "DATETIME" and self.__regex[k].search(self.__header):
+                                (month, day, year, hour, minute, second) = \
+                                    self.__regex[k].search(self.__header).groups() 
+
+                                # format date and time to  "May 09 2011 16:33:53"
+                                dateTime = "%s/%s/%s %s:%s:%s"  %  (day, month, year, hour, minute, second)  
+                                # set datetime object                              
+                                sql['date_time'] = dt.strptime(dateTime, "%d/%b/%Y %H:%M:%S")
+                                sql['julian_day'] = tools.dt2julian(sql['date_time'])  
+
+                            # key is LATITUDE
+                            if k == "LATITUDE" and self.__regex[k].search(self.__header):
+                                if device.lower() == 'ladcp':
+                                    [latitude] = self.__regex[k].search(self.__header).groups()                                  
+                                else:
+                                    (lat_deg, lat_min, lat_hemi) = self.__regex[k].search(self.__header).groups() 
+
+                                    # format latitude to string
+                                    latitude_str = "%s%c%s %s" % (lat_deg, tools.DEGREE, lat_min, lat_hemi)
+
+                                    # transform to decimal using ternary operator
+                                    latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
+                                        (float(lat_deg) + (float(lat_min) / 60.)) * -1
+                                sql['LATITUDE'] = latitude  
+                                sql['lat'] = tools.Dec2dmc(latitude,'N')
+
+                            # key is LONGITUDE
+                            if k == "LONGITUDE" and self.__regex[k].search(self.__header):
+                                if device.lower() == 'ladcp':
+                                    [longitude] = self.__regex[k].search(self.__header).groups()
+                                else:
+                                    (lon_deg, lon_min, lon_hemi) = self.__regex[k].search(self.__header).groups() 
+
+                                    # format longitude to string
+                                    longitude_str = "%s%c%s %s" % (lon_deg, tools.DEGREE, lon_min, lon_hemi)
+
+                                    # transform to decimal using ternary operator
+                                    longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
+                                        (float(lon_deg) + (float(lon_min) / 60.)) * -1
+                                sql['LONGITUDE'] = longitude  
+                                sql['lon'] = tools.Dec2dmc(longitude,'E')
+
+                            # key is BATH
+                            if k == "BATH" and self.__regex[k].search(self.__header):
+                                [bath] = self.__regex[k].search(self.__header).groups() 
+                                sql['bath'] = bath
+                                
+                        # print debug header values
+                        # print('header from sql dict:')
+                        # for k in sql.keys():
+                        #     print(sql[k])
+
+                        #print("insert station")
+                        self.db.insert("station", sql)
                         continue
 
-                    print(line)        
+                    # now, extract and process all data
+                    #print(line)        
                     # split the line, remove leading and trailing space before
                     p = line.strip().split(self.__separator)
-                    sql = 'station_id = 1'
                     # for key in self.keys:
                     #     # Insert data in profile table
                     #     sql += ", {} = {}".format(key, p[hash[key]])
@@ -164,16 +239,32 @@ class FileExtractor:
                     #print(sql)
                     sql = {}
                     #[sql[key] = p[hash[key]]  for key in self.keys]
-                    sql['station_id'] = 1
+                    sql['station_id'] = station
                     for key in self.keys:
                         sql[key] = p[hash[key]] 
-                    print(sql)
+                    #print(sql)
                     self.db.insert("profile",  sql )
                     #self.db.insert("profile", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
 
+            #print(sql['ETDD'])
+            jj = tools.dt2julian(datetime(year=2019, day=1, month=1))
+            dt = tools.julian2dt(float(sql['ETDD'])+jj-1)
+            #print(dt.strftime("%d/%m/%Y %H:%M:%S"))
+            self.db.update("station", id = station, 
+                end_date_time = dt.strftime("%Y-%m-%d %H:%M:%S"))
+
+        # print infos after reding all files
         print('get sizes:')
+        hdr = self.db.query('SELECT * FROM station')
         st = self.db.query('SELECT COUNT(id) FROM station')
-        max_press = self.db.query('SELECT count(PRES) FROM profile')
+        max_press = self.db.query('SELECT max(PRES) FROM profile')
+        # hdr is a list of dict
+        # hdr[0] ={'id': 1, 'header': None, 'date_time': '2019-03-02 15:20:03', 
+        # 'julian_day': 25262.638923611026, 'latitude': 12.492833333333333, 
+        # 'longitude': -23.342666666666666, 'max_depth': None, 'bath': 4894.0}
+        #print(hdr[0]['id'])
+        for i in hdr:
+            print(i['id'], i['date_time'], i['end_date_time'], i['lat'], i['lon'])
         print(st, max_press)
 
 
@@ -201,8 +292,8 @@ if __name__ == "__main__":
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
-    parser.add_argument('fname', nargs='*',
-                        help='cnv file(s) to parse, (default: data/cnv/dfr29*.cnv)')
+    parser.add_argument('files', nargs='*',
+                        help='ASCII file(s) to parse')
 
     # display extra logging info
     # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
@@ -212,10 +303,15 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-    fe = FileExtractor(args.fname, Roscop('code_roscop.csv'), args.keys)
-    print("File(s): {}, Config: {}".format(args.fname, args.config))
+    # work with DOs, Git bash and Linux
+    files = []
+    for file in args.files:  
+        files += glob(file)  
+
+    fe = FileExtractor(files, Roscop('code_roscop.csv'), args.keys)
+    print("File(s): {}, Config: {}".format(files, args.config))
     cfg = toml.load(args.config)
-    fe.set_regex(cfg, args.instrument)
+    fe.set_regex(cfg, args.instrument, 'header')
     fe.read_files(cfg, args.instrument)
     # print("Indices: {} x {}\nkeys: {}".format(fe.n, fe.m, fe.keys))
     # fe.second_pass(cfg, args.instrument, ['TIME', 'LATITUDE', 'LONGITUDE','BATH'])

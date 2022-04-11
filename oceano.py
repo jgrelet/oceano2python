@@ -250,7 +250,7 @@ def process(args, cfg, ti):
     fe = FileExtractor(args.files, r, args.keys)
 
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
-    fe.set_regex(cfg, ti)
+    fe.set_regex(cfg, ti, 'header')
 
     # the first pass skip headers and return data dimensions size
     fe.first_pass()

@@ -22,11 +22,6 @@ def dateTime2julian(month, day, year, hour, minute, second):
     dateTime = "%s" % \
         (dt.strptime(dateTime,
         "%d/%b/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
-    
-    # conversion to "20110509163353"
-    epic_date = "%s" % \
-        (dt.strptime(dateTime,
-        "%d/%m/%Y %H:%M:%S").strftime("%Y%m%d%H%M%S"))
 
     # conversion to julian day
     julian = float((dt.strptime(dateTime, "%d/%m/%Y %H:%M:%S").strftime("%j"))) \
@@ -37,22 +32,9 @@ def dateTime2julian(month, day, year, hour, minute, second):
     julian -= 1
     return julian
 
-def julian2dt(jd):
-    # see: https://en.wikipedia.org/wiki/Julian_day
-    # Julian Date	12h Jan 1, 4713 BC
-    # Modified JD	0h Nov 17, 1858	JD − 2400000.5
-    # CNES JD	0h Jan 1, 1950	JD − 2433282.5
-    jd = jd + JULIAN
-    dt = julian.from_jd(jd, fmt='mjd')
-    return dt
-
-def dt2julian(dt):
-    jd = julian.to_jd(dt, fmt='mjd')
-    jd = jd - JULIAN
-    return jd
-
 def dateTime2epic(month, day, year, hour, minute, second):
-    
+    # return date as "20110509163353"
+
     # initialize datetime object
     dt = datetime
         
@@ -72,8 +54,19 @@ def dateTime2epic(month, day, year, hour, minute, second):
 
     return  epic_date
 
+def julian2dt(jd):
+    # see: https://en.wikipedia.org/wiki/Julian_day
+    # Julian Date	12h Jan 1, 4713 BC
+    # Modified JD	0h Nov 17, 1858	JD − 2400000.5
+    # CNES JD	0h Jan 1, 1950	JD − 2433282.5
+    jd = jd + JULIAN
+    dt = julian.from_jd(jd, fmt='mjd')
+    return dt
 
-
+def dt2julian(dt):
+    jd = julian.to_jd(dt, fmt='mjd')
+    jd = jd - JULIAN
+    return jd
 
 # Dec2dmc convert decimal position to degree, mim with centieme string,
 # hemi = 0 for latitude, 1 for longitude
