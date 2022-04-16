@@ -2,6 +2,10 @@ Aide mémoire Python
 -------------------
 J Grelet June 2011 - March 2019 - Avril 2021
 
+Docs en ligne:
+--------------
+https://www.tutorialspoint.com/python/index.htm
+
 Conda:
 -------
 Installer miniconda
@@ -106,7 +110,8 @@ dict_values([1, 2])
 
 >>> key not in d          Equivalent to not key in d.
 
->>> iter(d)               Return an iterator over the keys of the dictionary. This is a shortcut for iter(d.keys()).
+>>> iter(d)               Return an iterator over the keys of the dictionary. 
+                          This is a shortcut for iter(d.keys()).
 
 >>> d.clear()             Remove all items from the dictionary.
 
@@ -348,9 +353,11 @@ self.s[key].value
 
 Decorator:
 -----------
-A function returning another function, usually applied as a function transformation using the @wrapper syntax. 
+A function returning another function, usually applied as a function transformation
+using the @wrapper syntax. 
 Common examples for decorators are classmethod() and staticmethod().
-The decorator syntax is merely syntactic sugar, the following two function definitions are semantically equivalent:
+The decorator syntax is merely syntactic sugar, the following two function 
+definitions are semantically equivalent:
 
 def f(...):
     ...
