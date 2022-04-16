@@ -72,6 +72,7 @@ def dt2julian(dt):
 # hemi = 0 for latitude, 1 for longitude
 def Dec2dmc(position, hemi):
 
+    #print(type(position))
     if re.match('[EW]', hemi):
         neg = 'W'
         pos = 'E'
@@ -79,7 +80,7 @@ def Dec2dmc(position, hemi):
         neg = 'S'
         pos = 'N'
 
-    if position < 0:
+    if position < 0.:
         geo = neg
     else:
         geo = pos
@@ -107,7 +108,7 @@ def Dec2dms(position, hemi):
         neg = 'S'
         pos = 'N'
 
-    if position < 0:
+    if position < 0.:
         geo = neg
     else:
         geo = pos

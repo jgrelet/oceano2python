@@ -252,12 +252,7 @@ def process(args, cfg, ti):
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
     fe.set_regex(cfg, ti, 'header')
 
-    # the first pass skip headers and return data dimensions size
-    fe.first_pass()
-
-    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
-    fe.second_pass(cfg, ti, variables_1D)
-    # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+    fe.read_files(cfg, ti)
     return fe
 
 
