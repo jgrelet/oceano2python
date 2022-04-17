@@ -45,7 +45,7 @@ def writeData(dataFile, cfg, device, fe, r):
             tools.julian2dt(fe['TIME'][i]).strftime("%Y%m%d%H%M%S"), fe['BATH'][i]))
         for m in range(fe.m):
             #print(fe['PRES'])
-            if fe['PRES'][i][m] < 1e35:
+            if fe[fe.keys[0]][i][m] < 1e35:
                 f.write("{:0>5} ".format(fe['PROFILE'][i]))
                 for k in fe.keys:        
                     f.write("{:0>5.2f} ".format( fe[k][i][m]))
