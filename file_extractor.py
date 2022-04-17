@@ -304,13 +304,14 @@ class FileExtractor:
 
         # print infos after reding all files   
         hdr = self.db.query('SELECT * FROM station')
-        st = self.db.query('SELECT COUNT(id) FROM station')
+        #st = self.db.query('SELECT COUNT(id) FROM station')
         #print(f"SELECT COUNT({self.keys[0]}) FROM data")
-        max_press = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data")
+        #max_size = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data")
+        n = self.db.count('station')
+        m = self.db.count('data')
         # need more documentation about return dict from select
-        #print(max_press[0].keys())
-        n = int(st[0]['COUNT(id)']) 
-        m = int(max_press[0][f"COUNT({self.keys[0]})"])
+        #n = int(st[0]['COUNT(id)']) 
+        #m = int(max_size[0][f"COUNT({self.keys[0]})"])
         print(f"get sizes: {n} x {m}")
 
         # hdr is a list of dict, add station ?
