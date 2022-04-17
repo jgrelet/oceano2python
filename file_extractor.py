@@ -123,6 +123,64 @@ class FileExtractor:
         for key in d.keys():
             self.__regex[key] = re.compile(d[key])
 
+    def update_arrays(self):
+        ''' extract data from sqlite database and fill self.__data arrays
+        '''
+        # print infos after reding all files   
+        hdr = self.db.query('SELECT * FROM station')
+        #st = self.db.query('SELECT COUNT(id) FROM station')
+        #print(f"SELECT COUNT({self.keys[0]}) FROM data")
+        #max_size = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data")
+        n = self.db.count('station')
+        m = self.db.count('data')
+        # need more documentation about return dict from select
+        #n = int(st[0]['COUNT(id)']) 
+        #m = int(max_size[0][f"COUNT({self.keys[0]})"])
+        print(f"get sizes: {n} x {m}")
+
+        # hdr is a list of dict, add station ?
+        variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
+
+        for k in variables_1D:
+            #print(self.roscop[k])
+            if '_FillValue' in self.roscop[k]:
+                    self.__data[k] = np.full(n, self.roscop[k]['_FillValue']) 
+            else:
+                    self.__data[k] = np.empty(n) 
+
+        #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
+        query = self.db.select('station', ['id','station', 'julian_day', 'end_date_time',
+            'latitude', 'longitude', 'bath'])
+        #print(query)
+
+        profil_pk = []
+        for idx, item in enumerate(query):
+            profil_pk.append(item['id'])
+            self.__data['PROFILE'][idx] = item['station']
+            #print(item['station'])
+            self.__data['TIME'][idx] = item['julian_day']
+            #self.__data['END_TIME'][idx] = item['end_date_time']
+            self.__data['LATITUDE'][idx] = item['latitude']
+            self.__data['LONGITUDE'][idx] = item['longitude']
+            self.__data['BATH'][idx] = item['bath']
+
+        # initialize array
+        for k in self.keys:
+            if '_FillValue' in self.roscop[k]:
+                self.__data[k] = np.full([n, m], self.roscop[k]['_FillValue'])
+            else:
+                self.__data[k] = np.empty([n, m]) 
+        # for each parameters
+        for k in self.keys:
+            # for each entries in station table, n is a list with indice start at 0
+            for i in profil_pk:
+                query = self.db.select('data', [k], station_id = profil_pk[i-1])
+                for idx, item in enumerate(query):
+                    self.__data[k][i-1, idx] = item[k]
+
+        self.m = m
+        self.n = n
+
     def read_files(self, cfg, device):
 
         # initialize datetime object
@@ -302,60 +360,7 @@ class FileExtractor:
 
                 #self.db.update("station", id = pk, end_date_time = dt)
 
-        # print infos after reding all files   
-        hdr = self.db.query('SELECT * FROM station')
-        #st = self.db.query('SELECT COUNT(id) FROM station')
-        #print(f"SELECT COUNT({self.keys[0]}) FROM data")
-        #max_size = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data")
-        n = self.db.count('station')
-        m = self.db.count('data')
-        # need more documentation about return dict from select
-        #n = int(st[0]['COUNT(id)']) 
-        #m = int(max_size[0][f"COUNT({self.keys[0]})"])
-        print(f"get sizes: {n} x {m}")
-
-        # hdr is a list of dict, add station ?
-        variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
-
-        for k in variables_1D:
-            #print(self.roscop[k])
-            if '_FillValue' in self.roscop[k]:
-                    self.__data[k] = np.full(n, self.roscop[k]['_FillValue']) 
-            else:
-                    self.__data[k] = np.empty(n) 
-
-        #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
-        query = self.db.select('station', ['id','station', 'julian_day', 'end_date_time',
-            'latitude', 'longitude', 'bath'])
-        #print(query)
-
-        profil_pk = []
-        for idx, item in enumerate(query):
-            profil_pk.append(item['id'])
-            self.__data['PROFILE'][idx] = item['station']
-            #print(item['station'])
-            self.__data['TIME'][idx] = item['julian_day']
-            #self.__data['END_TIME'][idx] = item['end_date_time']
-            self.__data['LATITUDE'][idx] = item['latitude']
-            self.__data['LONGITUDE'][idx] = item['longitude']
-            self.__data['BATH'][idx] = item['bath']
-
-        # initialize array
-        for k in self.keys:
-            if '_FillValue' in self.roscop[k]:
-                self.__data[k] = np.full([n, m], self.roscop[k]['_FillValue'])
-            else:
-                self.__data[k] = np.empty([n, m]) 
-        # for each parameters
-        for k in self.keys:
-            # for each entries in station table, n is a list with indice start at 0
-            for n in profil_pk:
-                query = self.db.select('data', [k], station_id = profil_pk[n-1])
-                for idx, item in enumerate(query):
-                    self.__data[k][n-1, idx] = item[k]
-
-        self.m = m
-        self.n = n
+        self.update_arrays()
         
 
 
