@@ -19,7 +19,7 @@ EXIT_FAILURE = 1
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
     'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': 'COLCOR'}
-variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
+#variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
 ti = typeInstrument  # an alias
 filesBrowsePosition_row = 2
 filesBrowsePosition_column = 1
@@ -320,10 +320,10 @@ if __name__ == "__main__":
         # print(fe.disp())
 
     # write ASCII hdr and data files
-    ascii.writeAscii(cfg, device, fe, r, variables_1D)
+    ascii.writeAscii(cfg, device, fe, r)
 
     # write the NetCDF file
-    netcdf.writeNetCDF(cfg, device, fe, r, variables_1D)
+    netcdf.writeNetCDF(cfg, device, fe, r)
     
     
 
