@@ -36,10 +36,10 @@ table_station = """
         operator
         );"""
 
-# define the profile table
+# define the data table
 # the id is actually the rowid AUTOINCREMENT column.
-table_profile = """
-        CREATE TABLE profile (
+table_data = """
+        CREATE TABLE data (
         id INTEGER PRIMARY KEY,
         station_id INTEGER,
         FOREIGN KEY (station_id) 
@@ -106,7 +106,7 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-    def set_regex(self, cfg, ti, table):
+    def set_regex(self, cfg, ti, header):
         ''' prepare (compile) each regular expression inside toml file under section [<device>.header] 
         	[ctd.header]
 	        isHeader = '^[*#]'
@@ -117,7 +117,7 @@ class FileExtractor:
         '''
 
         # first pass on file(s)
-        d = cfg[ti.lower()][table]
+        d = cfg[ti.lower()][header]
 
         # fill the __regex dict with compiled regex 
         for key in d.keys():
@@ -132,13 +132,13 @@ class FileExtractor:
         #db.query("DROP DATABASE IF EXISTS '{}'".format(fname))
         self.db.query(table_station)
 
-        # Create table profile
-        self.db.query(table_profile)
+        # Create table data
+        self.db.query(table_data)
 
-        # update table profile and add new column from pm (physical parameter)
+        # update table data and add new column from pm (physical parameter)
         for pm in self.keys:
-            #print(f"\tUpdate table profile with new column {pm}")
-            addColumn = f"ALTER TABLE profile ADD COLUMN {pm} REAL NOT NULL"
+            #print(f"\tUpdate table data with new column {pm}")
+            addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
             self.db.query(addColumn)
 
         # get the dictionary from toml block, device must be is in lower case
@@ -287,8 +287,8 @@ class FileExtractor:
                         sql['station_id'] = pk
                         for key in self.keys:
                             sql[key] = p[hash[key]] 
-                        #self.db.insert("profile", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
-                        self.db.insert("profile",  sql )
+                        #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
+                        self.db.insert("data",  sql )
 
                 # end of readline in file
 
@@ -305,8 +305,8 @@ class FileExtractor:
         # print infos after reding all files   
         hdr = self.db.query('SELECT * FROM station')
         st = self.db.query('SELECT COUNT(id) FROM station')
-        #print(f"SELECT COUNT({self.keys[0]}) FROM profile")
-        max_press = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM profile")
+        #print(f"SELECT COUNT({self.keys[0]}) FROM data")
+        max_press = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data")
         # need more documentation about return dict from select
         #print(max_press[0].keys())
         n = int(st[0]['COUNT(id)']) 
@@ -349,7 +349,7 @@ class FileExtractor:
         for k in self.keys:
             # for each entries in station table, n is a list with indice start at 0
             for n in profil_pk:
-                query = self.db.select('profile', [k], station_id = profil_pk[n-1])
+                query = self.db.select('data', [k], station_id = profil_pk[n-1])
                 for idx, item in enumerate(query):
                     self.__data[k][n-1, idx] = item[k]
 
@@ -375,7 +375,7 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='tests/test.toml')
-    parser.add_argument('-i', '--instrument', nargs='?', choices=['CTD','XBT'],
+    parser.add_argument('-i', '--instrument', nargs='?', choices=['CTD','XBT','LADCP'],
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
@@ -402,6 +402,6 @@ if __name__ == "__main__":
     fe.read_files(cfg, args.instrument)
     # print(f"Indices: {fe.n} x {fe.m}\nkeys: {fe.keys}")
     # # debug
-    # print(fe['PRES'])
-    # print(fe['TEMP'])
+    print(fe['PRES'])
+    print(fe['TEMP'])
     # print(fe['PSAL'])
