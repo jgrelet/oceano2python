@@ -61,6 +61,7 @@ class FileExtractor:
     keys: list of physical parameter to extract
     separator : str, column separator, default None (blank)
     '''
+    variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
 
     # constructor with values by defaul
     def __init__(self, fname, roscop, keys, dbname=":memory:", separator=None):
@@ -95,6 +96,11 @@ class FileExtractor:
     def __str__(self):
         ''' overload string representation '''
         return 'Class FileExtractor, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
+
+    # get the keys list from __data
+    def getlist(self):
+        ''' return keys '''
+        return self.__data.keys()
 
     def disp(self):
         # for key in keys:
@@ -138,10 +144,7 @@ class FileExtractor:
         #m = int(max_size[0][f"COUNT({self.keys[0]})"])
         print(f"get sizes: {n} x {m}")
 
-        # hdr is a list of dict, add station ?
-        variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
-
-        for k in variables_1D:
+        for k in self.variables_1D:
             #print(self.roscop[k])
             if '_FillValue' in self.roscop[k]:
                     self.__data[k] = np.full(n, self.roscop[k]['_FillValue']) 
@@ -408,6 +411,7 @@ if __name__ == "__main__":
     fe.read_files(cfg, args.instrument)
     # print(f"Indices: {fe.n} x {fe.m}\nkeys: {fe.keys}")
     # # debug
-    print(fe['PRES'])
-    print(fe['TEMP'])
+    #print(fe['PRES'])
+    print(fe['TEMP'][0][1])
+    print(fe.getlist())
     # print(fe['PSAL'])
