@@ -77,12 +77,25 @@ class FileExtractor:
 
         # private:
         self.__separator = separator
+        self.__julianOrigin = 0
         self.__header = ''
         self.__data = {}
         self.__regex = {}
         self.__year = []
         # replace this constante with roscop fill value
         #self.__FillValue = 1e36
+
+    @property
+    def year(self):
+        return self.__year
+
+    @property
+    def julianOrigin(self):
+        return self.__julianOrigin
+
+    @property
+    def julian_from_year(self):
+        return tools.dt2julian(datetime(year=self.year, day=1, month=1))
 
     # overloading operators
     def __getitem__(self, key):
@@ -150,6 +163,8 @@ class FileExtractor:
                     self.__data[k] = np.full(n, self.roscop[k]['_FillValue']) 
             else:
                     self.__data[k] = np.empty(n) 
+        # add END_TIME
+        #self.__data['END_TIME'] = np.chararray(n,17)
 
         #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
         query = self.db.select('station', ['id','station', 'julian_day', 'end_date_time',
@@ -208,6 +223,10 @@ class FileExtractor:
         # set separator field if declared in toml section, none by default
         if 'separator' in cfg[device.lower()]:
             self.__separator = cfg[device.lower()]['separator']
+
+        # set julian day origin field if declared in toml section, zero by default
+        if 'julianOrigin' in cfg[device.lower()]:
+            self.__julianOrigin = cfg[device.lower()]['julianOrigin']
 
         # read each file and extract header and data and fill sqlite tables
         for file in self.fname:
@@ -271,6 +290,8 @@ class FileExtractor:
                                     month, day, year = \
                                     self.__regex[k].search(self.__header).groups() 
                                 #print(f"{day}/{month}/{year}")
+                                if not self.__year:
+                                    self.__year = int(year)
 
                             # key is TIME
                             if k == "TIME" and self.__regex[k].search(self.__header):
@@ -347,7 +368,10 @@ class FileExtractor:
                         #[sql[key] = p[hash[key]]  for key in self.keys]
                         sql['station_id'] = pk
                         for key in self.keys:
-                            sql[key] = p[hash[key]] 
+                            if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]:
+                                sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
+                            else:
+                                sql[key] = float(p[hash[key]]) 
                         #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )
 
@@ -355,11 +379,10 @@ class FileExtractor:
 
             # add end_date_time in station table if ETDD (julian) is present in data
             if 'ETDD' in self.keys:
-                jj = tools.dt2julian(datetime(year=self.__year, day=1, month=1))
-                dt = tools.julian2dt(float(sql['ETDD'])+jj-1)
-                #print(dt.strftime("%d/%m/%Y %H:%M:%S"))
+                # Seabird use julian day start at 1, we use jd start at 0
+                dt = tools.julian2dt(float(sql['ETDD']) + self.julian_from_year)
                 self.db.update("station", id = pk, 
-                    end_date_time = dt.strftime("%Y-%m-%d %H:%M:%S"))
+                    end_date_time = dt.strftime("%d/%m/%Y %H:%M:%S"))
 
                 #self.db.update("station", id = pk, end_date_time = dt)
 

@@ -32,6 +32,7 @@ titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
 typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
 dateTimeFormat = "%d/%b/%Y %H:%M:%S"
+julianOrigin = 1
 
 	[ctd.header]
 	isHeader = '^[*#]+\s+'
@@ -51,6 +52,7 @@ typeInstrument           = "SBE32 standard 24 Niskin bottles"
 instrumentNumber         = "unknown"
 titleSummary   = "Water sample during PIRATA-FR29 cruise with 20 levels"
 comment        = "CTD bottles water sampling with temperature, salinity and oxygen from primary and secondary sensors"
+julianOrigin = 1
 
 [xbt]
 
