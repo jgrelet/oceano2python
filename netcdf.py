@@ -23,11 +23,14 @@ def writeNetCDF(cfg, device, fe, r):
     # create netcdf file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
                                        ['netcdf'], cfg['cruise']['cycleMesure'], device)
-    if not os.path.exists(cfg['global']['ascii']):
-        os.makedirs(cfg['global']['ascii'])
+
+    print(f"writing netCDF file: {fileName}", end='', flush=True)  
+
+    if not os.path.exists(cfg['global']['netcdf']):
+        os.makedirs(cfg['global']['netcdf'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
-    print('writing netCDF file: {}'.format(fileName), end='')
+    
 
     # create dimensions
     # n is number of profiles, m the max size of profiles
