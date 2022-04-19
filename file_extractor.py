@@ -149,12 +149,19 @@ class FileExtractor:
         hdr = self.db.query('SELECT * FROM station')
         #st = self.db.query('SELECT COUNT(id) FROM station')
         #print(f"SELECT COUNT({self.keys[0]}) FROM data")
-        #max_size = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data")
         n = self.db.count('station')
-        m = self.db.count('data')
+        m = 0
+        for i in range(1,n+1):
+            query = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data where station_id = {i}")
+            #print(query)
+            size = int(query[0][f"COUNT({self.keys[0]})"])
+            if size > m:
+                m = size
+        
+        #m = self.db.max('data')
         # need more documentation about return dict from select
         #n = int(st[0]['COUNT(id)']) 
-        #m = int(max_size[0][f"COUNT({self.keys[0]})"])
+        #m = int(max_size[0][f"MAX({self.keys[0]})"])
         print(f"get sizes: {n} x {m}")
 
         for k in self.variables_1D:
@@ -371,6 +378,7 @@ class FileExtractor:
                             if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]:
                                 sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
                             else:
+                                #print(key, hash[key], p[hash[key]])
                                 sql[key] = float(p[hash[key]]) 
                         #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )
