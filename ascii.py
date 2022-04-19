@@ -58,13 +58,14 @@ def writeHeader(hdrFile, cfg, device, fe, r):
 
         # get max value for each profile
         col = f"MAX({fe.keys[0]})"
-        query = fe.db.query(f"SELECT {col} FROM data WHERE station_id = {int(fe['PROFILE'][i])}")
+        query = fe.db.query(
+            f"SELECT {col} FROM data WHERE station_id = {int(fe['PROFILE'][i])}")
         for idx, item in enumerate(query):
             dt = item[col]
             if dt == None:
                 pass
             else:
-                print("%6.1f  " % (item[col]))
+                print("%6.1f  " % (item[col]), end='')
                 f.write("%6.1f  " % (item[col]))
         print(end = '\n')
         f.write('\n')
