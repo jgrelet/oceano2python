@@ -1,7 +1,7 @@
 # oceano2python
 
 This program read ASCII file(s) from oceanographic instruments (Seabird CTD, Sippican XBT, RDI LADCP, etc), extract data from header files and write result into one ASCII and NetCDF OceanSITES file.
-Work in progress.
+The last version use an embedded Sqlite3 database to save and retreive data in memory.
 
 ## Prequisites for Windows
 
@@ -32,7 +32,7 @@ The program works under Windows (terminal) or Git bash as well as under Linux. I
 conda create -n oceano2python python=3.9
 conda activate oceano2python
 conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller pysimplegui
-pip install julian
+pip install julian notanorm
 ```
 
 ## Export your environment
@@ -56,17 +56,36 @@ make ladcp
 make ctd GUI=-g
 ```
 
+## Configuration
+
+As the project consists of several files (modules), it is necessary to define the access path to the program in the environment variables PYTHONPATH and PATH. 
+For example, under Linux:
+
+**Update your PATH in your ~/.profile as:
+ 
+ ``` bash
+ if [ -d "/mnt/c/git/Python/oceano2python" ] ; then
+    PATH="/mnt/c/git/Python/oceano2python:$PATH"
+fi
+```
+
+**Add this line in your ~/.bashrc
+
+  export $PYTHONPATH = /mnt/c/git/Python/oceano2python
+
 ## Usage
 
 By default, the program uses the configuration file under: tests/test.toml, should change in future versions.
 
 ``` bash
-python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD 
-python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -c <config.toml> -i CTD -d
-python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS
-python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -d
-python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
-python oceano.py data/LADCP/*.lad - i LADCP - k DEPTH EWCT NSCT
+cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/CTD
+oceano.py data/cnv/dfr320*.cnv -c ../config.toml -r ../../local/code_roscop.csv -i CTD -k PRES DEPTH ETDD TEMP PSAL DENS SVEL DOX2 FLU2 FLU3 TUR3 NAVG
+
+cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/CELERITE
+oceano.py data/XBT*.edf -c ../config.toml -r ../../local/code_roscop.csv -i XBT -k DEPTH TEMP SVEL
+
+cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/LADCP
+oceano.py profiles/*.lad -c ../config.toml -r ../../local/code_roscop.csv -i LADCP -k DEPTH EWCT NSCT
 ```
 
 This program read multiple ASCII file, extract physical parameter following ROSCOP codification at the given column, fill arrays, write header file.
