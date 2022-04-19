@@ -137,7 +137,7 @@ def writeAscii(cfg, device, fe, r):
     
     fileName = "{}/{}_{}".format(cfg['global']['ascii'], 
         cfg['cruise']['cycleMesure'], device.lower())
-    print('writing  data  file: {}'.format(fileName), end='')
+    print('writing  data  file: {}'.format(fileName), end='', flush=True)
     writeData(fileName, cfg, device.lower(), fe, r)
     print(' done...')
    
