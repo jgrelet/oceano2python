@@ -427,6 +427,7 @@ if __name__ == "__main__":
     for file in args.files:  
         files += glob(file)  
 
+    # call fe with  dbname='test.db' to create db file
     fe = FileExtractor(files, Roscop('code_roscop.csv'), args.keys)
     #print(f"File(s): {files}, Config: {args.config}")
     cfg = toml.load(args.config)

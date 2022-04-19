@@ -247,6 +247,7 @@ def process(args, cfg, ti):
         args.keys = cfg['split'][device.lower()].keys()
 
     # extract header and data from files
+    #fe = FileExtractor(args.files, r, args.keys, dbname='test.db')
     fe = FileExtractor(args.files, r, args.keys)
 
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
