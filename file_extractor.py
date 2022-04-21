@@ -208,6 +208,7 @@ class FileExtractor:
 
     def read_files(self, cfg, device):
 
+        logging.debug("Enter in read_files()")
         # initialize datetime object
         dt = datetime
 
@@ -268,8 +269,8 @@ class FileExtractor:
                     # to the table station and go to next line
                     if process_header:
 
-                        #print(f"Enter in process header : {self.__header}")
-                        #print(f"Header with line: {line}")
+                        #logging.debug(f"Enter in process header : {self.__header}")
+                        logging.debug(f"Header with line: {line}")
                         
                         # read and decode header for each entries in configuration 
                         # toml file, section [device.header]
@@ -370,7 +371,15 @@ class FileExtractor:
                         # now, extract and process all data   
                         # split the line, remove leading and trailing space before
                         p = line.strip().split(self.__separator)
-                        #print(p)
+                        #logging.debug(f"line split: {p}")
+                        #logging.debug(f"line end: {p[-1]}")
+                        
+                        # skip to next line in file when skipLineWith is defined
+                        if 'skipLineWith' in cfg[device.lower()]:             
+                            #logging.debug(cfg[device.lower()]['skipLineWith'])
+                            if cfg[device.lower()]['skipLineWith'] in p[-1]:
+                                continue
+
                         sql = {}
                         #[sql[key] = p[hash[key]]  for key in self.keys]
                         sql['station_id'] = pk
@@ -378,7 +387,7 @@ class FileExtractor:
                             if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]:
                                 sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
                             else:
-                                #print(key, hash[key], p[hash[key]])
+                                logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
                                 sql[key] = float(p[hash[key]]) 
                         #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )

@@ -20,7 +20,8 @@ EXIT_FAILURE = 1
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
-    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': 'COLCOR'}
+    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': ('colcor','COLCOR'),
+    'BTL': ('btl', 'BTL')}
 #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
 ti = typeInstrument  # an alias
 filesBrowsePosition_row = 2
