@@ -63,27 +63,25 @@ class FileExtractor:
     '''
     variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
 
-    # constructor with values by defaul
     def __init__(self, fname, roscop, keys, dbname=":memory:", separator=None):
-        # attibutes
-        # public:
-        self.fname = fname
-        self.keys = keys
-        self.roscop = roscop
-        self.n = 0
-        self.m = 0
-        self.lineHeader = 0
-        self.db = SqliteDb(dbname) 
-
-        # private:
+        '''constructor with values by default'''
+        # private attibutes:
+        self.__dbname = dbname
         self.__separator = separator
         self.__julianOrigin = 0
         self.__header = ''
         self.__data = {}
         self.__regex = {}
         self.__year = []
-        # replace this constante with roscop fill value
-        #self.__FillValue = 1e36
+
+        # public attibutes:
+        self.fname = fname
+        self.keys = keys
+        self.roscop = roscop
+        self.n = 0
+        self.m = 0
+        self.lineHeader = 0
+        self.db = SqliteDb(self.__dbname) 
 
     @property
     def year(self):
@@ -109,6 +107,24 @@ class FileExtractor:
     def __str__(self):
         ''' overload string representation '''
         return 'Class FileExtractor, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
+
+    def create_tables(self):
+        ''' Create table station and data'''
+        self.db.query("DROP TABLE IF EXISTS station")
+        self.db.query("DROP TABLE IF EXISTS data")
+        self.db.query(table_station)
+
+        # Create table data
+        self.db.query(table_data)
+
+        # update table data and add new column from pm (physical parameter)
+        for pm in self.keys:
+            #print(f"\tUpdate table data with new column {pm}")
+            addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
+            self.db.query(addColumn)
+
+    def close(self):
+        self.db.close()
 
     # get the keys list from __data
     def getlist(self):
@@ -162,22 +178,21 @@ class FileExtractor:
         # need more documentation about return dict from select
         #n = int(st[0]['COUNT(id)']) 
         #m = int(max_size[0][f"MAX({self.keys[0]})"])
-        print(f"get sizes: {n} x {m}")
+        print(f"Array sizes: {n} x {m}")
 
+        # initialize one dimension variables
         for k in self.variables_1D:
             #print(self.roscop[k])
             if '_FillValue' in self.roscop[k]:
                     self.__data[k] = np.full(n, self.roscop[k]['_FillValue']) 
             else:
                     self.__data[k] = np.empty(n) 
-        # add END_TIME
-        #self.__data['END_TIME'] = np.chararray(n,17)
 
+        # get data from table station and fill array
         #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
         query = self.db.select('station', ['id','station', 'julian_day', 'end_date_time',
             'latitude', 'longitude', 'bath'])
-        #print(query)
-
+        logging.debug(query)
         profil_pk = []
         for idx, item in enumerate(query):
             profil_pk.append(item['id'])
@@ -211,19 +226,6 @@ class FileExtractor:
         logging.debug("Enter in read_files()")
         # initialize datetime object
         dt = datetime
-
-        # Create table station
-        #db.query("DROP DATABASE IF EXISTS '{}'".format(fname))
-        self.db.query(table_station)
-
-        # Create table data
-        self.db.query(table_data)
-
-        # update table data and add new column from pm (physical parameter)
-        for pm in self.keys:
-            #print(f"\tUpdate table data with new column {pm}")
-            addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
-            self.db.query(addColumn)
 
         # get the dictionary from toml block, device must be is in lower case
         hash = cfg['split'][device.lower()]
@@ -412,7 +414,7 @@ class FileExtractor:
 if __name__ == "__main__":
 
     # usage:
-    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -d -i CTD
+    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
     # > python file_extractor.py data/CTD/cnv/dfr2900*.cnv -k PRES ETDD TEMP PSAL DOX2 DENS -i CTD
     # > python file_extractor.py data/XBT/T7_0000*.EDF -k DEPTH TEMP SVEL -i XBT
       
@@ -444,15 +446,18 @@ if __name__ == "__main__":
     for file in args.files:  
         files += glob(file)  
 
-    # call fe with  dbname='test.db' to create db file
+    # call fe with  dbname='test.db' to create db file, dbname='test.db'
+    #fe = FileExtractor(files, Roscop('code_roscop.csv'), args.keys, dbname='test.db')
     fe = FileExtractor(files, Roscop('code_roscop.csv'), args.keys)
-    #print(f"File(s): {files}, Config: {args.config}")
+    fe.create_tables()
+    logging.debug(f"File(s): {files}, Config: {args.config}")
     cfg = toml.load(args.config)
     fe.set_regex(cfg, args.instrument, 'header')
     fe.read_files(cfg, args.instrument)
-    # print(f"Indices: {fe.n} x {fe.m}\nkeys: {fe.keys}")
+    logging.debug(f"Indices: {fe.n} x {fe.m}\nkeys: {fe.keys}")
     # # debug
-    #print(fe['PRES'])
-    print(fe['TEMP'][0][1])
-    print(fe.getlist())
-    # print(fe['PSAL'])
+    logging.debug(fe['PRES'])
+    logging.debug(fe['TEMP'][0][1])
+    logging.debug(fe.getlist())
+    logging.debug(fe['PSAL'])
+    fe.close()

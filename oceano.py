@@ -252,6 +252,7 @@ def process(args, cfg, ti):
     # extract header and data from files
     #fe = FileExtractor(args.files, r, args.keys, dbname='test.db')
     fe = FileExtractor(args.files, r, args.keys)
+    fe.create_tables()
 
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
     fe.set_regex(cfg, ti, 'header')
