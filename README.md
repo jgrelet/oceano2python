@@ -1,7 +1,8 @@
 # oceano2python
 
 This program read ASCII file(s) from oceanographic instruments (Seabird CTD, Sippican XBT, RDI LADCP, etc), extract data from header files and write result into one ASCII and NetCDF OceanSITES file.
-The last version use an embedded Sqlite3 database to save and retreive data in memory.
+
+The last version use an embedded Sqlite3 database to save and retreive data from memory.
 
 ## Prequisites for Windows
 
@@ -53,7 +54,9 @@ make build
 make ctd
 make xbt
 make ladcp
-make ctd GUI=-g
+make btl
+make ctd OPT=-g   
+make ctd OPT=-d
 ```
 
 ## Configuration
@@ -80,6 +83,7 @@ By default, the program uses the configuration file under: tests/test.toml, shou
 ``` bash
 cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/CTD
 oceano.py data/cnv/dfr320*.cnv -c ../config.toml -r ../../local/code_roscop.csv -i CTD -k PRES DEPTH ETDD TEMP PSAL DENS SVEL DOX2 FLU2 FLU3 TUR3 NAVG
+oceano.py data/btl/fr320*.btl -c ../config.toml -r ../../local/code_roscop.csv -i BTL  -k PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
 
 cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/CELERITE
 oceano.py data/XBT*.edf -c ../config.toml -r ../../local/code_roscop.csv -i XBT -k DEPTH TEMP SVEL
