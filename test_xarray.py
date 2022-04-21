@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# 
 # https://pumatest.nerc.ac.uk/cgi-bin/cf-checker.pl?cfversion=auto
 import xarray as xr
 import os
@@ -7,6 +9,7 @@ import os
 
 ncfiles = ['netcdf/OS_PIRATA-FR29_CTD.nc', 'netcdf/OS_PIRATA-FR29_XBT.nc','netcdf/OS_PIRATA-FR29_LADCP.nc']
 for ncfile in ncfiles:
+    print(f"Read {ncfile}")
     ds = xr.open_dataset(ncfile)
     print(ds)
     df = ds.to_dataframe()
