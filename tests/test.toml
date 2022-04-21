@@ -27,14 +27,17 @@ creator        = "Jacques.Grelet@ird.fr"
 
 [ctd]
 cruisePrefix   = "fr29"
-station = 'Station\s*:\s*\D*(\d*)'
 stationPrefixLength  = 3
 titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
 typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
+dateTimeFormat = "%d/%b/%Y %H:%M:%S"
+julianOrigin = 1
 
 	[ctd.header]
-	isHeader = '^[*#]'
+	isHeader = '^[*#]+\s+'
+	endHeader = '^[*]END[*]'
+	station = 'Station\s*:\s*\D*(\d*)'
 	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
 	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
 	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
@@ -47,11 +50,25 @@ instrumentNumber  = "09P1263"
 [btl]
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
 instrumentNumber         = "unknown"
-titleSummary   = "Water sample during PIRATA-FR29 cruise with 20 levels"
+titleSummary   = "Water sample during PIRATA-FR32 cruise with 22 levels"
 comment        = "CTD bottles water sampling with temperature, salinity and oxygen from primary and secondary sensors"
+dateTimeFormat = "%d/%b/%Y %H:%M:%S"
+julianOrigin = 1
+skipLineWith = "(sdev)"
+
+	[btl.header]
+	endHeader = '^\s+Position\s+Time\s+$'
+	station = 'Station\s*:\s*\D*(\d*)'
+	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
+	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+	DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
+	TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
+	BATH = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+	operator = 'Operator\s*:\s*(.*)'
+	type = 'Type\s*:\s*(.*)'
 
 [xbt]
-
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
 typeInstrument   = "SIPPICAN+"
@@ -60,13 +77,15 @@ acquisitionSoftware = "WinMK21"
 acquisitionVersion = "2.10.1" 
 processingSoftware = ""
 processingVersion = ""
+dateTimeFormat = "%d/%m/%Y %H:%M:%S"
 type           = "SIPPICAN"
 sn             = "01150"
 title_summary  = "XBT profiles processed during PIRATA-FR29 cruise"
 comment        = "Extract from .edf files"
 
 	[xbt.header]
-	endHeader = 'Depth\s*\(m\)'
+	endHeader = '^Depth\s*\(m\)'
+	station = 'Sequence\s*#\s*:\s*(\d*)'
 	TIME = 'Time of Launch\s*[:=]\s*(\d+):(\d+):(\d+)'
 	DATE = 'Date of Launch\s*[:=]\s*(\d+)/(\d+)/(\d+)'
 	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
@@ -104,6 +123,7 @@ title_summary  = "IFM-GEOMAR/LDEO Matlab LADCP-Processing system adapted by FM/P
 comment        = "Extract from .lad files"
 
 	[ladcp.header]
+	station = 'fr29(\d*)'
 	endHeader = 'Columns'
 	DATE = 'Date\s*=\s*(\d+)/(\d+)/(\d+)'
 	TIME = 'Start_Time\s*=\s*(\d+)[:hH](\d+):(\d+)'
@@ -149,32 +169,29 @@ comment        = "Extract from .lad files"
 	SVEL = 21
 	NAVG = 23
 
-	[split.btl]
-	BOTL = 1
-	month = 2
-	day = 3
-	year = 4
-	PSA1 = 5
-	PSA2 = 6
-	DO11 = 7
-	DO12 = 8
-	DO21 = 9
-	DO22 = 10
-	Potemp090C = 11
-	Potemp190C = 12
-	ETDD = 13
-	PRES = 14
-	DEPH = 15
-	TE01 = 16
-	TE02 = 17
-	CND1 = 18
-	CND2 = 19
-	DOV1 = 20
-	DOV2 = 21
-	DVT1 = 22
-	DVT2 = 23
-	TUR3 = 24
-	FLU2 = 25
+		[split.btl]
+	BOTL = 0
+	PSA1 = 4
+	PSA2 = 5
+	DO11 = 6
+	DO12 = 7
+	DO21 = 8
+	DO22 = 9
+	Potemp090C = 10
+	Potemp190C = 11
+	ETDD = 12
+	PRES = 13
+	DEPTH = 14
+	TE01 = 15
+	TE02 = 16
+	CND1 = 17
+	CND2 = 18
+	DOV1 = 19
+	DOV2 = 20
+	DVT1 = 21
+	DVT2 = 22
+	TUR3 = 23
+	FLU2 = 24
 	
 [split.xbt]
 	DEPTH = 0

@@ -3,9 +3,10 @@ MAIN = $(PROJECT).py
 PYTHON = python
 PYLINT = pylint
 TEST_PATH = tests
-OPTIONS_CTD = data/CTD/cnv/dfr2900[1-3].cnv -i CTD 
+OPTIONS_CTD = data/CTD/cnv/dfr2900?.cnv -i CTD -k PRES ETDD TEMP PSAL DOX2 DENS SVEL FLU2 FLU3 TUR3 NAVG
 OPTIONS_XBT = data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
 OPTIONS_LADCP = data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT
+OPTIONS_BTL =  data/CTD/btl/fr290*.btl -i BTL -k PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
 
 .PHONY: clean-pyc clean-build lint test run build
 
@@ -26,16 +27,19 @@ lint:
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 
-# to run program in GUI mode : make ctd GUI=-g
+# to run program in GUI mode : make ctd OPT=-g
+# to run program in debug mode : make ctd OPT=-d
 ctd:
-	$(PYTHON) $(MAIN) $(OPTIONS_CTD) $(GUI)
+	$(PYTHON) $(MAIN) $(OPTIONS_CTD) $(OPT)
 
-# to run program in GUI mode : make xbt GUI=-g
 xbt:
-	$(PYTHON) $(MAIN) $(OPTIONS_XBT) $(GUI)
+	$(PYTHON) $(MAIN) $(OPTIONS_XBT) $(OPT)
 
 ladcp:
-	$(PYTHON) $(MAIN) $(OPTIONS_LADCP) $(GUI)
+	$(PYTHON) $(MAIN) $(OPTIONS_LADCP) $(OPT)
+
+btl:
+	$(PYTHON) $(MAIN) $(OPTIONS_BTL) $(OPT)
 
 build:
 	pyinstaller -wF --clean $(MAIN)

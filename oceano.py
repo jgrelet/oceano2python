@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import sys
 import re
@@ -18,8 +20,9 @@ EXIT_FAILURE = 1
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
-    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': 'COLCOR'}
-variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
+    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': ('colcor','COLCOR'),
+    'BTL': ('btl', 'BTL')}
+#variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
 ti = typeInstrument  # an alias
 filesBrowsePosition_row = 2
 filesBrowsePosition_column = 1
@@ -247,17 +250,13 @@ def process(args, cfg, ti):
         args.keys = cfg['split'][device.lower()].keys()
 
     # extract header and data from files
+    #fe = FileExtractor(args.files, r, args.keys, dbname='test.db')
     fe = FileExtractor(args.files, r, args.keys)
 
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
-    fe.set_regex(cfg, ti)
+    fe.set_regex(cfg, ti, 'header')
 
-    # the first pass skip headers and return data dimensions size
-    fe.first_pass()
-
-    # fe.secondPass(['PRES', 'TEMP', 'PSAL', 'DOX2'], cfg, 'ctd')
-    fe.second_pass(cfg, ti, variables_1D)
-    # fe.disp(['PRES', 'TEMP', 'PSAL', 'DOX2'])
+    fe.read_files(cfg, ti)
     return fe
 
 
@@ -325,10 +324,10 @@ if __name__ == "__main__":
         # print(fe.disp())
 
     # write ASCII hdr and data files
-    ascii.writeAscii(cfg, device, fe, r, variables_1D)
+    ascii.writeAscii(cfg, device, fe, r)
 
     # write the NetCDF file
-    netcdf.writeNetCDF(cfg, device, fe, r, variables_1D)
+    netcdf.writeNetCDF(cfg, device, fe, r)
     
     
 

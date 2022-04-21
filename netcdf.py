@@ -5,15 +5,16 @@ import os
 from datetime import datetime
 
 
-def writeNetCDF(cfg, device, fe, r, variables_1D):
+def writeNetCDF(cfg, device, fe, r):
 
     # ncvars is a dictionary that store a netcdf variable for each physical parameter key
     ncvars = {}
 
     # variables and dimensions use for 1D and 2D variables
     #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE']
-    variables = variables_1D.copy()
-    dims_2D = ['time', 'depth']
+    #variables = variables_1D.copy()
+    variables = fe.variables_1D
+    dims_2D = ['time', 'level']
 
     # create the output directory if it does not exist
     if not os.path.exists(cfg['global']['netcdf']):
@@ -22,28 +23,32 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
     # create netcdf file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
                                        ['netcdf'], cfg['cruise']['cycleMesure'], device)
-    if not os.path.exists(cfg['global']['ascii']):
-        os.makedirs(cfg['global']['ascii'])
+
+    print(f"writing netCDF file: {fileName}", end='', flush=True)  
+
+    if not os.path.exists(cfg['global']['netcdf']):
+        os.makedirs(cfg['global']['netcdf'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
-    print('writing netCDF file: {}'.format(fileName), end='')
+    
 
     # create dimensions
     # n is number of profiles, m the max size of profiles
     time = nc.createDimension("time", fe.n)
     lat = nc.createDimension("latitude", fe.n)
     lon = nc.createDimension("longitude", fe.n)
-    depth = nc.createDimension('depth', fe.m)
+    level = nc.createDimension('level', fe.m)
 
     # debug
-    logging.debug(" depth: {}, time: {}, lat: {}, lon: {}".format(
-        len(depth), len(time), len(lat), len(lon)))
+    logging.debug(" level: {}, time: {}, lat: {}, lon: {}".format(
+        len(level), len(time), len(lat), len(lon)))
 
     # create variables
     # add dimensions before variables list
-    for k in fe.keys:
-        variables.append(k)
+    #for k in fe.keys:
+    #    variables.append(k)
     # variables.extend(fe.keys())
+    variables = fe.getlist()
     for key in variables:
         # for each variables get the attributes dictionary from Roscop
         hash = r[key]
@@ -57,7 +62,7 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
             fillvalue = None
 
         # create the variable
-        if any(key in item for item in variables_1D):
+        if any(key in item for item in fe.variables_1D):
             try:
                 # create variable whit same dimension name, as TIME(time)
                 ncvars[key] = nc.createVariable(
@@ -105,7 +110,7 @@ def writeNetCDF(cfg, device, fe, r, variables_1D):
 
     # write the ncvars
     for key in variables:
-        if any(key in item for item in variables_1D):
+        if any(key in item for item in fe.variables_1D):
             ncvars[key][:] = fe[key]
         else:
             ncvars[key][:, :] = fe[key]
