@@ -56,9 +56,11 @@ class FileExtractor:
 
     Parameters
     ----------
-    fname : file, str, pathlib.Path, list of str
-        File, filename, or list to read.
+    fname : files, str, pathlib.Path, list of str
+        File, filename, or list to read and process.
+    roscop: file which describe physical parameter (code_roscop.csv) 
     keys: list of physical parameter to extract
+    dbname: sqlite3 file, default i in memory 
     separator : str, column separator, default None (blank)
     '''
     variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
@@ -108,6 +110,14 @@ class FileExtractor:
         ''' overload string representation '''
         return 'Class FileExtractor, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
 
+    def update_table(self, keys):
+        ''' update table data and add new column from pm (physical parameter)'''
+        print(keys, type(keys))
+        for pm in keys:
+            print(f"\tUpdate table data with new column {pm}")
+            addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
+            self.db.query(addColumn)
+
     def create_tables(self):
         ''' Create table station and data'''
         self.db.query("DROP TABLE IF EXISTS station")
@@ -117,11 +127,8 @@ class FileExtractor:
         # Create table data
         self.db.query(table_data)
 
-        # update table data and add new column from pm (physical parameter)
-        for pm in self.keys:
-            #print(f"\tUpdate table data with new column {pm}")
-            addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
-            self.db.query(addColumn)
+        # update table
+        self.update_table(self.keys)
 
     def close(self):
         self.db.close()
@@ -383,6 +390,7 @@ class FileExtractor:
                                 continue
 
                         sql = {}
+                        # insert data from list p with indice hash[key]
                         #[sql[key] = p[hash[key]]  for key in self.keys]
                         sql['station_id'] = pk
                         for key in self.keys:
@@ -414,9 +422,17 @@ class FileExtractor:
 if __name__ == "__main__":
 
     # usage:
-    # > python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
-    # > python file_extractor.py data/CTD/cnv/dfr2900*.cnv -k PRES ETDD TEMP PSAL DOX2 DENS -i CTD
-    # > python file_extractor.py data/XBT/T7_0000*.EDF -k DEPTH TEMP SVEL -i XBT
+    # python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
+    # python file_extractor.py data/CTD/cnv/dfr2900*.cnv -i CTD -k PRES ETDD TEMP PSAL DOX2 DENS
+    # python file_extractor.py data/XBT/T7_0000*.EDF -k DEPTH TEMP SVEL -i XBT
+    # python file_extractor.py data/CTD/btl/fr290*.btl -i BTL -k BOTL DEPTH ETDD TE01 PSA1 DO11
+
+    # typeInstrument is a dictionary as key: files extension
+    typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
+    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': ('colcor','COLCOR'),
+    'BTL': ('btl', 'BTL')}
+    #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
+    ti = typeInstrument  # an alias     
       
     parser = argparse.ArgumentParser(
         description='This class read multiple ASCII file, extract physical parameter \
@@ -426,12 +442,14 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='config.toml')
-    parser.add_argument('-i', '--instrument', nargs='?', choices=['CTD','XBT','LADCP'],
+    parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('files', nargs='*',
                         help='ASCII file(s) to parse')
+    parser.add_argument('--sbe35', nargs='*', 
+                        help='ASCII file(s) to parse')    
 
     # display extra logging info
     # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
@@ -441,6 +459,7 @@ if __name__ == "__main__":
         logging.basicConfig(
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
+    
     # work with DOs, Git bash and Linux
     files = []
     for file in args.files:  
@@ -455,9 +474,20 @@ if __name__ == "__main__":
     fe.set_regex(cfg, args.instrument, 'header')
     fe.read_files(cfg, args.instrument)
     logging.debug(f"Indices: {fe.n} x {fe.m}\nkeys: {fe.keys}")
+    # if args.sbe35 and args.instrument == 'BTL':
+    #     sbe35 = []
+    #     for t in args.sbe35:  
+    #         sbe35 += glob(t)  
+    #     fe.fname = sbe35
+    #     fe.set_regex(cfg, args.instrument, 'header')
+    #     fe.read_files(cfg, args.instrument)
+    # elif args.sbe35 and args.instrument != 'BTL': 
+    #     print("option --sbe35 can only be used with the BTL instrument (-i BTL)")
+    #     exit
+
     # # debug
-    logging.debug(fe['PRES'])
-    logging.debug(fe['TEMP'][0][1])
     logging.debug(fe.getlist())
-    logging.debug(fe['PSAL'])
+    for k in fe.keys:
+        for i in range(fe.n):
+            logging.debug(f"{fe[k][i][1]} : {fe[k][i][fe.m-1]}")
     fe.close()
