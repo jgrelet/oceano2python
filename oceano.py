@@ -46,6 +46,7 @@ def processArgs():
         'python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -d\n'
         'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
         'python oceano.py data/LADCP/*.lad - i LADCP - k DEPTH EWCT NSCT\n'
+        'python oceano.py data/CTD/btl/fr290*.btl -i BTL -k BOTL PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2'
         ' \n',
         epilog='J. Grelet IRD US191 - March 2019 / Feb 2020')
     parser.add_argument('-d', '--debug', help='display debug informations',

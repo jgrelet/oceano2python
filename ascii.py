@@ -113,8 +113,8 @@ def writeData(dataFile, cfg, device, fe, r):
 
         # for each valid line in array (not _fillvalue)
         for m in range(fe.m):
-            # todo: replace 1e35 by fillValue
-            if fe[fe.keys[0]][i][m] < 1e35:
+            # don't print line if data is _fillValue
+            if fe[fe.keys[0]][i][m] != fe.roscop[fe.keys[0]]['_FillValue']:
                 fmt = fe.roscop['PROFILE']['format']
                 f.write(f"{fmt}  " % (fe['PROFILE'][i]))
                 # add value for each parameter, use format from roscop
