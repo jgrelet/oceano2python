@@ -53,7 +53,7 @@ def processArgs():
     parser.add_argument('--demo', nargs='?', choices=ti.keys(),
                         help='specify the commande line for instrument, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
-                        default='tests/test.toml')
+                        default='config.toml')
     parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-r', '--roscop', nargs='?',

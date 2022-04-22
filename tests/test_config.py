@@ -12,7 +12,7 @@ class testConfig(unittest.TestCase):
 
     def setUp(self):
         """Initialisation des tests."""
-        self.cfg = toml.load('tests/test.toml')
+        self.cfg = toml.load('config.toml')
 
         self.glob = {'author': 'jgrelet IRD March 2019 PIRATA-FR29 cruise',
                      'debug': False, 'echo': True,

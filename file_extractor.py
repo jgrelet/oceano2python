@@ -425,7 +425,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
-                        default='tests/test.toml')
+                        default='config.toml')
     parser.add_argument('-i', '--instrument', nargs='?', choices=['CTD','XBT','LADCP'],
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-k', '--keys', nargs='+', default=['PRES', 'TEMP', 'PSAL'],
