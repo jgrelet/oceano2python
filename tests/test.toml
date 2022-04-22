@@ -68,6 +68,16 @@ skipLineWith = "(sdev)"
 	operator = 'Operator\s*:\s*(.*)'
 	type = 'Type\s*:\s*(.*)'
 
+[sbe35]
+typeInstrument           = "SBE35 high precision realtime thermometer"
+instrumentNumber         = 102
+
+
+        [sbe35.header]
+	endHeader = '^dd\d+,\d+$'
+	#station = '^[*]\s+FileName\s+=\s+(.*)$'
+        station = '^[*]+\s+Station:(\d+)$'
+
 [xbt]
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
@@ -169,7 +179,7 @@ comment        = "Extract from .lad files"
 	SVEL = 21
 	NAVG = 23
 
-		[split.btl]
+	[split.btl]
 	BOTL = 0
 	PSA1 = 4
 	PSA2 = 5
@@ -192,6 +202,11 @@ comment        = "Extract from .lad files"
 	DVT2 = 22
 	TUR3 = 23
 	FLU2 = 24
+
+	[split.sb35]
+	BOTL = 0
+	TE35 = 16
+
 	
 [split.xbt]
 	DEPTH = 0
