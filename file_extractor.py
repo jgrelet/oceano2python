@@ -112,9 +112,8 @@ class FileExtractor:
 
     def update_table(self, keys):
         ''' update table data and add new column from pm (physical parameter)'''
-        print(keys, type(keys))
         for pm in keys:
-            print(f"\tUpdate table data with new column {pm}")
+            logging.debug(f"\tUpdate table data with new column {pm}")
             addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
             self.db.query(addColumn)
 

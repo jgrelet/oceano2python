@@ -2,6 +2,7 @@
 # write hdr and data in ascii files
 
 import os
+import logging
 import tools
 import numpy as np
 from datetime import datetime
@@ -132,7 +133,7 @@ def writeAscii(cfg, device, fe, r):
         
     fileName = "{}/{}.{}".format(cfg['global']['ascii'], 
         cfg['cruise']['cycleMesure'], device.lower())
-    print('writing header file: {}'.format(fileName))
+    logging.debug('writing header file: {}'.format(fileName))
     writeHeader(fileName, cfg, device.lower(), fe, r, )
     
     fileName = "{}/{}_{}".format(cfg['global']['ascii'], 
