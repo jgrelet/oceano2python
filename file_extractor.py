@@ -365,12 +365,10 @@ class FileExtractor:
                         sql['date_time'] = dt.strptime(dateTime, dtf)
                         sql['julian_day'] = tools.dt2julian(sql['date_time'])  
                                 
-                        #print(f"insert station: {sql}")
                         # insert or query return last cursor, get the value of the primary key
                         # with lastrowid
                         ret = self.db.insert("station", sql)  
-                        pk = ret.lastrowid 
-                        #print(f"Return: {pk}")                    
+                        pk = ret.lastrowid          
                         continue
                     # end of if process_header:
 
