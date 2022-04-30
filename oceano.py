@@ -45,7 +45,7 @@ def processArgs():
         'python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS\n'
         'python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -d\n'
         'python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL\n'
-        'python oceano.py data/LADCP/*.lad - i LADCP - k DEPTH EWCT NSCT\n'
+        'python oceano.py data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT\n'
         'python oceano.py data/CTD/btl/fr290*.btl -i BTL -k BOTL PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2'
         ' \n',
         epilog='J. Grelet IRD US191 - March 2019 / Feb 2020')
@@ -63,6 +63,8 @@ def processArgs():
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
                         help='use GUI interface')
+    parser.add_argument('--database', help='save sqlite3 database in test.db instead of memory',
+                        action='store_true')
     # type=argparse.FileType('r') don't work with under DOS 
     parser.add_argument('files', nargs='*',
                         help='ASCII file(s) to parse')                        
@@ -251,8 +253,10 @@ def process(args, cfg, ti):
         args.keys = cfg['split'][device.lower()].keys()
 
     # extract header and data from files
-    #fe = FileExtractor(args.files, r, args.keys, dbname='test.db')
-    fe = FileExtractor(args.files, r, args.keys)
+    if args.database:
+        fe = FileExtractor(args.files, r, args.keys, dbname='test.db')
+    else:
+        fe = FileExtractor(args.files, r, args.keys)
     fe.create_tables()
 
     # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
@@ -267,6 +271,11 @@ if __name__ == "__main__":
     usage:
     > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD
     > python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -k PRES TEMP PSAL DOX2 DENS -d
+    > python oceano.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -k PRES TEMP PSAL DOX2 DENS
+    > python oceano.py data/CTD/cnv/dfr29*.cnv -i CTD -d
+    > python oceano.py data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
+    > python oceano.py data/LADCP/*.lad -i LADCP - k DEPTH EWCT NSCT
+    > python oceano.py data/CTD/btl/fr290*.btl -i BTL -k BOTL PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
     '''
     # recover and process line arguments
     parser = processArgs()
