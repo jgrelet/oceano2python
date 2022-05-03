@@ -73,7 +73,7 @@ typeInstrument           = "SBE35 high precision realtime thermometer"
 instrumentNumber         = 102
 
 
-        [sbe35.header]
+    [sbe35.header]
 	endHeader = '^dd\d+,\d+$'
 	#station = '^[*]\s+FileName\s+=\s+(.*)$'
         station = '^[*]+\s+Station:(\d+)$'
@@ -102,7 +102,7 @@ comment        = "Extract from .edf files"
 	LATITUDE = 'Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)(\w)'
 	LONGITUDE = 'Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)(\w)'
 
-[thermo]
+[tsg]
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3 
 separator = ","
@@ -119,6 +119,16 @@ externalCalDate = "16/01/2018"
 depth_intake   = 4
 title_summary  = "Thermosalinograph data acquired with Seabird SBE21 instrument and reduce with THECSAS/COLCOR"
 comment        = "Extract from .colcor files"
+
+	[tsg.header]
+	isHeader = '^#'
+	isData = 'TSCOR'
+
+	[tsg.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)/(\d+)/(\d+)'
+	LATITUDE = '([NS]),(\d+),(\d+\.\d+)'
+	LONGITUDE = '([EW]),(\d+),(\d+\.\d+)'
 
 [ladcp]
 cruisePrefix   = "fr29"
@@ -220,6 +230,6 @@ comment        = "Extract from .lad files"
 
 [split.tsg]
 	DEPTH = 0
-	SSJT = 1
-	SSTP = 2
-	SSPS = 3
+	SSJT = 18
+	SSTP = 19
+	SSPS = 21

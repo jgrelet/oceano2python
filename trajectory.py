@@ -15,38 +15,24 @@ from datetime import datetime
 import tools
 from physical_parameter import Roscop
 from notanorm import SqliteDb 
-
-# define SQL station table
-table_station = """
-        CREATE TABLE station (
-	    id INTEGER PRIMARY KEY,
-        header TEXT,
-        station INT NOT NULL UNIQUE,
-	    date_time TEXT NOT NULL UNIQUE,
-        end_date_time TEXT,
-	    julian_day REAL NOT NULL UNIQUE,
-	    latitude REAL NOT NULL,
-        lat TEXT,
-	    longitude REAL NOT NULL,
-        lon TEXT,
-        max_depth REAL,
-        bath REAL,
-        patm REAL,
-        tair REAL,
-        operator
-        );"""
+import ascii
+import netcdf
 
 # define the data table
 # the id is actually the rowid AUTOINCREMENT column.
 table_data = """
         CREATE TABLE data (
         id INTEGER PRIMARY KEY,
-        station_id INTEGER,
-        FOREIGN KEY (station_id) 
-            REFERENCES station (id) 
+        date_time TEXT NOT NULL UNIQUE,
+        end_date_time TEXT,
+        julian_day REAL NOT NULL UNIQUE,
+        latitude REAL NOT NULL,
+        lat TEXT,
+        longitude REAL NOT NULL,
+        lon TEXT
         ); """
 
-class FileExtractor:
+class Trajectory:
 
     '''
     This class read multiple ASCII file, extract physical parameter from ROSCOP codification at the given column
@@ -108,7 +94,7 @@ class FileExtractor:
 
     def __str__(self):
         ''' overload string representation '''
-        return 'Class FileExtractor, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
+        return 'Class Trajectory, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
 
     def update_table(self, keys):
         ''' update table data and add new column from pm (physical parameter)'''
@@ -118,10 +104,8 @@ class FileExtractor:
             self.db.query(addColumn)
 
     def create_tables(self):
-        ''' Create table station and data'''
-        self.db.query("DROP TABLE IF EXISTS station")
+        ''' Create table data'''
         self.db.query("DROP TABLE IF EXISTS data")
-        self.db.query(table_station)
 
         # Create table data
         self.db.query(table_data)
@@ -147,7 +131,7 @@ class FileExtractor:
             buf += "{}\n".format(self.__data[key])
         return buf
 
-    def set_regex(self, cfg, ti, header):
+    def set_regex(self, cfg, ti, section):
         ''' prepare (compile) each regular expression inside toml file under section [<device>.header] 
         	[ctd.header]
 	        isHeader = '^[*#]'
@@ -158,33 +142,28 @@ class FileExtractor:
         '''
 
         # first pass on file(s)
-        d = cfg[ti.lower()][header]
+        d = cfg[ti.lower()][section]
 
         # fill the __regex dict with compiled regex 
         for key in d.keys():
             self.__regex[key] = re.compile(d[key])
 
+    
+
     def update_arrays(self):
         ''' extract data from sqlite database and fill self.__data arrays
         '''
         # print infos after reding all files   
-        hdr = self.db.query('SELECT * FROM station')
-        #st = self.db.query('SELECT COUNT(id) FROM station')
+        hdr = self.db.query('SELECT * FROM data')
+        #st = self.db.query('SELECT COUNT(id) FROM data')
         #print(f"SELECT COUNT({self.keys[0]}) FROM data")
-        n = self.db.count('station')
-        m = 0
-        for i in range(1,n+1):
-            query = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data where station_id = {i}")
-            #print(query)
-            size = int(query[0][f"COUNT({self.keys[0]})"])
-            if size > m:
-                m = size
+        n = self.db.count('data')
         
         #m = self.db.max('data')
         # need more documentation about return dict from select
         #n = int(st[0]['COUNT(id)']) 
         #m = int(max_size[0][f"MAX({self.keys[0]})"])
-        print(f"Array sizes: {n} x {m}")
+        print(f"Array sizes: {n}")
 
         # initialize one dimension variables
         for k in self.variables_1D:
@@ -196,7 +175,10 @@ class FileExtractor:
 
         # get data from table station and fill array
         #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
-        query = self.db.select('station', ['id','station', 'julian_day', 'end_date_time',
+        query = self.db.select('data')
+        print(query)
+        '''
+        query = self.db.select('data', ['id', 'julian_day', 'end_date_time',
             'latitude', 'longitude', 'bath'])
         logging.debug(query)
         profil_pk = []
@@ -223,8 +205,8 @@ class FileExtractor:
                 query = self.db.select('data', [k], station_id = profil_pk[i-1])
                 for idx, item in enumerate(query):
                     self.__data[k][i-1, idx] = item[k]
-
-        self.m = m
+        
+        '''
         self.n = n
 
     def read_files(self, cfg, device):
@@ -257,106 +239,49 @@ class FileExtractor:
                 # read all lines in file 
                 for line in f:
                     # if header line, save to __header private property and go to next line
+                    #logging.debug(f"line read: {line}")
                     if 'endHeader' in self.__regex:
                         if self.__regex['endHeader'].match(line):
-                            process_header = True
+                            process_data = True
                     if 'isHeader' in self.__regex:
                         if self.__regex['isHeader'].match(line):
                             self.__header += line 
-                            if process_header:
-                                pass                       
-                            else:
-                                continue
-                    if not process_data:
-                        if not 'isHeader' in self.__regex and not process_header:
-                            self.__header += line 
                             continue
-                        
+                    if 'isData' in self.__regex:
+                        if self.__regex['isData'].search(line):
+                            process_data = True
 
-                    # at the end of header, extract information from regex, insert data
-                    # to the table station and go to next line
-                    if process_header:
-
-                        #logging.debug(f"Enter in process header : {self.__header}")
-                        logging.debug(f"Header with line: {line}")
-                        
-                        # read and decode header for each entries in configuration 
-                        # toml file, section [device.header]
-                        for k in self.__regex.keys():
-
-                            # extract STATION number
-                            if k == "station" and self.__regex[k].search(self.__header):
-                                [station] = self.__regex[k].search(self.__header).groups() 
-                                #print("station: {}, type: {}".format(station, type(station)))
-                                sql['station'] = int(station)
-
-                            # key is DATETIME
-                            if k == "DATETIME" and self.__regex[k].search(self.__header):
-                                month, day, year, hour, minute, second = \
-                                    self.__regex[k].search(self.__header).groups() 
-                                if not self.__year:
-                                    self.__year = int(year)
-
-                            # key is DATE
-                            if k == "DATE" and self.__regex[k].search(self.__header):
-                                if device.lower() == 'ladcp':
-                                    year, month, day = \
-                                    self.__regex[k].search(self.__header).groups() 
-                                else:
-                                    month, day, year = \
-                                    self.__regex[k].search(self.__header).groups() 
-                                #print(f"{day}/{month}/{year}")
-                                if not self.__year:
-                                    self.__year = int(year)
-
-                            # key is TIME
-                            if k == "TIME" and self.__regex[k].search(self.__header):
+                    if process_data:
+                        sql = {}
+                        if self.__regex['TIME'].search(line):
                                 hour, minute, second = \
-                                self.__regex[k].search(self.__header).groups()  
-
-                            # key is LATITUDE
-                            if k == "LATITUDE" and self.__regex[k].search(self.__header):
-                                if device.lower() == 'ladcp':
-                                    [latitude] = self.__regex[k].search(self.__header).groups()                                  
-                                else:
-                                    (lat_deg, lat_min, lat_hemi) = self.__regex[k].search(self.__header).groups() 
-
-                                    # format latitude to string
-                                    latitude_str = "%s%c%s %s" % (lat_deg, tools.DEGREE, lat_min, lat_hemi)
-
-                                    # transform to decimal using ternary operator
-                                    latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
+                                self.__regex['TIME'].search(line).groups() 
+                                #print(f"{hour}:{minute}:{second}")
+                        if self.__regex['DATE'].search(line):
+                                day, month, year = \
+                                self.__regex['DATE'].search(line).groups() 
+                                #print(f"{day}/{month}/{year}")
+                        # format date and time to  "May 09 2011 16:33:53"
+                        dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"  
+                        #print(dateTime)
+                        if self.__regex['LATITUDE'].search(line):
+                                (lat_hemi, lat_deg, lat_min) = \
+                                self.__regex['LATITUDE'].search(line).groups() 
+                                #print(f"{lat_deg} {lat_min} {lat_hemi}")
+                                # transform to decimal using ternary operator
+                                latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
                                         (float(lat_deg) + (float(lat_min) / 60.)) * -1
                                 sql['LATITUDE'] = latitude  
                                 sql['lat'] = tools.Dec2dmc(float(latitude),'N')
-
-                            # key is LONGITUDE
-                            if k == "LONGITUDE" and self.__regex[k].search(self.__header):
-                                if device.lower() == 'ladcp':
-                                    [longitude] = self.__regex[k].search(self.__header).groups()
-                                else:
-                                    (lon_deg, lon_min, lon_hemi) = self.__regex[k].search(self.__header).groups() 
-
-                                    # format longitude to string
-                                    longitude_str = "%s%c%s %s" % (lon_deg, tools.DEGREE, lon_min, lon_hemi)
-
-                                    # transform to decimal using ternary operator
-                                    longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
+                        if self.__regex['LONGITUDE'].search(line):
+                                (lon_hemi, lon_deg, lon_min) = \
+                                self.__regex['LONGITUDE'].search(line).groups() 
+                                #print(f"{lon_deg} {lon_min} {lon_hemi}")
+                                longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
                                         (float(lon_deg) + (float(lon_min) / 60.)) * -1
                                 sql['LONGITUDE'] = longitude  
                                 sql['lon'] = tools.Dec2dmc(float(longitude),'E')
-
-                            # key is BATH
-                            if k == "BATH" and self.__regex[k].search(self.__header):
-                                [bath] = self.__regex[k].search(self.__header).groups() 
-                                sql['bath'] = bath
-
-                        # end of matching regex inside header
-                        process_header = False
-                        process_data = True
-
-                        # format date and time to  "May 09 2011 16:33:53"
-                        dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"  
+                                
                         # set datetime object   
                         if 'dateTimeFormat' in cfg[device.lower()]:
                             dtf = cfg[device.lower()]['dateTimeFormat']  
@@ -364,55 +289,73 @@ class FileExtractor:
                             dtf = "%d/%m/%Y %H:%M:%S"                    
                         sql['date_time'] = dt.strptime(dateTime, dtf)
                         sql['julian_day'] = tools.dt2julian(sql['date_time'])  
-                                
-                        # insert or query return last cursor, get the value of the primary key
-                        # with lastrowid
-                        ret = self.db.insert("station", sql)  
-                        pk = ret.lastrowid          
-                        continue
-                    # end of if process_header:
 
-                    if process_data:
-
+                        #print(f"Line: {line} separator: {self.__separator}")
                         # now, extract and process all data   
                         # split the line, remove leading and trailing space before
                         p = line.strip().split(self.__separator)
-                        #logging.debug(f"line split: {p}")
+                        #print(p)
+                        logging.debug(f"line split: {p}")
                         #logging.debug(f"line end: {p[-1]}")
-                        
-                        # skip to next line in file when skipLineWith is defined
-                        if 'skipLineWith' in cfg[device.lower()]:             
-                            #logging.debug(cfg[device.lower()]['skipLineWith'])
-                            if cfg[device.lower()]['skipLineWith'] in p[-1]:
-                                continue
 
-                        sql = {}
                         # insert data from list p with indice hash[key]
                         #[sql[key] = p[hash[key]]  for key in self.keys]
-                        sql['station_id'] = pk
+                        #sql['station_id'] = pk
                         for key in self.keys:
-                            if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]:
-                                sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
-                            else:
-                                logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
-                                sql[key] = float(p[hash[key]]) 
+                            logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
+                            sql[key] = float(p[hash[key]]) 
                         #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )
 
                 # end of readline in file
 
-            # add end_date_time in station table if ETDD (julian) is present in data
-            if 'ETDD' in self.keys:
-                # Seabird use julian day start at 1, we use jd start at 0
-                dt = tools.julian2dt(float(sql['ETDD']) + self.julian_from_year)
-                self.db.update("station", id = pk, 
-                    end_date_time = dt.strftime("%d/%m/%Y %H:%M:%S"))
-
-                #self.db.update("station", id = pk, end_date_time = dt)
-
         self.update_arrays()
         
+    def process(self, args, cfg, ti):
+        '''
+        Extract data from ASCII files and return Trajectory instance and array size of extracted data
 
+        Parameters
+        ----------
+            args : ConfigParser
+            cfg : dict
+                toml instance describing the file structure to decode
+            ti : str {'CNV', 'XBT','LADCP','TSG',}
+                The typeInstrument key
+
+        Returns
+        -------
+            fe: Profile
+            n, m: array size
+        '''
+
+        print('processing...')
+        # check if no file selected or cancel button pressed
+        logging.debug("File(s): {}, config: {}, Keys: {}".format(
+            args.files, args.config, args.keys))
+
+        # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
+        if args.keys == None:
+            args.keys = cfg['split'][ti.lower()].keys()
+
+        # extract header and data from files
+        # if args.database:
+        #     fe = Profile(args.files, self.roscop, args.keys, dbname='test.db')
+        # else:
+        #     fe = Profile(args.files, r, args.keys)
+        self.create_tables()
+
+        # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
+        self.set_regex(cfg, ti, 'header')
+        self.set_regex(cfg, ti, 'format')
+
+        self.read_files(cfg, ti)
+        #return fe
+        # write ASCII hdr and data files
+        ascii.writeTrajectory(cfg, ti, self, self.roscop)
+
+        # write the NetCDF file
+        #netcdf.writeTrajectory(cfg, ti, self, self.roscop)
 
 # for testing in standalone context
 # ---------------------------------
@@ -463,8 +406,8 @@ if __name__ == "__main__":
         files += glob(file)  
 
     # call fe with  dbname='test.db' to create db file, dbname='test.db'
-    #fe = FileExtractor(files, Roscop('code_roscop.csv'), args.keys, dbname='test.db')
-    fe = FileExtractor(files, Roscop('code_roscop.csv'), args.keys)
+    #fe = Trajectory(files, Roscop('code_roscop.csv'), args.keys, dbname='test.db')
+    fe = Trajectory(files, Roscop('code_roscop.csv'), args.keys)
     fe.create_tables()
     logging.debug(f"File(s): {files}, Config: {args.config}")
     cfg = toml.load(args.config)

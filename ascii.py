@@ -7,7 +7,7 @@ import tools
 import numpy as np
 from datetime import datetime
     
-def writeHeader(hdrFile, cfg, device, fe, r):
+def writeHeaderProfile(hdrFile, cfg, device, fe, r):
     f = open(hdrFile, 'w')
     # first line, header ex: 
     # PIRATA-FR30  THALASSA  IRD  SBE911+  09P-1263  BOURLES
@@ -74,7 +74,7 @@ def writeHeader(hdrFile, cfg, device, fe, r):
     f.close()
     
     
-def writeData(dataFile, cfg, device, fe, r):
+def writeDataProfile(dataFile, cfg, device, fe, r):
     f = open(dataFile, 'w')
 
     # write header, first line
@@ -127,18 +127,50 @@ def writeData(dataFile, cfg, device, fe, r):
                 f.write("\n")
     f.close()
 
-def writeAscii(cfg, device, fe, r):
+def writeProfile(cfg, device, fe, r):
     if not os.path.exists(cfg['global']['ascii']):
         os.makedirs(cfg['global']['ascii'])
         
     fileName = "{}/{}.{}".format(cfg['global']['ascii'], 
         cfg['cruise']['cycleMesure'], device.lower())
     logging.debug('writing header file: {}'.format(fileName))
-    writeHeader(fileName, cfg, device.lower(), fe, r, )
+    writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
     
     fileName = "{}/{}_{}".format(cfg['global']['ascii'], 
         cfg['cruise']['cycleMesure'], device.lower())
     print('writing  data  file: {}'.format(fileName), end='', flush=True)
-    writeData(fileName, cfg, device.lower(), fe, r)
+    writeDataProfile(fileName, cfg, device.lower(), fe, r)
+    print(' done...')
+
+def writeDataTrajectory(dataFile, cfg, device, fe, r):
+    f = open(dataFile, 'w')
+
+    # write header, first line
+    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['cycleMesure'], 
+        cfg['cruise']['plateforme'], cfg['cruise']['institute'],
+        cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
+        cfg['cruise']['pi']))
+
+    # write header, second line with physical parameter liste, fill with N/A if necessary
+    f.write("DATE  TIME  LATITUDE  LONGITUDE  ")
+    for k in fe.keys:
+        f.write(f"  {k} ")
+    for r in range(len(fe.keys),len(fe.variables_1D)+1):
+        f.write('   N/A  ')
+    f.write("\n")
+
+def writeTrajectory(cfg, device, fe, r):
+    if not os.path.exists(cfg['global']['ascii']):
+        os.makedirs(cfg['global']['ascii'])
+        
+    # fileName = "{}/{}.{}".format(cfg['global']['ascii'], 
+    #     cfg['cruise']['cycleMesure'], device.lower())
+    # logging.debug('writing header file: {}'.format(fileName))
+    # writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
+    
+    fileName = "{}/{}_{}".format(cfg['global']['ascii'], 
+        cfg['cruise']['cycleMesure'], device.lower())
+    print('writing  data  file: {}'.format(fileName), end='', flush=True)
+    writeDataTrajectory(fileName, cfg, device.lower(), fe, r)
     print(' done...')
    

@@ -7,6 +7,8 @@ OPTIONS_CTD = data/CTD/cnv/dfr2900?.cnv -i CTD -k PRES ETDD TEMP PSAL DOX2 DENS 
 OPTIONS_XBT = data/XBT/T7_0000*.EDF -i XBT -k DEPTH TEMP SVEL
 OPTIONS_LADCP = data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT
 OPTIONS_BTL =  data/CTD/btl/fr290*.btl -i BTL -k BOTL PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
+OPTIONS_COLCOR = data/TSG/COLCOR/*.colcor -i TSG -k SSJT SSTP SSPS
+OPTIONS_SEASAVE = data/TSG/SEASAVE/*.cnv -i TSG -k SSJT SSTP SSPS
 
 .PHONY: clean-pyc clean-build lint test run build
 
@@ -40,6 +42,12 @@ ladcp:
 
 btl:
 	$(PYTHON) $(MAIN) $(OPTIONS_BTL) $(OPT)
+
+colcor:
+	$(PYTHON) $(MAIN) $(OPTIONS_COLCOR) $(OPT)
+
+tsg:
+	$(PYTHON) $(MAIN) $(OPTIONS_SEASAVE) $(OPT)
 
 build:
 	pyinstaller -wF --clean $(MAIN)

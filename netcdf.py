@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 
-def writeNetCDF(cfg, device, fe, r):
+def writeProfile(cfg, device, fe, r):
 
     # ncvars is a dictionary that store a netcdf variable for each physical parameter key
     ncvars = {}

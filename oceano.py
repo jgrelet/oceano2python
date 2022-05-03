@@ -6,17 +6,18 @@ import re
 import PySimpleGUI as sg
 import toml
 import logging
-from file_extractor import FileExtractor
+from profile import Profile
+from trajectory import Trajectory
 from pathlib import Path
 from configparser import ConfigParser
 from glob import glob
 import distutils.util as du
-import netcdf
-import ascii
 from physical_parameter import Roscop
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
+
+dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP'], 'TRAJECTORY': ['TSG','MTO']}
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
@@ -168,7 +169,7 @@ def process_gui():
                 raise SystemExit("Cancelling: user exit")
 
             if event == 'OK':  # end of initialization, process data now
-                # values['_HIDDEN_'] is a string with files separated by ';' and fileExtractor need a list
+                # values['_HIDDEN_'] is a string with files separated by ';' and Profile need a list
                 files = values['_HIDDEN_'].split(';')
                 args.files = files
 
@@ -209,6 +210,7 @@ def process_gui():
             else:
                 args.keys.append(re.sub('_\w+$', '', k))
 
+        '''
         # process of files start here
         fe = process(args, cfg, device)
 
@@ -216,7 +218,7 @@ def process_gui():
         dims = "Dimensions: {} x {}".format(fe.n, fe.m)
         sg.PopupScrolled('Oceano2python', dims,
                          fe.disp(),  size=(80, 40))
-
+        '''
         # It will output to a debug window. Bug ? debug windows xas closed before exiting program
         # print = sg.Print
         # or
@@ -224,46 +226,6 @@ def process_gui():
 
         return window, fe, device
 
-
-def process(args, cfg, ti):
-    '''
-    Extract data from ASCII files and return FileExtractor instannce and array size of extracted data
-
-    Parameters
-    ----------
-        args : ConfigParser
-        cfg : dict
-            toml instance describing the file structure to decode
-        ti : str {'CNV', 'XBT','LADCP','TSG',}
-            The typeInstrument key
-
-    Returns
-    -------
-        fe: FileExtractor
-        n, m: array size
-    '''
-
-    print('processing...')
-    # check if no file selected or cancel button pressed
-    logging.debug("File(s): {}, config: {}, Keys: {}".format(
-        args.files, args.config, args.keys))
-
-    # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
-    if args.keys == None:
-        args.keys = cfg['split'][device.lower()].keys()
-
-    # extract header and data from files
-    if args.database:
-        fe = FileExtractor(args.files, r, args.keys, dbname='test.db')
-    else:
-        fe = FileExtractor(args.files, r, args.keys)
-    fe.create_tables()
-
-    # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
-    fe.set_regex(cfg, ti, 'header')
-
-    fe.read_files(cfg, ti)
-    return fe
 
 
 if __name__ == "__main__":
@@ -329,16 +291,30 @@ if __name__ == "__main__":
             parser.print_help(sys.stderr)
             sys.exit(1)
 
-        # in command line mode (console)
-        fe = process(args, cfg, device)
-        #print("Dimensions: {} x {}".format(fe.m, fe.n))
-        # print(fe.disp())
+    def search_dict(dict_type, instrument):
+        for k,i in dict_type.items():
+            if instrument in i:
+                return(k)
+
+    type = search_dict(dict_type, args.instrument)
+    print(type)
+
+    if type == 'PROFILE':
+        context = Profile(args.files, r, args.keys)
+    elif type == 'TRAJECTORY':
+        context = Trajectory(args.files, r, args.keys)
+    else:
+        print(f"Invalide type: {type}")
+        sys.exit()
+        
+    context.process(args, cfg, device)
+
 
     # write ASCII hdr and data files
-    ascii.writeAscii(cfg, device, fe, r)
+    #ascii.writeAscii(cfg, device, fe, r)
 
     # write the NetCDF file
-    netcdf.writeNetCDF(cfg, device, fe, r)
+    #netcdf_profile.writeNetCDF(cfg, device, fe, r)
     
     
 
