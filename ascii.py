@@ -152,12 +152,19 @@ def writeDataTrajectory(dataFile, cfg, device, fe, r):
         cfg['cruise']['pi']))
 
     # write header, second line with physical parameter liste, fill with N/A if necessary
-    f.write("DATE  TIME  LATITUDE  LONGITUDE  ")
     for k in fe.keys:
-        f.write(f"  {k} ")
-    for r in range(len(fe.keys),len(fe.variables_1D)+1):
-        f.write('   N/A  ')
+        f.write(f"  {k}  ")
     f.write("\n")
+    for n in range(fe.n):
+        for k in fe.keys: 
+            if k == 'id':       
+                fmt = fe.roscop['PROFILE']['format']
+            else:
+                fmt = fe.roscop[k]['format']
+            f.write(f" {fmt} " % (fe[k][n]))
+        f.write("\n")
+    f.close()
+
 
 def writeTrajectory(cfg, device, fe, r):
     if not os.path.exists(cfg['global']['ascii']):

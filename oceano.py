@@ -258,7 +258,7 @@ if __name__ == "__main__":
         defaultRoscop = Path(cfg['global']['codeRoscop'])
     if args.roscop != None:
         defaultRoscop = args.roscop
-    r = Roscop(defaultRoscop)
+    roscop = Roscop(defaultRoscop)
 
     # test arguments from sys.argv, args is never to None with default option set, without option
     # or -g, call GUI
@@ -300,9 +300,9 @@ if __name__ == "__main__":
     print(type)
 
     if type == 'PROFILE':
-        context = Profile(args.files, r, args.keys)
+        context = Profile(args.files, roscop, args.keys)
     elif type == 'TRAJECTORY':
-        context = Trajectory(args.files, r, args.keys)
+        context = Trajectory(args.files, roscop, args.keys)
     else:
         print(f"Invalide type: {type}")
         sys.exit()

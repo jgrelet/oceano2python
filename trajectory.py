@@ -5,6 +5,7 @@ import fileinput
 import linecache
 import logging
 from operator import length_hint
+import string
 import toml
 import sys
 import argparse
@@ -13,7 +14,7 @@ import re
 from glob import glob
 from datetime import datetime
 import tools
-from physical_parameter import Roscop
+#from physical_parameter import Roscop
 from notanorm import SqliteDb 
 import ascii
 import netcdf
@@ -23,13 +24,9 @@ import netcdf
 table_data = """
         CREATE TABLE data (
         id INTEGER PRIMARY KEY,
-        date_time TEXT NOT NULL UNIQUE,
-        end_date_time TEXT,
-        julian_day REAL NOT NULL UNIQUE,
-        latitude REAL NOT NULL,
-        lat TEXT,
-        longitude REAL NOT NULL,
-        lon TEXT
+        DAYD REAL NOT NULL UNIQUE,
+        LATITUDE REAL NOT NULL,
+        LONGITUDE REAL NOT NULL
         ); """
 
 class Trajectory:
@@ -49,7 +46,6 @@ class Trajectory:
     dbname: sqlite3 file, default i in memory 
     separator : str, column separator, default None (blank)
     '''
-    variables_1D = ['PROFILE', 'TIME', 'LATITUDE', 'LONGITUDE','BATH']
 
     def __init__(self, fname, roscop, keys, dbname=":memory:", separator=None):
         '''constructor with values by default'''
@@ -154,9 +150,6 @@ class Trajectory:
         ''' extract data from sqlite database and fill self.__data arrays
         '''
         # print infos after reding all files   
-        hdr = self.db.query('SELECT * FROM data')
-        #st = self.db.query('SELECT COUNT(id) FROM data')
-        #print(f"SELECT COUNT({self.keys[0]}) FROM data")
         n = self.db.count('data')
         
         #m = self.db.max('data')
@@ -165,49 +158,31 @@ class Trajectory:
         #m = int(max_size[0][f"MAX({self.keys[0]})"])
         print(f"Array sizes: {n}")
 
-        # initialize one dimension variables
-        for k in self.variables_1D:
-            #print(self.roscop[k])
-            if '_FillValue' in self.roscop[k]:
-                    self.__data[k] = np.full(n, self.roscop[k]['_FillValue']) 
-            else:
-                    self.__data[k] = np.empty(n) 
-
         # get data from table station and fill array
-        #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
         query = self.db.select('data')
-        print(query)
-        '''
-        query = self.db.select('data', ['id', 'julian_day', 'end_date_time',
-            'latitude', 'longitude', 'bath'])
-        logging.debug(query)
-        profil_pk = []
-        for idx, item in enumerate(query):
-            profil_pk.append(item['id'])
-            self.__data['PROFILE'][idx] = item['station']
-            #print(item['station'])
-            self.__data['TIME'][idx] = item['julian_day']
-            #self.__data['END_TIME'][idx] = item['end_date_time']
-            self.__data['LATITUDE'][idx] = item['latitude']
-            self.__data['LONGITUDE'][idx] = item['longitude']
-            self.__data['BATH'][idx] = item['bath']
 
-        # initialize array
-        for k in self.keys:
-            if '_FillValue' in self.roscop[k]:
-                self.__data[k] = np.full([n, m], self.roscop[k]['_FillValue'])
-            else:
-                self.__data[k] = np.empty([n, m]) 
-        # for each parameters
-        for k in self.keys:
-            # for each entries in station table, n is a list with indice start at 0
-            for i in profil_pk:
-                query = self.db.select('data', [k], station_id = profil_pk[i-1])
-                for idx, item in enumerate(query):
-                    self.__data[k][i-1, idx] = item[k]
+        # initialize one dimension variables
+        for idx, item in enumerate(query):
+            # define array size from table column name
+            
+            for k in item:  
+                # k is a type of <class 'notanorm.base.CIKey'>, convert to char !!!
+                key = f"{k}"
+                if idx == 0:                  
+                    if key != 'id':          
+                        #print(f"{key}:  {self.roscop[key]}")
+                        if '_FillValue' in self.roscop[key]:
+                                self.__data[key] = np.full(n, self.roscop[key]['_FillValue']) 
+                        else:
+                                self.__data[key] = np.empty(n)
+                    else:
+                        self.__data[key] = np.empty(n) 
+                # fill arrays
+                self.__data[key][idx] = item[key]
         
-        '''
         self.n = n
+        # save all database columns as key
+        self.keys = self.__data.keys()
 
     def read_files(self, cfg, device):
 
@@ -272,7 +247,7 @@ class Trajectory:
                                 latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
                                         (float(lat_deg) + (float(lat_min) / 60.)) * -1
                                 sql['LATITUDE'] = latitude  
-                                sql['lat'] = tools.Dec2dmc(float(latitude),'N')
+                                #sql['lat'] = tools.Dec2dmc(float(latitude),'N')
                         if self.__regex['LONGITUDE'].search(line):
                                 (lon_hemi, lon_deg, lon_min) = \
                                 self.__regex['LONGITUDE'].search(line).groups() 
@@ -280,15 +255,15 @@ class Trajectory:
                                 longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
                                         (float(lon_deg) + (float(lon_min) / 60.)) * -1
                                 sql['LONGITUDE'] = longitude  
-                                sql['lon'] = tools.Dec2dmc(float(longitude),'E')
+                                #sql['lon'] = tools.Dec2dmc(float(longitude),'E')
                                 
                         # set datetime object   
                         if 'dateTimeFormat' in cfg[device.lower()]:
                             dtf = cfg[device.lower()]['dateTimeFormat']  
                         else:
                             dtf = "%d/%m/%Y %H:%M:%S"                    
-                        sql['date_time'] = dt.strptime(dateTime, dtf)
-                        sql['julian_day'] = tools.dt2julian(sql['date_time'])  
+                        date_time = dt.strptime(dateTime, dtf)
+                        sql['DAYD'] = tools.dt2julian(date_time)  
 
                         #print(f"Line: {line} separator: {self.__separator}")
                         # now, extract and process all data   
@@ -296,15 +271,11 @@ class Trajectory:
                         p = line.strip().split(self.__separator)
                         #print(p)
                         logging.debug(f"line split: {p}")
-                        #logging.debug(f"line end: {p[-1]}")
 
                         # insert data from list p with indice hash[key]
-                        #[sql[key] = p[hash[key]]  for key in self.keys]
-                        #sql['station_id'] = pk
                         for key in self.keys:
                             logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
                             sql[key] = float(p[hash[key]]) 
-                        #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )
 
                 # end of readline in file
@@ -355,7 +326,7 @@ class Trajectory:
         ascii.writeTrajectory(cfg, ti, self, self.roscop)
 
         # write the NetCDF file
-        #netcdf.writeTrajectory(cfg, ti, self, self.roscop)
+        netcdf.writeTrajectory(cfg, ti, self, self.roscop)
 
 # for testing in standalone context
 # ---------------------------------

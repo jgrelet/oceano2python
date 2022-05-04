@@ -129,9 +129,9 @@ if __name__ == "__main__":
     # if args list is empty, key contain NoneType
     if key is not None:
         for k in key:
-            r[k]
+            print(f"{k}: {r[k]}")
 
-    print("{}: {}".format(key[0], r[key[0]]['long_name']))
+    """ print("{}: {}".format(key[0], r[key[0]]['long_name']))
     r['TOTO'] = {'uncle': 'tata'}
     print(r['TOTO'])
-    r['TEMP'] = 'tata'
+    r['TEMP'] = 'tata' """
