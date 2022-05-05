@@ -7,7 +7,7 @@ from datetime import datetime
 
 def writeProfile(cfg, device, fe, r):
 
-    # ncvars is a dictionary that store a netcdf variable for each physical parameter key
+    # ncvars is a dictionary that store a NETCDF variable for each physical parameter key
     ncvars = {}
 
     # variables and dimensions use for 1D and 2D variables
@@ -17,17 +17,17 @@ def writeProfile(cfg, device, fe, r):
     dims_2D = ['time', 'level']
 
     # create the output directory if it does not exist
-    if not os.path.exists(cfg['global']['netcdf']):
-        os.makedirs(cfg['global']['netcdf'])
+    if not os.path.exists(cfg['global']['NETCDF']):
+        os.makedirs(cfg['global']['NETCDF'])
 
-    # create netcdf file
+    # create NETCDF file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
-                                       ['netcdf'], cfg['cruise']['cycleMesure'], device)
+                                       ['NETCDF'], cfg['cruise']['CYCLEMESURE'], device)
 
     print(f"writing netCDF file: {fileName}", end='', flush=True)  
 
-    if not os.path.exists(cfg['global']['netcdf']):
-        os.makedirs(cfg['global']['netcdf'])
+    if not os.path.exists(cfg['global']['NETCDF']):
+        os.makedirs(cfg['global']['NETCDF'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
     
@@ -89,15 +89,15 @@ def writeProfile(cfg, device, fe, r):
     nc.source = cfg['global']['source']
     nc.comment = cfg['global']['comment']
     nc.references = cfg['global']['references']
-    nc.cycle_mesure = cfg['cruise']['cycleMesure']
-    nc.time_coverage_start = cfg['cruise']['beginDate']
-    nc.time_coverage_end = cfg['cruise']['endDate']
-    nc.timezone = cfg['cruise']['timezone']
-    nc.data_assembly_center = cfg['cruise']['institute']
+    nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
+    nc.time_coverage_start = cfg['cruise']['BEGINDATE']
+    nc.time_coverage_end = cfg['cruise']['ENDDATE']
+    nc.TIMEZONE = cfg['cruise']['TIMEZONE']
+    nc.data_assembly_center = cfg['cruise']['INSTITUTE']
     nc.type_instrument = cfg[device.lower()]['typeInstrument']
     nc.instrument_number = cfg[device.lower()]['instrumentNumber']
     nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
-    nc.pi_name = cfg['cruise']['pi']
+    nc.pi_name = cfg['cruise']['PI']
     nc.processing_state = "1A"
     nc.codification = "OOPC"
     nc.format_version = "1.2"
@@ -115,33 +115,33 @@ def writeProfile(cfg, device, fe, r):
         else:
             ncvars[key][:, :] = fe[key]
 
-    # close the netcdf file
+    # close the NETCDF file
     nc.close()
     print(' done...')
 
 def writeTrajectory(cfg, device, fe, r):
 
-    # ncvars is a dictionary that store a netcdf variable for each physical parameter key
+    # ncvars is a dictionary that store a NETCDF variable for each physical parameter key
     ncvars = {}
 
     # variables and dimensions 
     variables = list(fe.getlist())
     #print(variables)
-    variables.remove('id')
+    variables.remove('ID')
     dims = ['time']
 
     # create the output directory if it does not exist
-    if not os.path.exists(cfg['global']['netcdf']):
-        os.makedirs(cfg['global']['netcdf'])
+    if not os.path.exists(cfg['global']['NETCDF']):
+        os.makedirs(cfg['global']['NETCDF'])
 
-    # create netcdf file
+    # create NETCDF file
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
-                                    ['netcdf'], cfg['cruise']['cycleMesure'], device)
+                                    ['NETCDF'], cfg['cruise']['CYCLEMESURE'], device)
 
     print(f"writing netCDF file: {fileName}", end='', flush=True)  
 
-    if not os.path.exists(cfg['global']['netcdf']):
-        os.makedirs(cfg['global']['netcdf'])
+    if not os.path.exists(cfg['global']['NETCDF']):
+        os.makedirs(cfg['global']['NETCDF'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
     
@@ -154,12 +154,9 @@ def writeTrajectory(cfg, device, fe, r):
     logging.debug("time: {}".format(len(time)))
 
     # create variables
-    # add dimensions before variables list
-    #for k in fe.keys:
-    #    variables.append(k)
-    # variables.extend(fe.keys())
-    
+    print("")
     for key in variables:
+        print(f"Writing variable : {key}")
         # for each variables get the attributes dictionary from Roscop
         hash = r[key]
         # _FillValue attribute must be set when variable is created
@@ -174,18 +171,7 @@ def writeTrajectory(cfg, device, fe, r):
         # create the variable
         ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, dims, fill_value=fillvalue)
-        """ if any(key in item for item in fe.variables_1D):
-            try:
-                # create variable whit same dimension name, as TIME(time)
-                ncvars[key] = nc.createVariable(
-                    key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
-            except:
-                # for BATH(time), it's a mess !
-                ncvars[key] = nc.createVariable(
-                    key, dtype(hash['types']).char, 'time', fill_value=fillvalue)
-        else:
-            ncvars[key] = nc.createVariable(
-                key, dtype(hash['types']).char, dims, fill_value=fillvalue) """
+  
         # remove from the dictionary
         hash.pop('types')
         # create dynamically variable attributes
@@ -193,23 +179,31 @@ def writeTrajectory(cfg, device, fe, r):
             setattr(ncvars[key], k, hash[k])
     nc._enddef()
 
+    print("Writing Global attributes", end='')
     # add global attributes
     nc.data_type = "OceanSITES trajectory data"
     nc.Conventions = "CF-1.7"
-    nc.title = cfg['global']['title']
-    nc.institution = cfg['global']['institution']
-    nc.source = cfg['global']['source']
-    nc.comment = cfg['global']['comment']
-    nc.references = cfg['global']['references']
-    nc.cycle_mesure = cfg['cruise']['cycleMesure']
-    nc.time_coverage_start = cfg['cruise']['beginDate']
-    nc.time_coverage_end = cfg['cruise']['endDate']
-    nc.timezone = cfg['cruise']['timezone']
-    nc.data_assembly_center = cfg['cruise']['institute']
-    nc.type_instrument = cfg[device.lower()]['typeInstrument']
-    nc.instrument_number = cfg[device.lower()]['instrumentNumber']
+    if 'title' in cfg[device.lower()]:
+        nc.title = cfg['global']['title']
+    if 'institution' in cfg[device.lower()]:
+        nc.institution = cfg['global']['institution']
+    if 'source' in cfg[device.lower()]:
+        nc.source = cfg['global']['source']
+    if 'comment' in cfg[device.lower()]:
+        nc.comment = cfg['global']['comment']
+    if 'references' in cfg[device.lower()]:
+        nc.references = cfg['global']['references']
+    nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
+    nc.time_coverage_start = cfg['cruise']['BEGINDATE']
+    nc.time_coverage_end = cfg['cruise']['ENDDATE']
+    nc.TIMEZONE = cfg['cruise']['TIMEZONE']
+    nc.data_assembly_center = cfg['cruise']['INSTITUTE']
+    if 'typeInstrument' in cfg[device.lower()]:
+        nc.type_instrument = cfg[device.lower()]['typeInstrument']
+    if 'instrumentNumber' in cfg[device.lower()]:
+        nc.instrument_number = cfg[device.lower()]['instrumentNumber']
     nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
-    nc.pi_name = cfg['cruise']['pi']
+    nc.pi_name = cfg['cruise']['PI']
     nc.processing_state = "1A"
     nc.codification = "OOPC"
     nc.format_version = "1.2"
@@ -220,14 +214,10 @@ def writeTrajectory(cfg, device, fe, r):
         logging.debug(" var: {}, dims: {}, shape: {}, dtype: {}, ndim: {}".format(
             key, ncvars[key].dimensions, ncvars[key].shape, ncvars[key].dtype, ncvars[key].ndim))
 
-    # write the ncvars
+    # write variables with ncvars
     for key in variables:
         ncvars[key][:] = fe[key]
-        """ if any(key in item for item in fe.variables_1D):
-            ncvars[key][:] = fe[key]
-        else:
-            ncvars[key][:, :] = fe[key] """
 
-    # close the netcdf file
+    # close the NETCDF file
     nc.close()
     print(' done...')

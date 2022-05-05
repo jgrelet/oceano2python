@@ -28,15 +28,15 @@ class testConfig(unittest.TestCase):
                     'comment':'',
                     'references':''}
 
-        self.cruise = {'cycleMesure': 'PIRATA-FR29',
-                       'plateforme': 'THALASSA',
+        self.cruise = {'CYCLEMESURE': 'PIRATA-FR29',
+                       'PLATEFORME': 'THALASSA',
                        'callsign': 'FNFP',
-                       'institute': 'IRD',
-                       'timezone': 'GMT',
-                       'beginDate': '01/03/2019',
-                       'endDate': '04/04/2019',
-                       'pi': 'BOURLES',
-                       'creator': 'Jacques.Grelet@ird.fr'}
+                       'INSTITUTE': 'IRD',
+                       'TIMEZONE': 'GMT',
+                       'BEGINDATE': '01/03/2019',
+                       'ENDDATE': '04/04/2019',
+                       'PI': 'BOURLES',
+                       'CREATOR': 'Jacques.Grelet@ird.fr'}
 
         self.ctd = {'cruisePrefix': 'fr29',
                     'stationPrefixLength': 3,

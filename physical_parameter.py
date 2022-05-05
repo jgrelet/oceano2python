@@ -3,6 +3,7 @@ import shelve
 import sys
 import logging
 import argparse
+from tkinter.ttk import Separator
 
 
 class Roscop:
@@ -12,10 +13,11 @@ class Roscop:
     '''
 
     # constructor with values by default
-    def __init__(self, file):
+    def __init__(self, file, separator=','):
         # attibutes
         # public:
         self.file = file
+        self.separator = separator
         # private:
         self.__hash = {}
         # constructor build objet by reading the file
@@ -68,12 +70,13 @@ class Roscop:
 
             # Create an object that maps the information in each row to an OrderedDict
             # the values in the first row of file f will be used as the fieldnames.
-            reader = csv.DictReader(f, delimiter=';')
+            reader = csv.DictReader(f, delimiter=self.separator)
 
             for row in reader:
                 theKey = row[reader.fieldnames[0]]
-
+                #print(theKey)
                 for k in reader.fieldnames:
+                    
                     # if the value of key is empty
                     if row[k] == '' or k == 'key':
                         # remove the key
@@ -107,7 +110,8 @@ if __name__ == "__main__":
                         action="store_true")
     parser.add_argument("-k", "--key", nargs='+',
                         help="display dictionary for key(s), example -k TEMP [PSAL ...]")
-    parser.add_argument("file", type=str, help="the csv file to parse")
+    parser.add_argument("-r", "--roscop", help="the csv file to parse, (default: %(default)s)",
+                        default='code_roscop.csv')
 
     # display extra logging info
     # see: https://stackoverflow.com/questions/14097061/easier-way-to-enable-verbose-logging
@@ -118,8 +122,7 @@ if __name__ == "__main__":
             format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
     # Read the csv file and create an instance of Roscop class
-    r = Roscop(args.file)
-    # r = Roscop("code_roscop.csv")
+    r = Roscop(args.roscop)
 
     # r.read()
     print(r)

@@ -13,15 +13,17 @@ from configparser import ConfigParser
 from glob import glob
 import distutils.util as du
 from physical_parameter import Roscop
+import os.path as path
+
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
-dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP'], 'TRAJECTORY': ['TSG','MTO']}
+dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP'], 'TRAJECTORY': ['TSG','MTO', 'CASINO']}
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
-    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': ('colcor','COLCOR'),
+    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': ('colcor','COLCOR'), 'CASINO': ('csv'),
     'BTL': ('btl', 'BTL')}
 #variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
 ti = typeInstrument  # an alias
@@ -39,6 +41,9 @@ defaultRoscop = 'code_roscop.csv'
 
 
 def processArgs():
+    # get the path to the module oceano2python, use to file defaut roscop_code
+    roscop_file_path = path.dirname(path.abspath(__file__))
+
     parser = argparse.ArgumentParser(
         description='This program read multiple ASCII file, extract physical parameter \
                     following ROSCOP codification at the given column, fill arrays, write header file ',
@@ -59,7 +64,8 @@ def processArgs():
     parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
                         help='specify the instrument that produce files, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-r', '--roscop', nargs='?',
-                        help='specify location and ROSCOP file name, (default: code_roscop.csv)')
+                        help="specify location and ROSCOP file name,  (default: %(default)s)",
+                        default=roscop_file_path +'/code_roscop.csv')
     parser.add_argument('-k', '--keys', nargs='+',
                         help='display dictionary for key(s), (default: %(default)s)')
     parser.add_argument('-g', '--gui', action='store_true',
@@ -239,6 +245,7 @@ if __name__ == "__main__":
     > python oceano.py data/LADCP/*.lad -i LADCP - k DEPTH EWCT NSCT
     > python oceano.py data/CTD/btl/fr290*.btl -i BTL -k BOTL PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
     '''
+
     # recover and process line arguments
     parser = processArgs()
     args = parser.parse_args()

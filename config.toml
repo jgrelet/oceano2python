@@ -3,6 +3,7 @@ author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
 debug          = false
 echo           = true
 codeRoscop     = 'C:\git\python\oceano2python\code_roscop.csv'
+roscopSeparator = ','
 #codeRoscop     = 'd:\Users\jgrelet\Documents\git\Python\oceano2python\code_roscop.csv'
 ascii          = "ascii"
 netcdf         = "netcdf"
@@ -15,15 +16,15 @@ comment = ''
 references = ''
 
 [cruise]
-cycleMesure    = "PIRATA-FR29"
-plateforme     = "THALASSA"
+CYCLEMESURE    = "PIRATA-FR29"
+PLATEFORME     = "THALASSA"
 callsign       = "FNFP"
-institute      = "IRD"
-timezone       = "GMT"
-beginDate      = "01/03/2019"
-endDate        = "04/04/2019"
-pi             = "BOURLES"
-creator        = "Jacques.Grelet@ird.fr"
+INSTITUTE      = "IRD"
+TIMEZONE       = "GMT"
+BEGINDATE      = "01/03/2019"
+ENDDATE        = "04/04/2019"
+PI             = "BOURLES"
+CREATOR        = "Jacques.Grelet@ird.fr"
 
 [ctd]
 cruisePrefix   = "fr29"
@@ -102,6 +103,26 @@ comment        = "Extract from .edf files"
 	LATITUDE = 'Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)(\w)'
 	LONGITUDE = 'Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)(\w)'
 
+[ladcp]
+cruisePrefix   = "fr29"
+stationPrefixLength  = 3
+typeInstrument   = "LADCP WH150/WH300"
+instrumentNumber  = "24543/24085"
+acquisitionSoftware = "BBTALK"
+acquisitionVersion = 3.04
+processingSoftware = "MATLAB-VISBECK"
+processingVersion = "10.16.2"
+title_summary  = "IFM-GEOMAR/LDEO Matlab LADCP-Processing system adapted by FM/PR/JG"
+comment        = "Extract from .lad files"
+
+	[ladcp.header]
+	station = 'fr29(\d*)'
+	endHeader = 'Columns'
+	DATE = 'Date\s*=\s*(\d+)/(\d+)/(\d+)'
+	TIME = 'Start_Time\s*=\s*(\d+)[:hH](\d+):(\d+)'
+	LATITUDE = 'Latitude\s*[:=]\s*([-+]?\d+\.\d+)'
+	LONGITUDE = 'Longitude\s*[:=]\s*([-]?\d+.\d+)'
+
 [tsg]
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3 
@@ -122,7 +143,7 @@ comment        = "Extract from .colcor files"
 
 	[tsg.header]
 	isHeader = '^#'
-	isData = 'TSCOR'
+	isData = 'PIFM,TSCOR'
 
 	[tsg.format]
 	TIME = '(\d+):(\d+):(\d+)'
@@ -130,25 +151,22 @@ comment        = "Extract from .colcor files"
 	LATITUDE = '([NS]),(\d+),(\d+\.\d+)'
 	LONGITUDE = '([EW]),(\d+),(\d+\.\d+)'
 
-[ladcp]
-cruisePrefix   = "fr29"
-stationPrefixLength  = 3
-typeInstrument   = "LADCP WH150/WH300"
-instrumentNumber  = "24543/24085"
-acquisitionSoftware = "BBTALK"
-acquisitionVersion = 3.04
-processingSoftware = "MATLAB-VISBECK"
-processingVersion = "10.16.2"
-title_summary  = "IFM-GEOMAR/LDEO Matlab LADCP-Processing system adapted by FM/PR/JG"
-comment        = "Extract from .lad files"
+[casino]
+separator = "	"
+acquisitionSoftware = "CASINO"
+acquisitionVersion = ""
+processingSoftware = ""
+processingVersion = ""
+title_summary  = "Raw data extract from CASINO software, sample interval 30 secondes"
+comment        = "Extract from .csv files"
 
-	[ladcp.header]
-	station = 'fr29(\d*)'
-	endHeader = 'Columns'
-	DATE = 'Date\s*=\s*(\d+)/(\d+)/(\d+)'
-	TIME = 'Start_Time\s*=\s*(\d+)[:hH](\d+):(\d+)'
-	LATITUDE = 'Latitude\s*[:=]\s*([-+]?\d+\.\d+)'
-	LONGITUDE = 'Longitude\s*[:=]\s*([-]?\d+.\d+)'
+	[casino.header]
+	isHeader = '^#'
+	isData = 'ACQAUTO'
+
+	[casino.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)/(\d+)/(\d+)'
 
 [split]
 	[split.ctd]
@@ -229,7 +247,14 @@ comment        = "Extract from .lad files"
 	NSCT = 2
 
 [split.tsg]
-	DEPTH = 0
 	SSJT = 18
 	SSTP = 19
 	SSPS = 21
+
+[split.casino]
+	LATITUDE = 2
+	LONGITUDE = 3
+	BATH = 35
+	SSTP = 94
+	SSJT = 95
+	SSPS = 96

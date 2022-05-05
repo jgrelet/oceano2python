@@ -16,15 +16,17 @@ from datetime import datetime
 import tools
 #from physical_parameter import Roscop
 from notanorm import SqliteDb 
+import sqlite3
 import ascii
 import netcdf
 
 # define the data table
-# the id is actually the rowid AUTOINCREMENT column.
+# the ID is actually the rowid AUTOINCREMENT column.
+# removal of the UNIQUE constraint on DAYD, Casino bug ? DAYD REAL NOT NULL UNIQUE,
 table_data = """
         CREATE TABLE data (
-        id INTEGER PRIMARY KEY,
-        DAYD REAL NOT NULL UNIQUE,
+        ID INTEGER PRIMARY KEY,
+        DAYD REAL NOT NULL,
         LATITUDE REAL NOT NULL,
         LONGITUDE REAL NOT NULL
         ); """
@@ -92,8 +94,12 @@ class Trajectory:
         ''' overload string representation '''
         return 'Class Trajectory, file: %s, size = %d x %d' % (self.fname, self.n, self.m)
 
-    def update_table(self, keys):
+    def update_table(self, keysList):
         ''' update table data and add new column from pm (physical parameter)'''
+        # if LATITUDE and LONGITUDE are read as a variable, remove them from variables list
+        keys = keysList.copy()
+        if 'LATITUDE' in keys: keys.remove('LATITUDE')
+        if 'LONGITUDE' in keys: keys.remove('LONGITUDE')
         for pm in keys:
             logging.debug(f"\tUpdate table data with new column {pm}")
             addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
@@ -154,7 +160,7 @@ class Trajectory:
         
         #m = self.db.max('data')
         # need more documentation about return dict from select
-        #n = int(st[0]['COUNT(id)']) 
+        #n = int(st[0]['COUNT(ID)']) 
         #m = int(max_size[0][f"MAX({self.keys[0]})"])
         print(f"Array sizes: {n}")
 
@@ -169,7 +175,7 @@ class Trajectory:
                 # k is a type of <class 'notanorm.base.CIKey'>, convert to char !!!
                 key = f"{k}"
                 if idx == 0:                  
-                    if key != 'id':          
+                    if key != 'ID':          
                         #print(f"{key}:  {self.roscop[key]}")
                         if '_FillValue' in self.roscop[key]:
                                 self.__data[key] = np.full(n, self.roscop[key]['_FillValue']) 
@@ -239,7 +245,8 @@ class Trajectory:
                         # format date and time to  "May 09 2011 16:33:53"
                         dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"  
                         #print(dateTime)
-                        if self.__regex['LATITUDE'].search(line):
+                        if 'LATITUDE' in self.__regex:
+                            if self.__regex['LATITUDE'].search(line):
                                 (lat_hemi, lat_deg, lat_min) = \
                                 self.__regex['LATITUDE'].search(line).groups() 
                                 #print(f"{lat_deg} {lat_min} {lat_hemi}")
@@ -248,7 +255,8 @@ class Trajectory:
                                         (float(lat_deg) + (float(lat_min) / 60.)) * -1
                                 sql['LATITUDE'] = latitude  
                                 #sql['lat'] = tools.Dec2dmc(float(latitude),'N')
-                        if self.__regex['LONGITUDE'].search(line):
+                        if 'LONGITUDE' in self.__regex:
+                            if self.__regex['LONGITUDE'].search(line):
                                 (lon_hemi, lon_deg, lon_min) = \
                                 self.__regex['LONGITUDE'].search(line).groups() 
                                 #print(f"{lon_deg} {lon_min} {lon_hemi}")
@@ -275,9 +283,9 @@ class Trajectory:
                         # insert data from list p with indice hash[key]
                         for key in self.keys:
                             logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
-                            sql[key] = float(p[hash[key]]) 
+                            sql[key] = float(p[hash[key]].replace(',','.')) 
                         self.db.insert("data",  sql )
-
+                        process_data = False
                 # end of readline in file
 
         self.update_arrays()

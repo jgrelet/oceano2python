@@ -11,14 +11,14 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
     f = open(hdrFile, 'w')
     # first line, header ex: 
     # PIRATA-FR30  THALASSA  IRD  SBE911+  09P-1263  BOURLES
-    print("{}  {}  {}  {}  {}  {}".format(cfg['cruise']['cycleMesure'], 
-        cfg['cruise']['plateforme'], cfg['cruise']['institute'],
+    print("{}  {}  {}  {}  {}  {}".format(cfg['cruise']['CYCLEMESURE'], 
+        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE'],
         cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['pi']))
-    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['cycleMesure'], 
-        cfg['cruise']['plateforme'], cfg['cruise']['institute'],
+        cfg['cruise']['PI']))
+    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['CYCLEMESURE'], 
+        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE'],
         cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['pi']))
+        cfg['cruise']['PI']))
     # write next lines, start and end profile ex: 
     # 00001 18/02/2020 19:04:19 18/02/2020 22:41:07 11°28.85 N 023°00.59 W  4063  5083 fr30001
     # add PROFILE and END_PROFILE_TIME, BATH
@@ -49,7 +49,7 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
                 f.write(f"{lon}  ")
             else:
                 fmt = fe.roscop[k]['format']
-                if np.isnan(fe[k][i]):
+                if np.isnan(fe[k][i]):  # a revoir !!!
                     #print(k, type(fe[k][i]))
                     print(' 1e+36 ', end='')
                     f.write(' 1e+36 ')
@@ -78,10 +78,10 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
     f = open(dataFile, 'w')
 
     # write header, first line
-    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['cycleMesure'], 
-        cfg['cruise']['plateforme'], cfg['cruise']['institute'],
+    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['CYCLEMESURE'], 
+        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE'],
         cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['pi']))
+        cfg['cruise']['PI']))
 
     # write header, second line with physical parameter liste, fill with N/A if necessary
     f.write("PROFILE  ")
@@ -128,16 +128,16 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
     f.close()
 
 def writeProfile(cfg, device, fe, r):
-    if not os.path.exists(cfg['global']['ascii']):
-        os.makedirs(cfg['global']['ascii'])
+    if not os.path.exists(cfg['global']['ASCII']):
+        os.makedirs(cfg['global']['ASCII'])
         
-    fileName = "{}/{}.{}".format(cfg['global']['ascii'], 
-        cfg['cruise']['cycleMesure'], device.lower())
+    fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
+        cfg['cruise']['CYCLEMESURE'], device.lower())
     logging.debug('writing header file: {}'.format(fileName))
     writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
     
-    fileName = "{}/{}_{}".format(cfg['global']['ascii'], 
-        cfg['cruise']['cycleMesure'], device.lower())
+    fileName = "{}/{}_{}".format(cfg['global']['ASCII'], 
+        cfg['cruise']['CYCLEMESURE'], device.lower())
     print('writing  data  file: {}'.format(fileName), end='', flush=True)
     writeDataProfile(fileName, cfg, device.lower(), fe, r)
     print(' done...')
@@ -146,10 +146,15 @@ def writeDataTrajectory(dataFile, cfg, device, fe, r):
     f = open(dataFile, 'w')
 
     # write header, first line
-    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['cycleMesure'], 
-        cfg['cruise']['plateforme'], cfg['cruise']['institute'],
-        cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['pi']))
+    f.write("{}  {}  {}  ".format(cfg['cruise']['CYCLEMESURE'], 
+        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE']))
+    if 'typeInstrument' in cfg[device]:
+        f.write(f"{cfg[device]['typeInstrument']}")
+    if 'instrumentNumber' in cfg[device]:
+        f.write(f"{cfg[device]['instrumentNumber']}")
+    if 'PI' in cfg['cruise']:
+        f.write(f"{cfg['cruise']['PI']}")
+    f.write("\n")
 
     # write header, second line with physical parameter liste, fill with N/A if necessary
     for k in fe.keys:
@@ -157,26 +162,26 @@ def writeDataTrajectory(dataFile, cfg, device, fe, r):
     f.write("\n")
     for n in range(fe.n):
         for k in fe.keys: 
-            if k == 'id':       
-                fmt = fe.roscop['PROFILE']['format']
+            fmt = fe.roscop[k]['format']
+            if '_FillValue' in fe.roscop[k] and fe[k][n] == fe.roscop[k]['_FillValue']:
+                f.write('  1e+36 ')
             else:
-                fmt = fe.roscop[k]['format']
-            f.write(f" {fmt} " % (fe[k][n]))
+                f.write(f" {fmt} " % (fe[k][n]))
         f.write("\n")
     f.close()
 
 
 def writeTrajectory(cfg, device, fe, r):
-    if not os.path.exists(cfg['global']['ascii']):
-        os.makedirs(cfg['global']['ascii'])
+    if not os.path.exists(cfg['global']['ASCII']):
+        os.makedirs(cfg['global']['ASCII'])
         
-    # fileName = "{}/{}.{}".format(cfg['global']['ascii'], 
-    #     cfg['cruise']['cycleMesure'], device.lower())
+    # fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
+    #     cfg['cruise']['CYCLEMESURE'], device.lower())
     # logging.debug('writing header file: {}'.format(fileName))
     # writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
     
-    fileName = "{}/{}_{}".format(cfg['global']['ascii'], 
-        cfg['cruise']['cycleMesure'], device.lower())
+    fileName = "{}/{}_{}".format(cfg['global']['ASCII'], 
+        cfg['cruise']['CYCLEMESURE'], device.lower())
     print('writing  data  file: {}'.format(fileName), end='', flush=True)
     writeDataTrajectory(fileName, cfg, device.lower(), fe, r)
     print(' done...')
