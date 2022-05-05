@@ -14,7 +14,7 @@ import re
 from glob import glob
 from datetime import datetime
 import tools
-#from physical_parameter import Roscop
+from physical_parameter import Roscop
 from notanorm import SqliteDb 
 import sqlite3
 import ascii
