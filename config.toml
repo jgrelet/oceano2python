@@ -2,9 +2,8 @@
 author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
 debug          = false
 echo           = true
-codeRoscop     = 'C:\git\python\oceano2python\code_roscop.csv'
+codeRoscop     = 'code_roscop.csv'
 roscopSeparator = ','
-#codeRoscop     = 'd:\Users\jgrelet\Documents\git\Python\oceano2python\code_roscop.csv'
 ASCII          = "ascii"
 NETCDF         = "netcdf"
 odv            = "odv"
@@ -159,6 +158,8 @@ processingSoftware = ""
 processingVersion = ""
 title_summary  = "Raw data extract from CASINO software, sample interval 30 secondes"
 comment        = "Extract from .csv files"
+#dateTimeFormat = "%d/%b/%Y %H:%M:%S"
+
 
 	[casino.header]
 	isHeader = '^#'

@@ -25,7 +25,7 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
     for i in range(fe.n):
         for k in fe.variables_1D:
             if k == 'TIME':
-                t = tools.julian2dt(fe['TIME'][i]).strftime("%d/%m/%Y %H:%M:%S")
+                t = tools.julian2format(fe['TIME'][i])
                 print(f"{t}  ", end='')
                 f.write(f"{t}  ")
                 #query = self.db.query('SELECT end_date_time FROM station')
@@ -100,7 +100,7 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
                 f.write(f"{fmt}       -1 " % (fe[k][i]))
             elif k == 'TIME':
                 f.write(f" {fmt} {'%s'}" % (fe[k][i] - fe.julian_from_year, 
-                    tools.julian2dt(fe[k][i]).strftime("%Y%m%d%H%M%S")))
+                    tools.julian2format(fe[k][i])))
             else:
                 if np.isnan(fe[k][i]):
                     #print(k, type(fe[k][i]))
@@ -203,8 +203,9 @@ def writeHumanDataTrajectory(dataFile, cfg, device, fe, r):
                 f.write(f" {tools.Dec2dmc(fe[k][n],'E')} ")
                 continue
             if k == 'DAYD':
-                dt = tools.julian2dt(fe[k][n])
-                f.write(f" {dt.strftime('%d/%m/%Y %H:%M:%S')} ")
+                # use the format given in devide trajectory toml config file
+                dt = tools.julian2format(fe[k][n])
+                f.write(f" {dt} ")
                 continue
             fmt = fe.roscop[k]['format']
             if '_FillValue' in fe.roscop[k] and fe[k][n] == fe.roscop[k]['_FillValue']:

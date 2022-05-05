@@ -63,6 +63,11 @@ def julian2dt(jd):
     dt = julian.from_jd(jd, fmt='mjd')
     return dt
 
+def julian2format(jd, format='%d/%m/%Y %H:%M:%S'):
+    # overwrite the wrong format of the julian module (second with lot of decimal)
+    dt = julian2dt(jd)
+    return dt.strftime(format)
+
 def dt2julian(dt):
     jd = julian.to_jd(dt, fmt='mjd')
     jd = jd - JULIAN

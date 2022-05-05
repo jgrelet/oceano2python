@@ -404,9 +404,8 @@ class Profile:
             # add end_date_time in station table if ETDD (julian) is present in data
             if 'ETDD' in self.keys:
                 # Seabird use julian day start at 1, we use jd start at 0
-                dt = tools.julian2dt(float(sql['ETDD']) + self.julian_from_year)
-                self.db.update("station", id = pk, 
-                    end_date_time = dt.strftime("%d/%m/%Y %H:%M:%S"))
+                tmp = tools.julian2format(float(sql['ETDD']) + self.julian_from_year)
+                self.db.update("station", id = pk, end_date_time = tmp)
 
                 #self.db.update("station", id = pk, end_date_time = dt)
 
