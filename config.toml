@@ -258,3 +258,7 @@ comment        = "Extract from .csv files"
 	SSTP = 94
 	SSJT = 95
 	SSPS = 96
+	WMSP = 65
+	WDIR = 64
+	DRYT = 66
+	RELH = 68

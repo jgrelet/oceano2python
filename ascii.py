@@ -142,7 +142,7 @@ def writeProfile(cfg, device, fe, r):
     writeDataProfile(fileName, cfg, device.lower(), fe, r)
     print(' done...')
 
-def writeDataTrajectory(dataFile, cfg, device, fe, r):
+def writeDecimalDataTrajectory(dataFile, cfg, device, fe, r):
     f = open(dataFile, 'w')
 
     # write header, first line
@@ -160,8 +160,51 @@ def writeDataTrajectory(dataFile, cfg, device, fe, r):
     for k in fe.keys:
         f.write(f"  {k}  ")
     f.write("\n")
+    # write data
     for n in range(fe.n):
         for k in fe.keys: 
+            fmt = fe.roscop[k]['format']
+            if '_FillValue' in fe.roscop[k] and fe[k][n] == fe.roscop[k]['_FillValue']:
+                f.write('  1e+36 ')
+            else:
+                f.write(f" {fmt} " % (fe[k][n]))
+        f.write("\n")
+    f.close()
+
+def writeHumanDataTrajectory(dataFile, cfg, device, fe, r):
+    f = open(dataFile, 'w')
+
+    # write header, first line
+    f.write("{}  {}  {}  ".format(cfg['cruise']['CYCLEMESURE'], 
+        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE']))
+    if 'typeInstrument' in cfg[device]:
+        f.write(f"{cfg[device]['typeInstrument']}")
+    if 'instrumentNumber' in cfg[device]:
+        f.write(f"{cfg[device]['instrumentNumber']}")
+    if 'PI' in cfg['cruise']:
+        f.write(f"{cfg['cruise']['PI']}")
+    f.write("\n")
+
+    # write header, second line with physical parameter liste, fill with N/A if necessary
+    for k in fe.keys:
+        if k == 'DAYD':
+            f.write("    DATE      TIME   ")
+            continue
+        f.write(f"   {k}  ")
+    f.write("\n")
+    # write data
+    for n in range(fe.n):
+        for k in fe.keys: 
+            if k == 'LATITUDE':
+                f.write(f" {tools.Dec2dmc(fe[k][n],'N')} ")
+                continue
+            if k == 'LONGITUDE':
+                f.write(f" {tools.Dec2dmc(fe[k][n],'E')} ")
+                continue
+            if k == 'DAYD':
+                dt = tools.julian2dt(fe[k][n])
+                f.write(f" {dt.strftime('%d/%m/%Y %H:%M:%S')} ")
+                continue
             fmt = fe.roscop[k]['format']
             if '_FillValue' in fe.roscop[k] and fe[k][n] == fe.roscop[k]['_FillValue']:
                 f.write('  1e+36 ')
@@ -174,15 +217,18 @@ def writeDataTrajectory(dataFile, cfg, device, fe, r):
 def writeTrajectory(cfg, device, fe, r):
     if not os.path.exists(cfg['global']['ASCII']):
         os.makedirs(cfg['global']['ASCII'])
-        
-    # fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
-    #     cfg['cruise']['CYCLEMESURE'], device.lower())
-    # logging.debug('writing header file: {}'.format(fileName))
-    # writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
     
+    # write ascii file with human read time and position
+    fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
+        cfg['cruise']['CYCLEMESURE'], device.lower())
+    print('writing file: {}'.format(fileName), end='', flush=True)
+    writeHumanDataTrajectory(fileName, cfg, device.lower(), fe, r, )
+    print(' done...')
+    
+    # write ascii file with decimal time and position
     fileName = "{}/{}_{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
-    print('writing  data  file: {}'.format(fileName), end='', flush=True)
-    writeDataTrajectory(fileName, cfg, device.lower(), fe, r)
+    print('writing file: {}'.format(fileName), end='', flush=True)
+    writeDecimalDataTrajectory(fileName, cfg, device.lower(), fe, r)
     print(' done...')
    
