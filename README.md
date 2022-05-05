@@ -17,18 +17,6 @@ You must install the following tools:
 - Git (<https://git-scm.com/downloads>)
 - miniconda3 (<https://docs.conda.io/en/latest/miniconda.html>)
 - chocolatey (<https://chocolatey.org/install>) and install GNU Make package (<https://community.chocolatey.org/packages/make>)
-  
-## Installation based on an YAML environment file
-
-``` bash
-conda env create -f environment.yml -n <new_env_name>
-```
-
-example:
-
-``` bash
-conda env create -f environment-windows.yml -n oceano2python
-```
 
 ## Installation from scratch with conda
 
@@ -39,6 +27,17 @@ conda create -n oceano2python python=3.9
 conda activate oceano2python
 conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller pysimplegui
 pip install julian notanorm
+```
+## Installation based on an YAML environment file
+
+``` bash
+conda env create -f environment.yml -n <new_env_name>
+```
+
+example:
+
+``` bash
+conda env create -f environment-windows.yml -n oceano2python
 ```
 
 ## Export your environment
