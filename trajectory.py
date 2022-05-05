@@ -221,16 +221,13 @@ class Trajectory:
                 for line in f:
                     # if header line, save to __header private property and go to next line
                     #logging.debug(f"line read: {line}")
-                    if 'endHeader' in self.__regex:
-                        if self.__regex['endHeader'].match(line):
-                            process_data = True
-                    if 'isHeader' in self.__regex:
-                        if self.__regex['isHeader'].match(line):
-                            self.__header += line 
-                            continue
-                    if 'isData' in self.__regex:
-                        if self.__regex['isData'].search(line):
-                            process_data = True
+                    if 'endHeader' in self.__regex and self.__regex['endHeader'].match(line):
+                       process_data = True
+                    if 'isHeader' in self.__regex and self.__regex['isHeader'].match(line):
+                        self.__header += line 
+                        continue
+                    if 'isData' in self.__regex and self.__regex['isData'].search(line):
+                        process_data = True
 
                     if process_data:
                         sql = {}
@@ -245,25 +242,23 @@ class Trajectory:
                         # format date and time to  "May 09 2011 16:33:53"
                         dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"  
                         #print(dateTime)
-                        if 'LATITUDE' in self.__regex:
-                            if self.__regex['LATITUDE'].search(line):
-                                (lat_hemi, lat_deg, lat_min) = \
-                                self.__regex['LATITUDE'].search(line).groups() 
-                                #print(f"{lat_deg} {lat_min} {lat_hemi}")
-                                # transform to decimal using ternary operator
-                                latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
-                                        (float(lat_deg) + (float(lat_min) / 60.)) * -1
-                                sql['LATITUDE'] = latitude  
-                                #sql['lat'] = tools.Dec2dmc(float(latitude),'N')
-                        if 'LONGITUDE' in self.__regex:
-                            if self.__regex['LONGITUDE'].search(line):
-                                (lon_hemi, lon_deg, lon_min) = \
-                                self.__regex['LONGITUDE'].search(line).groups() 
-                                #print(f"{lon_deg} {lon_min} {lon_hemi}")
-                                longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
-                                        (float(lon_deg) + (float(lon_min) / 60.)) * -1
-                                sql['LONGITUDE'] = longitude  
-                                #sql['lon'] = tools.Dec2dmc(float(longitude),'E')
+                        if 'LATITUDE' in self.__regex and self.__regex['LATITUDE'].search(line):
+                            (lat_hemi, lat_deg, lat_min) = \
+                            self.__regex['LATITUDE'].search(line).groups() 
+                            #print(f"{lat_deg} {lat_min} {lat_hemi}")
+                            # transform to decimal using ternary operator
+                            latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
+                                    (float(lat_deg) + (float(lat_min) / 60.)) * -1
+                            sql['LATITUDE'] = latitude  
+                            #sql['lat'] = tools.Dec2dmc(float(latitude),'N')
+                        if 'LONGITUDE' in self.__regex and self.__regex['LONGITUDE'].search(line):
+                            (lon_hemi, lon_deg, lon_min) = \
+                            self.__regex['LONGITUDE'].search(line).groups() 
+                            #print(f"{lon_deg} {lon_min} {lon_hemi}")
+                            longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
+                                    (float(lon_deg) + (float(lon_min) / 60.)) * -1
+                            sql['LONGITUDE'] = longitude  
+                            #sql['lon'] = tools.Dec2dmc(float(longitude),'E')
                                 
                         # set datetime object   
                         if 'dateTimeFormat' in cfg[device.lower()]:

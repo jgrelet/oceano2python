@@ -259,16 +259,14 @@ class Profile:
                 # read all lines in file 
                 for line in f:
                     # if header line, save to __header private property and go to next line
-                    if 'endHeader' in self.__regex:
-                        if self.__regex['endHeader'].match(line):
-                            process_header = True
-                    if 'isHeader' in self.__regex:
-                        if self.__regex['isHeader'].match(line):
-                            self.__header += line 
-                            if process_header:
-                                pass                       
-                            else:
-                                continue
+                    if 'endHeader' in self.__regex and self.__regex['endHeader'].match(line):
+                        process_header = True
+                    if 'isHeader' in self.__regex and self.__regex['isHeader'].match(line):
+                        self.__header += line 
+                        if process_header:
+                            pass                       
+                        else:
+                            continue
                     if not process_data:
                         if not 'isHeader' in self.__regex and not process_header:
                             self.__header += line 
