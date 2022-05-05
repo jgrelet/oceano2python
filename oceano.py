@@ -102,7 +102,7 @@ def defineGUI():
 
     # define a frame layout for each instrument (device) with composite key as PRES_CTD, TEMP_XBT
     for d in devices:
-        keys = cfg['split'][d.lower()].keys()
+        keys = cfg[d.lower()]['split'].keys()
         # List comprehensions
         frameLayout[d] = [[sg.Checkbox(k, key='{:s}_{:s}'.format(k, d),
                                        tooltip='Select the extract the physical parameter {}'.format(k))] for k in keys]
@@ -147,7 +147,7 @@ def process_gui():
           # setup the GUI windows Layout
         window = defineGUI()
         device = window.find_element('_DEVICE_').DefaultValue
-        keys = cfg['split'][device.lower()].keys()
+        keys = cfg[device.lower()]['split'].keys()
 
         # can't update combo with FindElement('_HIDDEN_').Update(), we use this function
         # with hardcoded FilesBrowseCombo position

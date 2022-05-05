@@ -47,6 +47,45 @@ julianOrigin = 1
 	operator = 'Operator\s*:\s*(.*)'
 	type = 'Type\s*:\s*(.*)'
 
+	[ctd.split]
+	ETDD = 1
+	PRES = 2
+	DEPTH = 3
+	TEMP = 4
+	PSAL = 17
+	DENS = 19
+	SVEL = 21
+	DOX2 = 15
+	FLU2 = 13
+	FLU3 = 14
+	TUR3 = 12
+	NAVG = 23
+
+	[ctdAll.split]
+	ETDD = 1
+	PRES = 2
+	DEPTH = 3
+	TE01 = 4
+	TE02 = 5
+	CND1 = 6
+	CND2 = 7
+	DOV1 = 8
+	DOV2 = 9
+	DVT1 = 10
+	DVT2 = 11
+	TUR3 = 12
+	FLU2 = 13
+	FLU3 = 14
+	DO12 = 15
+	DO22 = 16
+	PSA1 = 17
+	PSA2 = 18
+	DEN1 = 19
+	DEN2 = 20
+	SVEL = 21
+	NAVG = 23
+
+
 [btl]
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
 instrumentNumber         = "unknown"
@@ -68,6 +107,31 @@ skipLineWith = "(sdev)"
 	operator = 'Operator\s*:\s*(.*)'
 	type = 'Type\s*:\s*(.*)'
 
+	[btl.split]
+	BOTL = 0
+	PSA1 = 4
+	PSA2 = 5
+	DO11 = 6
+	DO12 = 7
+	DO21 = 8
+	DO22 = 9
+	Potemp090C = 10
+	Potemp190C = 11
+	ETDD = 12
+	PRES = 13
+	DEPTH = 14
+	TE01 = 15
+	TE02 = 16
+	CND1 = 17
+	CND2 = 18
+	DOV1 = 19
+	DOV2 = 20
+	DVT1 = 21
+	DVT2 = 22
+	TUR3 = 23
+	FLU2 = 24
+
+
 [sbe35]
 typeInstrument           = "SBE35 high precision realtime thermometer"
 instrumentNumber         = 102
@@ -77,6 +141,10 @@ instrumentNumber         = 102
 	endHeader = '^dd\d+,\d+$'
 	#station = '^[*]\s+FileName\s+=\s+(.*)$'
         station = '^[*]+\s+Station:(\d+)$'
+
+	[sb35.split]
+	BOTL = 0
+	TE35 = 16
 
 [xbt]
 cruisePrefix   = "fr29"
@@ -102,6 +170,12 @@ comment        = "Extract from .edf files"
 	LATITUDE = 'Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)(\w)'
 	LONGITUDE = 'Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)(\w)'
 
+	[xbt.split]
+	DEPTH = 0
+	TEMP = 1
+	SVEL = 2	
+
+
 [ladcp]
 cruisePrefix   = "fr29"
 stationPrefixLength  = 3
@@ -121,6 +195,11 @@ comment        = "Extract from .lad files"
 	TIME = 'Start_Time\s*=\s*(\d+)[:hH](\d+):(\d+)'
 	LATITUDE = 'Latitude\s*[:=]\s*([-+]?\d+\.\d+)'
 	LONGITUDE = 'Longitude\s*[:=]\s*([-]?\d+.\d+)'
+
+	[ladcp.split]
+	DEPTH = 0
+	EWCT = 1
+	NSCT = 2
 
 [tsg]
 cruisePrefix   = "fr29"
@@ -150,6 +229,11 @@ comment        = "Extract from .colcor files"
 	LATITUDE = '([NS]),(\d+),(\d+\.\d+)'
 	LONGITUDE = '([EW]),(\d+),(\d+\.\d+)'
 
+	[tsg.split]
+	SSJT = 18
+	SSTP = 19
+	SSPS = 21
+
 [casino]
 separator = "	"
 acquisitionSoftware = "CASINO"
@@ -160,7 +244,6 @@ title_summary  = "Raw data extract from CASINO software, sample interval 30 seco
 comment        = "Extract from .csv files"
 #dateTimeFormat = "%d/%b/%Y %H:%M:%S"
 
-
 	[casino.header]
 	isHeader = '^#'
 	isData = 'ACQAUTO'
@@ -169,90 +252,7 @@ comment        = "Extract from .csv files"
 	TIME = '(\d+):(\d+):(\d+)'
 	DATE = '(\d+)/(\d+)/(\d+)'
 
-[split]
-	[split.ctd]
-	ETDD = 1
-	PRES = 2
-	DEPTH = 3
-	TEMP = 4
-	PSAL = 17
-	DENS = 19
-	SVEL = 21
-	DOX2 = 15
-	FLU2 = 13
-	FLU3 = 14
-	TUR3 = 12
-	NAVG = 23
-
-	[split.ctdAll]
-	ETDD = 1
-	PRES = 2
-	DEPTH = 3
-	TE01 = 4
-	TE02 = 5
-	CND1 = 6
-	CND2 = 7
-	DOV1 = 8
-	DOV2 = 9
-	DVT1 = 10
-	DVT2 = 11
-	TUR3 = 12
-	FLU2 = 13
-	FLU3 = 14
-	DO12 = 15
-	DO22 = 16
-	PSA1 = 17
-	PSA2 = 18
-	DEN1 = 19
-	DEN2 = 20
-	SVEL = 21
-	NAVG = 23
-
-	[split.btl]
-	BOTL = 0
-	PSA1 = 4
-	PSA2 = 5
-	DO11 = 6
-	DO12 = 7
-	DO21 = 8
-	DO22 = 9
-	Potemp090C = 10
-	Potemp190C = 11
-	ETDD = 12
-	PRES = 13
-	DEPTH = 14
-	TE01 = 15
-	TE02 = 16
-	CND1 = 17
-	CND2 = 18
-	DOV1 = 19
-	DOV2 = 20
-	DVT1 = 21
-	DVT2 = 22
-	TUR3 = 23
-	FLU2 = 24
-
-	[split.sb35]
-	BOTL = 0
-	TE35 = 16
-
-	
-[split.xbt]
-	DEPTH = 0
-	TEMP = 1
-	SVEL = 2	
-
-[split.ladcp]
-	DEPTH = 0
-	EWCT = 1
-	NSCT = 2
-
-[split.tsg]
-	SSJT = 18
-	SSTP = 19
-	SSPS = 21
-
-[split.casino]
+	[casino.split]
 	LATITUDE = 2
 	LONGITUDE = 3
 	BATH = 35

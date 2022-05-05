@@ -29,19 +29,19 @@ for key in cfg['cruise'].keys():
     # print(cfg['cruise'].get(key))
 print(end='\n')
 
-d = cfg['split']['ctd']
+d = cfg['ctd']['split']
 print(d, end='\n')
 for key in d.keys():
     print("{}: {}".format(key, d[key]))
 print(end='\n')
 
-d = cfg['split']['ctdAll']
+d = cfg['ctdAll']['split']
 print(d, end='\n')
 for key in d.keys():
     print("{}: {}".format(key, d[key]))
 print(end='\n')
 
-d = cfg['split']['btl']
+d = cfg['btl']['split']
 print(d, end='\n')
 for key in d.keys():
     print("{}: {}".format(key, d[key]))

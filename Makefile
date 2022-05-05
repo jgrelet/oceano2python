@@ -13,7 +13,7 @@ OPTIONS_CASINO = data/CASINO/*.csv -i CASINO -k LATITUDE LONGITUDE SSJT SSTP SSP
 
 .PHONY: clean-pyc clean-build lint test run build
 
-clean-all:  clean-pyc clean-build
+clean-all: clean-pyc clean-build
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm --force {} +
@@ -29,6 +29,8 @@ lint:
 
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
+
+all: ctd xbt ladcp btl colcor casino
 
 # to run program in GUI mode : make ctd OPT=-g
 # to run program in debug mode : make ctd OPT=-d

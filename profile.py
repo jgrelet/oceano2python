@@ -236,7 +236,7 @@ class Profile:
         dt = datetime
 
         # get the dictionary from toml block, device must be is in lower case
-        hash = cfg['split'][device.lower()]
+        hash = cfg[device.lower()]['split']
 
         # set separator field if declared in toml section, none by default
         if 'separator' in cfg[device.lower()]:
@@ -436,7 +436,7 @@ class Profile:
 
         # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
         if args.keys == None:
-            args.keys = cfg['split'][ti.lower()].keys()
+            args.keys = cfg[ti.lower()]['split'].keys()
 
         # extract header and data from files
         # if args.database:

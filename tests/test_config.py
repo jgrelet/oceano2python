@@ -122,19 +122,19 @@ class testConfig(unittest.TestCase):
 
     def test_split_ctd(self):
         """ Test if all value  in block [split.ctd] are correct """
-        d = self.cfg['split']['ctd']
+        d = self.cfg['ctd']['split']
         for k in d.keys():
             self.assertEqual(d[k], self.splitCtd[k])
 
     def test_split_ctdAll(self):
         """ Test if all value  in block [split.ctdall] are correct """
-        d = self.cfg['split']['ctdAll']
+        d = self.cfg['ctdAll']['split']
         for k in d.keys():
             self.assertEqual(d[k], self.splitCtdAll[k])
 
     def test_split_btl(self):
         """ Test if all value  in block [split.btl] are correct """
-        d = self.cfg['split']['btl']
+        d = self.cfg['btl']['split']
         for k in d.keys():
             self.assertEqual(d[k], self.splitBtl[k])
 
