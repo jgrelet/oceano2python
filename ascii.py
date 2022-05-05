@@ -133,12 +133,13 @@ def writeProfile(cfg, device, fe, r):
         
     fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
-    logging.debug('writing header file: {}'.format(fileName))
     writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
+    print('writing header file: {}'.format(fileName), end='', flush=True)
+    print(' done...')
     
     fileName = "{}/{}_{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
-    print('writing  data  file: {}'.format(fileName), end='', flush=True)
+    print('writing data   file: {}'.format(fileName), end='', flush=True)
     writeDataProfile(fileName, cfg, device.lower(), fe, r)
     print(' done...')
 
