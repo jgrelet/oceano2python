@@ -87,6 +87,8 @@ julianOrigin = 1
 
 
 [btl]
+cruisePrefix   = "fr29"
+stationPrefixLength  = 3
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
 instrumentNumber         = "unknown"
 titleSummary   = "Water sample during PIRATA-FR32 cruise with 22 levels"

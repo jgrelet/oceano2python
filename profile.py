@@ -246,14 +246,31 @@ class Profile:
         if 'julianOrigin' in cfg[device.lower()]:
             self.__julianOrigin = cfg[device.lower()]['julianOrigin']
 
+        # prepare the regex to extract station number from filename
+        # by default, station or profile number is extract from the filename
+        if 'cruisePrefix' in cfg[device.lower()]:
+            cruisePrefix = cfg[device.lower()]['cruisePrefix']
+            print(cruisePrefix)
+        if 'stationPrefixLength' in cfg[device.lower()]:
+            stationPrefixLength = cfg[device.lower()]['stationPrefixLength']
+            print(stationPrefixLength)
+        station_regex = re.compile(f"{cruisePrefix}(\d{{{stationPrefixLength}}})") 
+            
         # read each file and extract header and data and fill sqlite tables
         for file in self.fname:
             process_header = False
             process_data = False
-            station = []
+            sql = {}
+
+            # by default, station or profile number is extract from the filename
+            if station_regex.search(file):
+                [station] = station_regex.search(file).groups()
+                sql['station'] = int(station)
+                logging.debug(f"Station match: {sql['station']}")
+
+
             with fileinput.input(
                 file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
-                sql = {}
                 self.__header = ''
                 print(f"Reading file: {file}")
                 # read all lines in file 
@@ -284,7 +301,7 @@ class Profile:
                         # toml file, section [device.header]
                         for k in self.__regex.keys():
 
-                            # extract STATION number
+                            # extract STATION number if [device][header][station] is defined
                             if k == "station" and self.__regex[k].search(self.__header):
                                 [station] = self.__regex[k].search(self.__header).groups() 
                                 #print("station: {}, type: {}".format(station, type(station)))
