@@ -24,13 +24,13 @@ table_station = """
         CREATE TABLE station (
 	    id INTEGER PRIMARY KEY,
         header TEXT,
-        station INT NOT NULL UNIQUE,
-	    date_time TEXT NOT NULL UNIQUE,
+        STATION INT NOT NULL UNIQUE,
+	    DATE_TIME TEXT NOT NULL UNIQUE,
         end_date_time TEXT,
-	    julian_day REAL NOT NULL UNIQUE,
-	    latitude REAL NOT NULL,
+	    DAYD REAL NOT NULL UNIQUE,
+	    LATITUDE REAL NOT NULL,
         lat TEXT,
-	    longitude REAL NOT NULL,
+	    LONGITUDE REAL NOT NULL,
         lon TEXT,
         max_depth REAL,
         bath REAL,
@@ -46,7 +46,7 @@ table_data = """
         id INTEGER PRIMARY KEY,
         station_id INTEGER,
         FOREIGN KEY (station_id) 
-            REFERENCES station (id) 
+            REFERENCES STATION (id) 
         ); """
 
 class Profile:
@@ -198,19 +198,19 @@ class Profile:
                     self.__data[k] = np.empty(n) 
 
         # get data from table station and fill array
-        #query = self.db.query('SELECT julian_day, latitude, longitude, bath FROM station')
-        query = self.db.select('station', ['id','station', 'julian_day', 'end_date_time',
-            'latitude', 'longitude', 'bath'])
+        #query = self.db.query('SELECT DAYD, latitude, longitude, bath FROM station')
+        query = self.db.select('station', ['id','STATION', 'DAYD', 'end_date_time',
+            'LATITUDE', 'LONGITUDE', 'bath'])
         logging.debug(query)
         profil_pk = []
         for idx, item in enumerate(query):
             profil_pk.append(item['id'])
-            self.__data['PROFILE'][idx] = item['station']
-            #print(item['station'])
-            self.__data['TIME'][idx] = item['julian_day']
+            self.__data['PROFILE'][idx] = item['STATION']
+            #print(item['STATION'])
+            self.__data['TIME'][idx] = item['DAYD']
             #self.__data['END_TIME'][idx] = item['end_date_time']
-            self.__data['LATITUDE'][idx] = item['latitude']
-            self.__data['LONGITUDE'][idx] = item['longitude']
+            self.__data['LATITUDE'][idx] = item['LATITUDE']
+            self.__data['LONGITUDE'][idx] = item['LONGITUDE']
             self.__data['BATH'][idx] = item['bath']
 
         # initialize array
@@ -282,8 +282,8 @@ class Profile:
             # by default, station or profile number is extract from the filename
             if station_regex != None and station_regex.search(file):
                 [station] = station_regex.search(file).groups()
-                sql['station'] = int(station)
-                logging.debug(f"Station match: {sql['station']}")
+                sql['STATION'] = int(station)
+                logging.debug(f"Station match: {sql['STATION']}")
 
 
             with fileinput.input(
@@ -322,7 +322,7 @@ class Profile:
                             if k == "station" and self.__regex[k].search(self.__header):
                                 [station] = self.__regex[k].search(self.__header).groups() 
                                 #print("station: {}, type: {}".format(station, type(station)))
-                                sql['station'] = int(station)
+                                sql['STATION'] = int(station)
 
                             # key is DATETIME
                             if k == "DATETIME" and self.__regex[k].search(self.__header):
@@ -396,8 +396,8 @@ class Profile:
                             dtf = cfg[device.lower()]['dateTimeFormat']  
                         else:
                             dtf = "%d/%m/%Y %H:%M:%S"                    
-                        sql['date_time'] = dt.strptime(dateTime, dtf)
-                        sql['julian_day'] = tools.dt2julian(sql['date_time'])  
+                        sql['DATE_TIME'] = dt.strptime(dateTime, dtf)
+                        sql['DAYD'] = tools.dt2julian(sql['DATE_TIME'])  
                                 
                         # insert or query return last cursor, get the value of the primary key
                         # with lastrowid
