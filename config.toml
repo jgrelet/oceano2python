@@ -26,8 +26,8 @@ PI             = "BOURLES"
 CREATOR        = "Jacques.Grelet@ird.fr"
 
 [ctd]
-cruisePrefix   = "fr29"
-stationPrefixLength  = 3
+# extract profile/station number from fileName
+#station = 'fr29(\d{3})'
 titleSummary  = "CTD profiles processed during PIRATA-FR29 cruise"
 typeInstrument   = "SBE911+"
 instrumentNumber  = "09P1263"
@@ -87,8 +87,7 @@ julianOrigin = 1
 
 
 [btl]
-cruisePrefix   = "fr29"
-stationPrefixLength  = 3
+station = 'fr29(\d{3})'
 typeInstrument           = "SBE32 standard 24 Niskin bottles"
 instrumentNumber         = "unknown"
 titleSummary   = "Water sample during PIRATA-FR32 cruise with 22 levels"
@@ -149,8 +148,7 @@ instrumentNumber         = 102
 	TE35 = 16
 
 [xbt]
-cruisePrefix   = "fr29"
-stationPrefixLength  = 3
+station = '[CT]\d+_(\d{5})'
 typeInstrument   = "SIPPICAN+"
 instrumentNumber  = "N/A"
 acquisitionSoftware = "WinMK21"
@@ -165,7 +163,7 @@ comment        = "Extract from .edf files"
 
 	[xbt.header]
 	endHeader = '^Depth\s*\(m\)'
-	station = 'Sequence\s*#\s*:\s*(\d*)'
+	#station = 'Sequence\s*#\s*:\s*(\d*)'
 	TIME = 'Time of Launch\s*[:=]\s*(\d+):(\d+):(\d+)'
 	DATE = 'Date of Launch\s*[:=]\s*(\d+)/(\d+)/(\d+)'
 	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
@@ -179,8 +177,7 @@ comment        = "Extract from .edf files"
 
 
 [ladcp]
-cruisePrefix   = "fr29"
-stationPrefixLength  = 3
+station = 'fr29(\d{3})'
 typeInstrument   = "LADCP WH150/WH300"
 instrumentNumber  = "24543/24085"
 acquisitionSoftware = "BBTALK"

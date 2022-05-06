@@ -4,7 +4,8 @@ file_extractor.py
 import fileinput
 import linecache
 import logging
-from operator import length_hint
+from operator import length_hint, ne
+from tkinter import N
 import toml
 import sys
 import argparse
@@ -228,14 +229,19 @@ class Profile:
 
         self.m = m
         self.n = n
+        if n == 0:
+            sys.exit("No file read, check for a match between the file names and the toml configuration file")    
 
     def read_files(self, cfg, device):
 
         logging.debug("Enter in read_files()")
         # initialize datetime object
         dt = datetime
+        station_regex = None
+        fileName_dict = {}
+        new_fileName_dict ={}
 
-        # get the dictionary from toml block, device must be is in lower case
+        # get the dictionary from toml split block, device must be is in lower case
         hash = cfg[device.lower()]['split']
 
         # set separator field if declared in toml section, none by default
@@ -246,24 +252,35 @@ class Profile:
         if 'julianOrigin' in cfg[device.lower()]:
             self.__julianOrigin = cfg[device.lower()]['julianOrigin']
 
-        # prepare the regex to extract station number from filename
-        # by default, station or profile number is extract from the filename
-        if 'cruisePrefix' in cfg[device.lower()]:
-            cruisePrefix = cfg[device.lower()]['cruisePrefix']
-            print(cruisePrefix)
-        if 'stationPrefixLength' in cfg[device.lower()]:
-            stationPrefixLength = cfg[device.lower()]['stationPrefixLength']
-            print(stationPrefixLength)
-        station_regex = re.compile(f"{cruisePrefix}(\d{{{stationPrefixLength}}})") 
-            
-        # read each file and extract header and data and fill sqlite tables
-        for file in self.fname:
+        # prepare the regex to extract station number from filename by defaut
+        # if [device]['station'] defined
+        if 'station' in cfg[device.lower()]:
+            station_regex = re.compile(cfg[device.lower()]['station'])
+            logging.debug(f"Station regex: {station_regex}")
+            # Sometimes, when files start with different letters, the argv list is not well ordered 
+            for file in self.fname:
+                if station_regex.search(file):
+                    [station] = station_regex.search(file).groups()
+                    fileName_dict[int(station)] = file
+                else:  # filename dosn't match regex
+                    continue
+            # use list comprehension to reoder the dictionnary fileName_dict
+            for v in sorted(fileName_dict.keys()):
+                new_fileName_dict[v]= fileName_dict[v]
+            # [(fileName_dict[key]= value) for (key, value) in sorted(fileName_dict.items(), key=lambda x: x[1])]
+        else:
+            # we have to build a dictionary from the list of files
+            for i in range(1, len(self.fname)):
+                new_fileName_dict[i] = self.fname[i-1]
+
+        # read each file from dict and extract header and data, fill sqlite tables and array
+        for station, file in new_fileName_dict.items():
             process_header = False
             process_data = False
             sql = {}
 
             # by default, station or profile number is extract from the filename
-            if station_regex.search(file):
+            if station_regex != None and station_regex.search(file):
                 [station] = station_regex.search(file).groups()
                 sql['station'] = int(station)
                 logging.debug(f"Station match: {sql['station']}")
@@ -394,7 +411,7 @@ class Profile:
                         # now, extract and process all data   
                         # split the line, remove leading and trailing space before
                         p = line.strip().split(self.__separator)
-                        #logging.debug(f"line split: {p}")
+                        logging.debug(f"line split: {p}")
                         #logging.debug(f"line end: {p[-1]}")
                         
                         # skip to next line in file when skipLineWith is defined
