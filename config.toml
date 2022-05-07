@@ -48,6 +48,8 @@ julianOrigin = 1
 	type = 'Type\s*:\s*(.*)'
 
 	[ctd.split]
+	# column start at 0
+	# SCAN = 0
 	ETDD = 1
 	PRES = 2
 	DEPTH = 3
