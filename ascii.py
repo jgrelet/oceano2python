@@ -99,8 +99,9 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
             if k == 'PROFILE' or k == 'PRFL':
                 f.write(f"{fmt}       -1 " % (fe[k][i]))
             elif k == 'TIME':
+                # save date in EPIC format (numeric) in profile header
                 f.write(f" {fmt} {'%s'}" % (fe[k][i] - fe.julian_from_year, 
-                    tools.julian2format(fe[k][i])))
+                    tools.julian2format(fe[k][i], "%Y%m%d%H%M%S")))
             else:
                 if np.isnan(fe[k][i]):
                     #print(k, type(fe[k][i]))

@@ -408,6 +408,8 @@ class Profile:
 
                     if process_data:
 
+                        # reset sql dict to use with data table
+                        sql = {}
                         # now, extract and process all data   
                         # split the line, remove leading and trailing space before
                         p = line.strip().split(self.__separator)
@@ -420,16 +422,16 @@ class Profile:
                             if cfg[device.lower()]['skipLineWith'] in p[-1]:
                                 continue
 
-                        sql = {}
                         # insert data from list p with indice hash[key]
                         #[sql[key] = p[hash[key]]  for key in self.keys]
                         sql['station_id'] = pk
-                        for key in self.keys:
+                        for key in self.keys:              
                             if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]:
                                 sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
                             else:
                                 logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
                                 sql[key] = float(p[hash[key]]) 
+                         
                         #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )
 
