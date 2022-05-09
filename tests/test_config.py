@@ -38,8 +38,7 @@ class testConfig(unittest.TestCase):
                        'PI': 'BOURLES',
                        'CREATOR': 'Jacques.Grelet@ird.fr'}
 
-        self.ctd = {'cruisePrefix': 'fr29',
-                    'stationPrefixLength': 3,
+        self.ctd = {'station': 'fr29(\d{3})',
                     'titleSummary': 'CTD profiles processed during PIRATA-FR29 cruise',
                     'typeInstrument': 'SBE911+',
                     'instrumentNumber': '09P1263',
@@ -58,8 +57,7 @@ class testConfig(unittest.TestCase):
                           'operator': 'Operator\s*:\s*(.*)',
                           'type': 'Type\s*:\s*(.*)'}
 
-        self.xbt = {'cruisePrefix': "fr29",
-                    'stationPrefixLength': 3,
+        self.xbt = {'station': '[CT]\d+_(\d{5})',
                     'typeInstrument': "SIPPICAN+",
                     'instrumentNumber': "N/A",
                     'acquisitionSoftware': "WinMK21",
@@ -155,7 +153,7 @@ class testConfig(unittest.TestCase):
 
     def test_split_xbt(self):
         """ Test if all value  in block [split.xbt] are correct """
-        d = self.cfg['split']['xbt']
+        d = self.cfg['xbt']['split']
         for k in d.keys():
             self.assertEqual(d[k], self.splitXbt[k])
 
