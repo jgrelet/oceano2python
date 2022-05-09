@@ -87,7 +87,7 @@ fi
 **Add this line in your ~/.bashrc
 
 ``` bash
-  export $PYTHONPATH = /mnt/c/git/Python/oceano2python
+export $PYTHONPATH = /mnt/c/git/Python/oceano2python
 ```
 
 ## Usage
@@ -97,7 +97,7 @@ By default, the program uses the configuration file config.toml.
 ``` bash
 cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/CTD
 oceano.py data/cnv/dfr320*.cnv -c ../config.toml  -i CTD -k PRES DEPTH ETDD TEMP PSAL DENS SVEL DOX2 FLU2 FLU3 TUR3 NAVG
-oceano.py data/btl/fr320*.btl -c ../config.toml  -i BTL  -k PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
+oceano.py data/btl/fr320*.btl -c ../config.toml  -i BTL  -k PRES DEPTH TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
 
 cd /mnt/c/cruises/PIRATA/PIRATA-FR32/data-processing/CELERITE
 oceano.py data/XBT*.edf -c ../config.toml -i XBT -k DEPTH TEMP SVEL
