@@ -63,6 +63,11 @@ make tsg
 make casino
 make ctd OPT=-g   
 make ctd OPT=-d
+```
+
+or:
+
+``` bash
 make all
 ```
 
@@ -81,7 +86,9 @@ fi
 
 **Add this line in your ~/.bashrc
 
+``` bash
   export $PYTHONPATH = /mnt/c/git/Python/oceano2python
+```
 
 ## Usage
 
