@@ -30,7 +30,7 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
                 f.write(f"{t}  ")
                 #query = self.db.query('SELECT end_date_time FROM station')
                 # need to cast <class 'numpy.int32'> to int 
-                query = fe.db.select('station', ['end_date_time'], station = int(fe['PROFILE'][i]))
+                query = fe.db.select('station', ['end_date_time', 'filename'], station = int(fe['PROFILE'][i]))
                 for idx, item in enumerate(query):
                     dt = item['end_date_time']
                     if dt == None:
@@ -38,6 +38,7 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
                     else:
                         print(f"{dt}  ", end='')
                         f.write(f"{dt}  ")
+                    filename = item['filename']
 
             elif k == 'LATITUDE':
                 lat = tools.Dec2dmc(fe['LATITUDE'][i],'N')
@@ -57,19 +58,21 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
                     print(f"{fmt}  " % (fe[k][i]), end='')
                     f.write(f"{fmt}  " % (fe[k][i]))
 
-        # get max value for each profile
+        # get max value for each profile, DEPTH or PRES is the first value => keys[0]
         col = f"MAX({fe.keys[0]})"
+        print(fe.keys[0], int(fe['PROFILE'][i]))
         query = fe.db.query(
             f"SELECT {col} FROM data WHERE station_id = {int(fe['PROFILE'][i])}")
         for idx, item in enumerate(query):
             dt = item[col]
             if dt == None:
-                pass
+                print(' 1e+36 ', end='')
+                f.write(' 1e+36 ')
             else:
                 print("%6.1f  " % (item[col]), end='')
                 f.write("%6.1f  " % (item[col]))
-        print(end = '\n')
-        f.write('\n')
+        print(f" {filename}", end = '\n')
+        f.write(f" {filename}\n")
       
     f.close()
     

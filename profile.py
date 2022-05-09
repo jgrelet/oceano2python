@@ -11,6 +11,7 @@ import sys
 import argparse
 import numpy as np
 import re
+import os
 from glob import glob
 from datetime import datetime
 import tools
@@ -23,7 +24,7 @@ import netcdf
 table_station = """
         CREATE TABLE station (
 	    id INTEGER PRIMARY KEY,
-        header TEXT,
+        filename TEXT,
         STATION INT NOT NULL UNIQUE,
 	    DATE_TIME TEXT NOT NULL UNIQUE,
         end_date_time TEXT,
@@ -283,6 +284,7 @@ class Profile:
             if station_regex != None and station_regex.search(file):
                 [station] = station_regex.search(file).groups()
                 sql['STATION'] = int(station)
+                sql['filename'] =  os.path.basename(file)
                 logging.debug(f"Station match: {sql['STATION']}")
 
 
