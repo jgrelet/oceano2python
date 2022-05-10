@@ -24,7 +24,7 @@ def writeProfile(cfg, device, fe, r):
     fileName = "{}/OS_{}_{}.nc".format(cfg['global']
                                        ['NETCDF'], cfg['cruise']['CYCLEMESURE'], device)
 
-    print(f"writing netCDF file: {fileName}", end='', flush=True)  
+    print(f"writing netCDF file: {fileName}")  
 
     if not os.path.exists(cfg['global']['NETCDF']):
         os.makedirs(cfg['global']['NETCDF'])
@@ -81,6 +81,7 @@ def writeProfile(cfg, device, fe, r):
             setattr(ncvars[key], k, hash[k])
     nc._enddef()
 
+    print("Writing Global attributes")
     # add global attributes
     nc.data_type = "OceanSITES profile data"
     nc.Conventions = "CF-1.7"
@@ -110,6 +111,7 @@ def writeProfile(cfg, device, fe, r):
 
     # write the ncvars
     for key in variables:
+        print(f"Writing variable : {key}")
         if any(key in item for item in fe.variables_1D):
             ncvars[key][:] = fe[key]
         else:
@@ -117,7 +119,7 @@ def writeProfile(cfg, device, fe, r):
 
     # close the NETCDF file
     nc.close()
-    print(' done...')
+    print('done...')
 
 def writeTrajectory(cfg, device, fe, r):
 

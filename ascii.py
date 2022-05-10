@@ -61,7 +61,7 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
         # get max value for each profile, DEPTH or PRES is the first value => keys[0]
         col = f"MAX({fe.keys[0]})"
         query = fe.db.query(
-            f"SELECT {col} FROM data WHERE station_id = {i}")
+            f"SELECT {col} FROM data WHERE station_id = {i+1}")
         for idx, item in enumerate(query):
             dt = item[col]
             if dt == None:
