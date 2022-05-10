@@ -76,7 +76,7 @@ make all
 As the project consists of several files (modules), it is necessary to define the access path to the program in the environment variables PYTHONPATH and PATH. 
 For example, under Linux:
 
-**Update your PATH in your ~/.profile as:
+**Update your PATH in your ~/.profile as:**
  
  ``` bash
  if [ -d "/mnt/c/git/Python/oceano2python" ] ; then
@@ -84,7 +84,7 @@ For example, under Linux:
 fi
 ```
 
-**Add this line in your ~/.bashrc
+**Add this line in your ~/.bashrc**
 
 ``` bash
 export $PYTHONPATH = /mnt/c/git/Python/oceano2python
