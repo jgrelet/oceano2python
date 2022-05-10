@@ -316,13 +316,6 @@ if __name__ == "__main__":
         sys.exit()
         
     context.process(args, cfg, device)
-
-
-    # write ASCII hdr and data files
-    #ascii.writeAscii(cfg, device, fe, r)
-
-    # write the NetCDF file
-    #netcdf_profile.writeNetCDF(cfg, device, fe, r)
     
     
 
