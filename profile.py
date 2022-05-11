@@ -74,7 +74,6 @@ class Profile:
         # private attibutes:
         self.__dbname = dbname
         self.__separator = separator
-        #self.__encoding = "ISO-8859-1"
         self.__julianOrigin = 0
         self.__header = ''
         self.__data = {}

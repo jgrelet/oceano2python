@@ -64,6 +64,7 @@ class Trajectory:
         self.fname = fname
         self.keys = keys
         self.roscop = roscop
+        self.encoding = "ISO-8859-1"
         self.n = 0
         self.m = 0
         self.lineHeader = 0
