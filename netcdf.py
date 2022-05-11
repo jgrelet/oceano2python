@@ -4,6 +4,38 @@ from numpy import arange, complexfloating, dtype
 import os
 from datetime import datetime
 
+# add global attributes
+def writeGlobalAttributes(nc, cfg, device, type):
+
+    print("Writing global attributes")
+    nc.data_type = f"OceanSITES {type} data"
+    nc.Conventions = "CF-1.7"
+    if 'title' in cfg[device.lower()]:
+        nc.title = cfg['global']['title']
+    if 'institution' in cfg[device.lower()]:
+        nc.institution = cfg['global']['institution']
+    if 'source' in cfg[device.lower()]:
+        nc.source = cfg['global']['source']
+    if 'comment' in cfg[device.lower()]:
+        nc.comment = cfg['global']['comment']
+    if 'references' in cfg[device.lower()]:
+        nc.references = cfg['global']['references']
+    nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
+    nc.time_coverage_start = cfg['cruise']['BEGINDATE']
+    nc.time_coverage_end = cfg['cruise']['ENDDATE']
+    nc.TIMEZONE = cfg['cruise']['TIMEZONE']
+    nc.data_assembly_center = cfg['cruise']['INSTITUTE']
+    if 'typeInstrument' in cfg[device.lower()]:
+        nc.type_instrument = cfg[device.lower()]['typeInstrument']
+    if 'instrumentNumber' in cfg[device.lower()]:
+        nc.instrument_number = cfg[device.lower()]['instrumentNumber']
+    nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
+    nc.pi_name = cfg['cruise']['PI']
+    nc.processing_state = "1A"
+    nc.codification = "OOPC"
+    nc.format_version = "1.2"
+    nc.Netcdf_version = "3.6"
+
 
 def writeProfile(cfg, device, fe, r):
 
@@ -44,12 +76,10 @@ def writeProfile(cfg, device, fe, r):
         len(level), len(time), len(lat), len(lon)))
 
     # create variables
-    # add dimensions before variables list
-    #for k in fe.keys:
-    #    variables.append(k)
-    # variables.extend(fe.keys())
     variables = fe.getlist()
     for key in variables:
+
+        print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
         hash = r[key]
         # _FillValue attribute must be set when variable is created
@@ -74,51 +104,24 @@ def writeProfile(cfg, device, fe, r):
         else:
             ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
+
         # remove from the dictionary
         hash.pop('types')
+
         # create dynamically variable attributes
         for k in hash.keys():
             setattr(ncvars[key], k, hash[k])
+
     nc._enddef()
 
-    print("Writing Global attributes")
-    # add global attributes
-    nc.data_type = "OceanSITES profile data"
-    nc.Conventions = "CF-1.7"
-    if 'title' in cfg[device.lower()]:
-        nc.title = cfg['global']['title']
-    if 'institution' in cfg[device.lower()]:
-        nc.institution = cfg['global']['institution']
-    if 'source' in cfg[device.lower()]:
-        nc.source = cfg['global']['source']
-    if 'comment' in cfg[device.lower()]:
-        nc.comment = cfg['global']['comment']
-    if 'references' in cfg[device.lower()]:
-        nc.references = cfg['global']['references']
-    nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
-    nc.time_coverage_start = cfg['cruise']['BEGINDATE']
-    nc.time_coverage_end = cfg['cruise']['ENDDATE']
-    nc.TIMEZONE = cfg['cruise']['TIMEZONE']
-    nc.data_assembly_center = cfg['cruise']['INSTITUTE']
-    if 'typeInstrument' in cfg[device.lower()]:
-        nc.type_instrument = cfg[device.lower()]['typeInstrument']
-    if 'instrumentNumber' in cfg[device.lower()]:
-        nc.instrument_number = cfg[device.lower()]['instrumentNumber']
-    nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
-    nc.pi_name = cfg['cruise']['PI']
-    nc.processing_state = "1A"
-    nc.codification = "OOPC"
-    nc.format_version = "1.2"
-    nc.Netcdf_version = "3.6"
+    writeGlobalAttributes(nc, cfg, device, 'profile')
 
-    # debug
+    # write the ncvars
+    print(f"Writing variables")
     for key in variables:
         logging.debug(" var: {}, dims: {}, shape: {}, dtype: {}, ndim: {}".format(
             key, ncvars[key].dimensions, ncvars[key].shape, ncvars[key].dtype, ncvars[key].ndim))
 
-    # write the ncvars
-    for key in variables:
-        print(f"Writing variable : {key}")
         if any(key in item for item in fe.variables_1D):
             ncvars[key][:] = fe[key]
         else:
@@ -165,7 +168,8 @@ def writeTrajectory(cfg, device, fe, r):
     # create variables
     print("")
     for key in variables:
-        print(f"Writing variable : {key}")
+
+        print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
         hash = r[key]
         # _FillValue attribute must be set when variable is created
@@ -183,50 +187,23 @@ def writeTrajectory(cfg, device, fe, r):
   
         # remove from the dictionary
         hash.pop('types')
+        
         # create dynamically variable attributes
         for k in hash.keys():
             setattr(ncvars[key], k, hash[k])
+
     nc._enddef()
 
-    print("Writing Global attributes", end='')
-    # add global attributes
-    nc.data_type = "OceanSITES trajectory data"
-    nc.Conventions = "CF-1.7"
-    if 'title' in cfg[device.lower()]:
-        nc.title = cfg['global']['title']
-    if 'institution' in cfg[device.lower()]:
-        nc.institution = cfg['global']['institution']
-    if 'source' in cfg[device.lower()]:
-        nc.source = cfg['global']['source']
-    if 'comment' in cfg[device.lower()]:
-        nc.comment = cfg['global']['comment']
-    if 'references' in cfg[device.lower()]:
-        nc.references = cfg['global']['references']
-    nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
-    nc.time_coverage_start = cfg['cruise']['BEGINDATE']
-    nc.time_coverage_end = cfg['cruise']['ENDDATE']
-    nc.TIMEZONE = cfg['cruise']['TIMEZONE']
-    nc.data_assembly_center = cfg['cruise']['INSTITUTE']
-    if 'typeInstrument' in cfg[device.lower()]:
-        nc.type_instrument = cfg[device.lower()]['typeInstrument']
-    if 'instrumentNumber' in cfg[device.lower()]:
-        nc.instrument_number = cfg[device.lower()]['instrumentNumber']
-    nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
-    nc.pi_name = cfg['cruise']['PI']
-    nc.processing_state = "1A"
-    nc.codification = "OOPC"
-    nc.format_version = "1.2"
-    nc.Netcdf_version = "3.6"
+    writeGlobalAttributes(nc, cfg, device, 'profile')
 
-    # debug
+    # write variables with ncvars
+    print(f"Writing variables")
     for key in variables:
         logging.debug(" var: {}, dims: {}, shape: {}, dtype: {}, ndim: {}".format(
             key, ncvars[key].dimensions, ncvars[key].shape, ncvars[key].dtype, ncvars[key].ndim))
 
-    # write variables with ncvars
-    for key in variables:
         ncvars[key][:] = fe[key]
 
     # close the NETCDF file
     nc.close()
-    print(' done...')
+    print('done...')
