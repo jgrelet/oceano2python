@@ -143,7 +143,7 @@ instrumentNumber         = 102
     [sbe35.header]
 	endHeader = '^dd\d+,\d+$'
 	#station = '^[*]\s+FileName\s+=\s+(.*)$'
-        station = '^[*]+\s+Station:(\d+)$'
+    station = '^[*]+\s+Station:(\d+)$'
 
 	[sb35.split]
 	BOTL = 0
@@ -201,10 +201,35 @@ comment        = "Extract from .lad files"
 	DEPTH = 0
 	EWCT = 1
 	NSCT = 2
+	
+[rbr]
+station = 'fr29(\d{5})'
+separator = ","
+typeInstrument   = "RBR CTD Concerto"
+instrumentNumber  = ""
+title_summary  = "Data extract from RBR CTD Concerto"
+comment   = "Extract from .txt files"
+
+	[rbr.header]
+	#09/04/2017 21:33:07 08°50.75848 S  034°43.69047 W 1143.4
+	endHeader = 'Time'
+	DATETIME = '(\d+)/(\d+)/(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = '(\d+)\D(\d+\.\d+)\s+([NS])'
+	LONGITUDE = '(\d+)\D(\d+\.\d+)\s+([EW])'
+	#BATH = '[EW]\s+(\d+\.\d+)'
+
+	[rbr.split]
+	#Time,Conductivity,Temperature,Pressure,Chlorophyll a,Sea pressure,Depth,Salinity,Speed of sound,Specific conductivity,Density anomaly
+	#DATETIME = 0
+	TEMP = 2
+	PRES = 3
+	FLU2 = 4
+	DEPTH = 6
+	PSAL = 7
+	SVEL = 8
+	DENS = 10
 
 [tsg]
-cruisePrefix   = "fr29"
-stationPrefixLength  = 3 
 separator = ","
 typeInstrument   = "SBE21"
 instrumentNumber  = "3199"

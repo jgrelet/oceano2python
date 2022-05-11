@@ -216,7 +216,7 @@ class Trajectory:
             process_data = False
             station = []
             with fileinput.input(
-                file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
+                file, openhook=fileinput.hook_encoded("utf_8")) as f: 
                 sql = {}
                 self.__header = ''
                 print(f"Reading file: {file}")

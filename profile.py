@@ -289,7 +289,8 @@ class Profile:
 
 
             with fileinput.input(
-                file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
+                #file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
+                file, openhook=fileinput.hook_encoded("utf-8")) as f: 
                 self.__header = ''
                 print(f"Reading file: {file}")
                 # read all lines in file 

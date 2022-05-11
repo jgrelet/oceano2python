@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # https://github.com/jgrelet/oceano2python
 
 import argparse
@@ -20,13 +21,18 @@ import os.path as path
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
-dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP'], 'TRAJECTORY': ['TSG','MTO', 'CASINO']}
+# todo: move dict_type and typeInstrument to config.toml
+dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR'], 'TRAJECTORY': ['TSG','MTO', 'CASINO']}
 
 # typeInstrument is a dictionary as key: files extension
-typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
-    'EDF', 'edf'), 'LADCP': ('lad', 'LAD'), 'TSG': ('colcor','COLCOR'), 'CASINO': ('csv'),
-    'BTL': ('btl', 'BTL')}
-#variables_1D = ['TIME', 'LATITUDE', 'LONGITUDE','BATH']
+typeInstrument =   {'CTD': ('cnv', 'CNV'), 
+                    'XBT': ('EDF', 'edf'), 
+                    'LADCP': ('lad', 'LAD'), 
+                    'RBR': ('txt', 'TXT', 'rbr'),
+                    'TSG': ('colcor','COLCOR'), 
+                    'CASINO': ('csv'),
+                    'BTL': ('btl', 'BTL')}
+
 ti = typeInstrument  # an alias
 filesBrowsePosition_row = 2
 filesBrowsePosition_column = 1
@@ -35,11 +41,6 @@ filesBrowsePosition_column = 1
 configfile = 'oceano.cfg'
 # default file name for ROSCOP csv
 defaultRoscop = 'code_roscop.csv'
-
-# example, PIRATA cruises:
-# FR30:
-# python oceano.py /m/PIRATA-FR30/data-processing/CTD/data/cnv/d*.cnv -i CTD -k PRES TEMP PSAL DOX2 FLU2 -r code_roscop.csv
-
 
 def processArgs():
     # get the path to the module oceano2python, use to file defaut roscop_code
@@ -77,11 +78,6 @@ def processArgs():
     parser.add_argument('files', nargs='*',
                         help='ASCII file(s) to parse')                        
     return parser
-
-# TODOS:
-# DEPTH is missing
-# file name is not clear at startup
-# if no file selected, don't leave the program
 
 
 def defineGUI():
