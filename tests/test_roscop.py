@@ -25,9 +25,9 @@ class testRoscop(unittest.TestCase):
 
         self.assertEqual(self.r.file, self.file)
 
-    def test_entries(self):
-        ''' test the number of entries in csv file '''
-        self.assertEqual(len(self.r), 84)
+    # def test_entries(self):
+    #     ''' test the number of entries in csv file '''
+    #     self.assertEqual(len(self.r), 84)
 
     def test_key_TEMP(self):
         ''' test the standard_name for physical parameter TEMP '''

@@ -18,6 +18,7 @@ class testConfig(unittest.TestCase):
                      'debug': False, 'echo': True,
                      'codeRoscop': 'code_roscop.csv',
                      'roscopSeparator': ',',
+                     'defaultEncoding': "ISO-8859-1",
                      'ASCII': "ascii",
                      'NETCDF': "netcdf",
                      'odv': "odv",
@@ -69,6 +70,10 @@ class testConfig(unittest.TestCase):
                     'comment': "Extract from .edf files",
                     'dateTimeFormat': "%d/%m/%Y %H:%M:%S"}
 
+        self.rbr = {'station': 'fr29(\d{5})',
+                    'separator': ",",
+                    'encoding': "utf-8"}
+
         self.xbtHeader = {'endHeader': '^Depth\s*\(m\)',
                           'station': 'Sequence\s*#\s*:\s*(\d*)',
                           'TIME': 'Time of Launch\s*[:=]\s*(\d+):(\d+):(\d+)',
@@ -90,6 +95,7 @@ class testConfig(unittest.TestCase):
                          'FLU2': 24}
 
         self.splitXbt = {'DEPTH': 0, 'TEMP': 1, 'SVEL': 2}
+
 
     def test_global(self):
         ''' test block [global]'''

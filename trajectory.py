@@ -214,9 +214,14 @@ class Trajectory:
         for file in self.fname:
             process_header = False
             process_data = False
-            station = []
-            with fileinput.input(
-                file, openhook=fileinput.hook_encoded("utf_8")) as f: 
+
+            # select the file encoding, default is "ISO-8859-1" for windows files, or "utf-8"
+            if 'defaultEncoding' in  cfg['global']:
+                self.encoding = cfg['global']['defaultEncoding']
+            if 'encoding' in cfg[device.lower()]:
+                self.encoding = cfg[device.lower()]['encoding']
+
+            with fileinput.input(file, openhook=fileinput.hook_encoded(self.encoding)) as f: 
                 sql = {}
                 self.__header = ''
                 print(f"Reading file: {file}")

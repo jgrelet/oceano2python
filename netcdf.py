@@ -85,18 +85,25 @@ def writeProfile(cfg, device, fe, r):
     # add global attributes
     nc.data_type = "OceanSITES profile data"
     nc.Conventions = "CF-1.7"
-    nc.title = cfg['global']['title']
-    nc.institution = cfg['global']['institution']
-    nc.source = cfg['global']['source']
-    nc.comment = cfg['global']['comment']
-    nc.references = cfg['global']['references']
+    if 'title' in cfg[device.lower()]:
+        nc.title = cfg['global']['title']
+    if 'institution' in cfg[device.lower()]:
+        nc.institution = cfg['global']['institution']
+    if 'source' in cfg[device.lower()]:
+        nc.source = cfg['global']['source']
+    if 'comment' in cfg[device.lower()]:
+        nc.comment = cfg['global']['comment']
+    if 'references' in cfg[device.lower()]:
+        nc.references = cfg['global']['references']
     nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
     nc.time_coverage_start = cfg['cruise']['BEGINDATE']
     nc.time_coverage_end = cfg['cruise']['ENDDATE']
     nc.TIMEZONE = cfg['cruise']['TIMEZONE']
     nc.data_assembly_center = cfg['cruise']['INSTITUTE']
-    nc.type_instrument = cfg[device.lower()]['typeInstrument']
-    nc.instrument_number = cfg[device.lower()]['instrumentNumber']
+    if 'typeInstrument' in cfg[device.lower()]:
+        nc.type_instrument = cfg[device.lower()]['typeInstrument']
+    if 'instrumentNumber' in cfg[device.lower()]:
+        nc.instrument_number = cfg[device.lower()]['instrumentNumber']
     nc.date_update = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
     nc.pi_name = cfg['cruise']['PI']
     nc.processing_state = "1A"

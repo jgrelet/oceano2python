@@ -1,18 +1,18 @@
 [global]
 author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
-debug          = false
-echo           = true
 codeRoscop     = 'code_roscop.csv'
 roscopSeparator = ','
+defaultEncoding = "ISO-8859-1"
+#defaultEncoding = "utf-8"
 ASCII          = "ascii"
 NETCDF         = "netcdf"
 odv            = "odv"
-title			= ''
-history		= ''
-institution = 'IRD'
-source = ''
-comment = ''
-references = ''
+title		   = ''
+history		   = ''
+institution    = 'IRD'
+source         = ''
+comment        = ''
+references     = ''
 
 [cruise]
 CYCLEMESURE    = "PIRATA-FR29"
@@ -205,6 +205,7 @@ comment        = "Extract from .lad files"
 [rbr]
 station = 'fr29(\d{5})'
 separator = ","
+encoding = "utf-8"
 typeInstrument   = "RBR CTD Concerto"
 instrumentNumber  = ""
 title_summary  = "Data extract from RBR CTD Concerto"

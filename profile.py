@@ -74,6 +74,7 @@ class Profile:
         # private attibutes:
         self.__dbname = dbname
         self.__separator = separator
+        #self.__encoding = "ISO-8859-1"
         self.__julianOrigin = 0
         self.__header = ''
         self.__data = {}
@@ -84,6 +85,7 @@ class Profile:
         self.fname = fname
         self.keys = keys
         self.roscop = roscop
+        self.encoding = "ISO-8859-1"
         self.n = 0
         self.m = 0
         self.lineHeader = 0
@@ -100,6 +102,14 @@ class Profile:
     @property
     def julian_from_year(self):
         return tools.dt2julian(datetime(year=self.year, day=1, month=1))
+
+    # @property
+    # def encoding(self):
+    #     return self.__encoding
+
+    # @encoding.setter
+    # def encoding(self, encoding):
+    #     self.__encoding = encoding
 
     # overloading operators
     def __getitem__(self, key):
@@ -287,10 +297,14 @@ class Profile:
                 sql['filename'] =  os.path.basename(file)
                 logging.debug(f"Station match: {sql['STATION']}")
 
+            # select the file encoding, default is "ISO-8859-1" for windows files, or "utf-8"
+            if 'defaultEncoding' in  cfg['global']:
+                self.encoding = cfg['global']['defaultEncoding']
+            if 'encoding' in cfg[device.lower()]:
+                self.encoding = cfg[device.lower()]['encoding']
 
-            with fileinput.input(
-                #file, openhook=fileinput.hook_encoded("ISO-8859-1")) as f: 
-                file, openhook=fileinput.hook_encoded("utf-8")) as f: 
+            with fileinput.input(file, openhook=fileinput.hook_encoded(self.encoding)) as f: 
+                
                 self.__header = ''
                 print(f"Reading file: {file}")
                 # read all lines in file 
@@ -543,12 +557,12 @@ if __name__ == "__main__":
     for file in args.files:  
         files += glob(file)  
 
+    cfg = toml.load(args.config)
     # call fe with  dbname='test.db' to create db file, dbname='test.db'
     #fe = Profile(files, Roscop('code_roscop.csv'), args.keys, dbname='test.db')
     fe = Profile(files, Roscop('code_roscop.csv'), args.keys)
     fe.create_tables()
     logging.debug(f"File(s): {files}, Config: {args.config}")
-    cfg = toml.load(args.config)
     fe.set_regex(cfg, args.instrument, 'header')
     fe.read_files(cfg, args.instrument)
     logging.debug(f"Indices: {fe.n} x {fe.m}\nkeys: {fe.keys}")
