@@ -11,7 +11,7 @@ The last version use an embedded Sqlite3 database to normalize, save and retreiv
 
 See the [wiki](https://github.com/jgrelet/oceano2python/wiki) for a technical description
 
-## Prequisites 
+## Prequisites
 
 You must install the following tools:
 
