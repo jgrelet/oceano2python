@@ -78,4 +78,5 @@ dependencies:
   - zstd=1.5.0
   - pip:
     - julian==0.14
+    - notanorm==2.0.2
 prefix: C:\Users\jgrelet\miniconda3\envs\oceano2python
