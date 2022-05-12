@@ -43,12 +43,39 @@ example:
 conda env create -f environment-windows.yml -n oceano2python
 ```
 
+## Clone the project
+
+Change the current working directory to the location where you want the cloned directory.
+
+``` bash
+git clone https://github.com/jgrelet/oceano2python.git 
+```
+
 ## Export your environment
 
 Duplicate your environment on another machine, just export it to a YAML file, replace "OS" with linux or windows:
 
 ``` bash
 conda env export --no-builds > environment-<OS>.yml
+```
+
+## Configuration
+
+As the project consists of several files (modules), it is necessary to define the access path to the program in the environment variables PYTHONPATH and PATH.
+For example, under Linux:
+
+### Update your PATH in your ~/.profile
+
+``` bash
+ if [ -d "/mnt/c/git/Python/oceano2python" ] ; then
+    PATH="/mnt/c/git/Python/oceano2python:$PATH"
+fi
+```
+
+### Add this line in your ~/.bashrc
+
+``` bash
+export $PYTHONPATH = /mnt/c/git/Python/oceano2python
 ```
 
 ## Build and run
@@ -72,25 +99,6 @@ or:
 
 ``` bash
 make all
-```
-
-## Configuration
-
-As the project consists of several files (modules), it is necessary to define the access path to the program in the environment variables PYTHONPATH and PATH.
-For example, under Linux:
-
-### Update your PATH in your ~/.profile
-
-``` bash
- if [ -d "/mnt/c/git/Python/oceano2python" ] ; then
-    PATH="/mnt/c/git/Python/oceano2python:$PATH"
-fi
-```
-
-### Add this line in your ~/.bashrc
-
-``` bash
-export $PYTHONPATH = /mnt/c/git/Python/oceano2python
 ```
 
 ## Usage
