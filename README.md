@@ -9,6 +9,8 @@ and extract data from header files and write result into ASCII and NetCDF OceanS
 
 The last version use an embedded Sqlite3 database to normalize, save and retreive data from memory.
 
+See the [wiki](https://github.com/jgrelet/oceano2python/wiki) for a technical description
+
 ## Prequisites for Windows
 
 You must install the following tools:
