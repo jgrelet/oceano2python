@@ -11,13 +11,16 @@ The last version use an embedded Sqlite3 database to normalize, save and retreiv
 
 See the [wiki](https://github.com/jgrelet/oceano2python/wiki) for a technical description
 
-## Prequisites for Windows
+## Prequisites 
 
 You must install the following tools:
 
 - Visual Studio Code (<https://code.visualstudio.com/>)
 - Git (<https://git-scm.com/downloads>)
 - miniconda3 (<https://docs.conda.io/en/latest/miniconda.html>)
+
+### For Windows
+
 - chocolatey (<https://chocolatey.org/install>) and install GNU Make package (<https://community.chocolatey.org/packages/make>)
 
 ## Installation from scratch with conda
