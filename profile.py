@@ -267,12 +267,13 @@ class Profile:
         if 'station' in cfg[device.lower()]:
             station_regex = re.compile(cfg[device.lower()]['station'])
             logging.debug(f"Station regex: {station_regex}")
+
             # Sometimes, when files start with different letters, the argv list is not well ordered 
             for file in self.fname:
                 if station_regex.search(file):
                     [station] = station_regex.search(file).groups()
                     fileName_dict[int(station)] = file
-                else:  # filename dosn't match regex
+                else:  # filename doesn't match regex
                     continue
             # use list comprehension to reoder the dictionnary fileName_dict
             for v in sorted(fileName_dict.keys()):
