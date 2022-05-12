@@ -3,7 +3,7 @@
 This program read ASCII file(s) from oceanographic instruments:
 
 - Profile: Seabird CTD or RBR, Bottle, Sippican XBT, RDI LADCP
-- Trajectory: Seabird TSG, IFREMER COLCOR (realtime), IFREMER CASINO 
+- Trajectory: Seabird TSG, IFREMER COLCOR (realtime), IFREMER CASINO
 
 and extract data from header files and write result into ASCII and NetCDF OceanSITES files.
 
@@ -30,6 +30,7 @@ conda activate oceano2python
 conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller pysimplegui
 pip install julian notanorm
 ```
+
 ## Installation based on an YAML environment file
 
 ``` bash
@@ -75,18 +76,18 @@ make all
 
 ## Configuration
 
-As the project consists of several files (modules), it is necessary to define the access path to the program in the environment variables PYTHONPATH and PATH. 
+As the project consists of several files (modules), it is necessary to define the access path to the program in the environment variables PYTHONPATH and PATH.
 For example, under Linux:
 
-**Update your PATH in your ~/.profile as:**
- 
- ``` bash
+### Update your PATH in your ~/.profile
+
+``` bash
  if [ -d "/mnt/c/git/Python/oceano2python" ] ; then
     PATH="/mnt/c/git/Python/oceano2python:$PATH"
 fi
 ```
 
-**Add this line in your ~/.bashrc**
+### Add this line in your ~/.bashrc
 
 ``` bash
 export $PYTHONPATH = /mnt/c/git/Python/oceano2python
