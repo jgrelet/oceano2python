@@ -33,7 +33,6 @@ test:
 
 all: ctd xbt ladcp btl rbr colcor casino
 
-# to run program in GUI mode : make ctd OPT=-g
 # to run program in debug mode : make ctd OPT=-d
 ctd:
 	$(PYTHON) $(MAIN) $(OPTIONS_CTD) $(OPT)
