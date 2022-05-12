@@ -442,12 +442,16 @@ class Profile:
                         # insert data from list p with indice hash[key]
                         #[sql[key] = p[hash[key]]  for key in self.keys]
                         sql['station_id'] = pk
-                        for key in self.keys:              
-                            if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]:
+                        for key in self.keys:          
+                            if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]: 
                                 sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
                             else:
                                 logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
                                 sql[key] = float(p[hash[key]]) 
+                            # memorize last value of julian day if selected to use in table station, 
+                            if key == 'ETDD':
+                                jd = float(sql['ETDD'])
+
                          
                         #self.db.insert("data", station_id = 1, PRES = 1, TEMP = 20, PSAL = 35, DOX2 = 20, DENS = 30)
                         self.db.insert("data",  sql )
@@ -457,10 +461,8 @@ class Profile:
             # add end_date_time in station table if ETDD (julian) is present in data
             if 'ETDD' in self.keys:
                 # Seabird use julian day start at 1, we use jd start at 0
-                tmp = tools.julian2format(float(sql['ETDD']) + self.julian_from_year)
+                tmp = tools.julian2format(jd + self.julian_from_year)
                 self.db.update("station", id = pk, end_date_time = tmp)
-
-                #self.db.update("station", id = pk, end_date_time = dt)
 
         self.update_arrays()
         
