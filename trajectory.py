@@ -189,7 +189,7 @@ class Trajectory:
         
         self.n = n
         if n == 0:
-            sys.exit("No file read, check for a match between the file names and the toml configuration file")    
+            sys.exit("No file read ! Are you in the right directory ? Check for a match between the file names and the toml configuration file")    
         
         # save all database columns as key
         self.keys = self.__data.keys()

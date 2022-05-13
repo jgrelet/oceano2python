@@ -240,7 +240,7 @@ class Profile:
         self.m = m
         self.n = n
         if n == 0:
-            sys.exit("No file read, check for a match between the file names and the toml configuration file")    
+            sys.exit("No file read ! Are you in the right directory ? Check for a match between the file names and the toml configuration file")    
 
     def read_files(self, cfg, device):
 
