@@ -230,7 +230,7 @@ comment   = "Extract from .txt files"
 	SVEL = 8
 	DENS = 10
 
-[tsg]
+[colcor]
 separator = ","
 typeInstrument   = "SBE21"
 instrumentNumber  = "3199"
@@ -246,20 +246,54 @@ depth_intake   = 4
 title_summary  = "Thermosalinograph data acquired with Seabird SBE21 instrument and reduce with THECSAS/COLCOR"
 comment        = "Extract from .colcor files"
 
-	[tsg.header]
+	[colcor.header]
 	isHeader = '^#'
 	isData = 'PIFM,TSCOR'
 
-	[tsg.format]
+	[colcor.format]
 	TIME = '(\d+):(\d+):(\d+)'
 	DATE = '(\d+)/(\d+)/(\d+)'
 	LATITUDE = '([NS]),(\d+),(\d+\.\d+)'
 	LONGITUDE = '([EW]),(\d+),(\d+\.\d+)'
 
-	[tsg.split]
+	[colcor.split]
 	SSJT = 18
 	SSTP = 19
 	SSPS = 21
+	
+[tsg]
+typeInstrument   = "SBE21"
+instrumentNumber  = "3199"
+acquisitionSoftware = "SEASAVE"
+acquisitionVersion = "4.26b"
+processingSoftware = "SBEDataProcessing"
+processingVersion = "4.26b"
+calDate        = "14/01/2019" 
+externalType   = "SBE3S"
+externalSn     = 4074
+externalCalDate = "16/01/2018"
+depth_intake   = 4
+title_summary  = "Thermosalinograph raw data acquired with Seabird SBE21 instrument"
+comment        = "Extract from .cnv files after SBEdataprocessing"
+julianOrigin = 1
+
+	[tsg.header]
+	isHeader = '^[*#]+\s+'
+	endHeader = '^[*]END[*]'
+	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	
+	[tsg.split]
+	# SCAN = 0
+	SSJT = 1
+	CNDC = 2
+	SSTP = 3
+	LATITUDE = 4
+	LONGITUDE = 5
+	ETDD = 6
+	PRES = 7
+	SSPS = 8
+	DENS = 9
+	SVEL = 10
 
 [casino]
 separator = "	"

@@ -18,14 +18,15 @@ EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 # todo: move dict_type and typeInstrument to config.toml
-dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR'], 'TRAJECTORY': ['TSG','MTO', 'CASINO']}
+dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR'], 'TRAJECTORY': ['TSG','COLCOR','MTO', 'CASINO']}
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument =   {'CTD': ('cnv', 'CNV'), 
                     'XBT': ('EDF', 'edf'), 
                     'LADCP': ('lad', 'LAD'), 
                     'RBR': ('txt', 'TXT', 'rbr'),
-                    'TSG': ('colcor','COLCOR'), 
+                    'COLCOR': ('colcor','COLCOR'), 
+                    'TSG': ('cnv','CNV'),
                     'CASINO': ('csv'),
                     'BTL': ('btl', 'BTL')}
 

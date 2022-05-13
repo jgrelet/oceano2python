@@ -231,7 +231,16 @@ class Trajectory:
                     # if header line, save to __header private property and go to next line
                     #logging.debug(f"line read: {line}")
                     if 'endHeader' in self.__regex and self.__regex['endHeader'].match(line):
-                       process_data = True
+                        
+                        for k in self.__regex.keys():
+                        # key is DATETIME
+                            if k == "DATETIME" and self.__regex[k].search(self.__header):
+                                month, day, year, hour, minute, second = \
+                                    self.__regex[k].search(self.__header).groups() 
+                                if not self.__year:
+                                    self.__year = int(year)
+                        process_data = True
+                        continue
                     if 'isHeader' in self.__regex and self.__regex['isHeader'].match(line):
                         self.__header += line 
                         continue
@@ -240,16 +249,23 @@ class Trajectory:
 
                     if process_data:
                         sql = {}
-                        if self.__regex['TIME'].search(line):
-                                hour, minute, second = \
-                                self.__regex['TIME'].search(line).groups() 
-                                #print(f"{hour}:{minute}:{second}")
-                        if self.__regex['DATE'].search(line):
-                                day, month, year = \
-                                self.__regex['DATE'].search(line).groups() 
-                                #print(f"{day}/{month}/{year}")
-                        # format date and time to  "May 09 2011 16:33:53"
-                        dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"  
+                        if 'TIME' in self.__regex and self.__regex['TIME'].search(line):
+                            hour, minute, second = \
+                            self.__regex['TIME'].search(line).groups() 
+                            #print(f"{hour}:{minute}:{second}")
+                        if 'DATE' in self.__regex and  self.__regex['DATE'].search(line):
+                            day, month, year = \
+                            self.__regex['DATE'].search(line).groups() 
+                            #print(f"{day}/{month}/{year}")
+                            # format date and time to  "May 09 2011 16:33:53"
+                            dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}" 
+                             # set datetime object   
+                            if 'dateTimeFormat' in cfg[device.lower()]:
+                                dtf = cfg[device.lower()]['dateTimeFormat']  
+                            else:
+                                dtf = "%d/%m/%Y %H:%M:%S"                    
+                            date_time = dt.strptime(dateTime, dtf)
+                            sql['DAYD'] = tools.dt2julian(date_time)   
                         #print(dateTime)
                         if 'LATITUDE' in self.__regex and self.__regex['LATITUDE'].search(line):
                             (lat_hemi, lat_deg, lat_min) = \
@@ -268,14 +284,6 @@ class Trajectory:
                                     (float(lon_deg) + (float(lon_min) / 60.)) * -1
                             sql['LONGITUDE'] = longitude  
                             #sql['lon'] = tools.Dec2dmc(float(longitude),'E')
-                                
-                        # set datetime object   
-                        if 'dateTimeFormat' in cfg[device.lower()]:
-                            dtf = cfg[device.lower()]['dateTimeFormat']  
-                        else:
-                            dtf = "%d/%m/%Y %H:%M:%S"                    
-                        date_time = dt.strptime(dateTime, dtf)
-                        sql['DAYD'] = tools.dt2julian(date_time)  
 
                         #print(f"Line: {line} separator: {self.__separator}")
                         # now, extract and process all data   
@@ -286,8 +294,19 @@ class Trajectory:
 
                         # insert data from list p with indice hash[key]
                         for key in self.keys:
-                            logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
-                            sql[key] = float(p[hash[key]].replace(',','.')) 
+                            if key == 'ETDD':
+                                sql['DAYD'] = float(p[hash[key]].replace(',','.')) + \
+                                    tools.dt2julian(datetime(self.year, day=1, month=1)) - float(self.julianOrigin)
+                                sql['ETDD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                            elif key == 'DAYD':
+                                sql['DAYD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                            elif key == 'LATITUDE':
+                                sql['LATITUDE'] = float(p[hash[key]].replace(',','.')) 
+                            elif key == 'LONGITUDE':
+                                sql['LONGITUDE'] = float(p[hash[key]].replace(',','.')) 
+                            else:
+                                logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
+                                sql[key] = float(p[hash[key]].replace(',','.')) 
                         self.db.insert("data",  sql )
                         process_data = False
                 # end of readline in file
@@ -330,7 +349,8 @@ class Trajectory:
 
         # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
         self.set_regex(cfg, ti, 'header')
-        self.set_regex(cfg, ti, 'format')
+        if 'format' in cfg[ti.lower()]:
+            self.set_regex(cfg, ti, 'format')
 
         self.read_files(cfg, ti)
         #return fe
