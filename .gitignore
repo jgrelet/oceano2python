@@ -8,11 +8,8 @@
 *~
 *.ctd
 *_ctd
-*.btl
 *_btl
-*.ladcp
 *_ladcp
-*.xbt
 *_xbt
 *.nc
 *.xml
