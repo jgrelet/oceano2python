@@ -275,10 +275,8 @@ class Profile:
                     fileName_dict[int(station)] = file
                 else:  # filename doesn't match regex
                     continue
-            # use list comprehension to reoder the dictionnary fileName_dict
-            for v in sorted(fileName_dict.keys()):
-                new_fileName_dict[v]= fileName_dict[v]
-            # [(fileName_dict[key]= value) for (key, value) in sorted(fileName_dict.items(), key=lambda x: x[1])]
+            # use dictionary comprehension to re-order the dictionnary fileName_dict
+            new_fileName_dict = { key:value for (key, value) in sorted(fileName_dict.items())}
         else:
             # we have to build a dictionary from the list of files
             for i in range(1, len(self.fname)):
