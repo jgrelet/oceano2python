@@ -285,12 +285,14 @@ class Trajectory:
                             sql['LONGITUDE'] = longitude  
                             #sql['lon'] = tools.Dec2dmc(float(longitude),'E')
 
-                        #print(f"Line: {line} separator: {self.__separator}")
                         # now, extract and process all data   
                         # split the line, remove leading and trailing space before
                         p = line.strip().split(self.__separator)
-                        #print(p)
                         logging.debug(f"line split: {p}")
+
+                        # skip if list p is empty, case of empty line
+                        if not p:
+                            continue
 
                         # insert data from list p with indice hash[key]
                         for key in self.keys:

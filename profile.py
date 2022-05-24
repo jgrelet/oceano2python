@@ -430,6 +430,10 @@ class Profile:
                         p = line.strip().split(self.__separator)
                         logging.debug(f"line split: {p}")
                         #logging.debug(f"line end: {p[-1]}")
+
+                        # skip if list p is empty, case of empty line
+                        if not p:
+                            continue
                         
                         # skip to next line in file when skipLineWith is defined
                         if 'skipLineWith' in cfg[device.lower()]:             
