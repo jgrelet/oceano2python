@@ -29,7 +29,7 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
 
     # write variables and unit
     for k in fe.keys:
-        f.write(f"  {k} [{fe.roscop[k]['units']}]")
+        f.write(f"  {k} [{fe.roscop[k]['units']}]\t")
     f.write("\n")
 
     type = 'C'
