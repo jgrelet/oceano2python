@@ -38,19 +38,19 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
         
         for m in range(fe.size[i+1]):
             fmt = fe.roscop['PROFILE']['format']
-            f.write(f"%s\t{fmt}\t%s\t" % (cfg['cruise']['CYCLEMESURE'], fe['PROFILE'][i], type))
-            f.write(f"%s\t" % (tools.julian2format(fe['TIME'][i], "%Y-%m-%dT%H:%M:%S")))
-            f.write(f"%f\t" % (fe['LATITUDE'][i]))
-            f.write(f"%f\t" % (fe['LONGITUDE'][i]))
+            f.write(f"%s\t{fmt}\t%s" % (cfg['cruise']['CYCLEMESURE'], fe['PROFILE'][i], type))
+            f.write(f"\t%s" % (tools.julian2format(fe['TIME'][i], "%Y-%m-%dT%H:%M:%S")))
+            f.write(f"\t%f" % (fe['LATITUDE'][i]))
+            f.write(f"\t%f" % (fe['LONGITUDE'][i]))
             if fe.iskey('BATH'):
                 fmt = fe.roscop['BATH']['format']
-                f.write(f"{fmt}\t" % (fe['BATH'][i]))
+                f.write(f"\t{fmt}" % (fe['BATH'][i]))
             else:
                 f.write("\t")
             for k in fe.keys:        
                 if fe[k][i][m] != fe.roscop[k]['_FillValue']:
                     fmt = fe.roscop[k]['format']
-                    f.write(f"{fmt}\t" % (fe[k][i][m]))
+                    f.write(f"\t{fmt}" % (fe[k][i][m]))
                 else:
                     f.write("\t")
             f.write("\n")
