@@ -25,7 +25,7 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
     f.write(f"//<Source>{os.getcwd()}</Sources>\n")
     f.write(f"//<Creator>{cfg['cruise']['CREATOR']}</Creator>\n")
     f.write("//\n")
-    f.write("Cruise\tStation\tType\tmon/day/yr\thh:mm\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]")
+    f.write("Cruise\tStation\tType\tyyyy-mm-ddThh:mm:ss.sss\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]")
 
     # write variables and unit
     for k in fe.keys:
@@ -40,8 +40,8 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
             fmt = fe.roscop['PROFILE']['format']
             f.write(f"%s\t{fmt}\t%s" % (cfg['cruise']['CYCLEMESURE'], fe['PROFILE'][i], type))
             f.write(f"\t%s" % (tools.julian2format(fe['TIME'][i], "%Y-%m-%dT%H:%M:%S")))
-            f.write(f"\t%f" % (fe['LATITUDE'][i]))
             f.write(f"\t%f" % (fe['LONGITUDE'][i]))
+            f.write(f"\t%f" % (fe['LATITUDE'][i]))
             if fe.iskey('BATH'):
                 fmt = fe.roscop['BATH']['format']
                 f.write(f"\t{fmt}" % (fe['BATH'][i]))
