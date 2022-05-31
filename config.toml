@@ -297,6 +297,7 @@ julianOrigin = 1
 
 [casino]
 separator = "	"
+typeInstrument   = "Meteo, Ferrybox"
 acquisitionSoftware = "CASINO"
 acquisitionVersion = ""
 processingSoftware = ""
