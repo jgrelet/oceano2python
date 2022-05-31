@@ -16,8 +16,8 @@ from datetime import datetime
 import tools
 from physical_parameter import Roscop
 from notanorm import SqliteDb 
-import sqlite3
 import ascii
+import odv
 import netcdf
 
 # define the data table
@@ -81,6 +81,13 @@ class Trajectory:
     @property
     def julian_from_year(self):
         return tools.dt2julian(datetime(year=self.year, day=1, month=1))
+
+    def iskey(self, key):
+        ''' return true ik key is in dict self.__data '''
+        if key in self.__data:
+            return True
+        else:
+            return False
 
     # overloading operators
     def __getitem__(self, key):
@@ -355,9 +362,12 @@ class Trajectory:
             self.set_regex(cfg, ti, 'format')
 
         self.read_files(cfg, ti)
-        #return fe
+        
         # write ASCII hdr and data files
         ascii.writeTrajectory(cfg, ti, self, self.roscop)
+
+        if cfg['global']['odv']:
+            odv.writeTrajectory(cfg, ti, self, self.roscop)
 
         # write the NetCDF file
         netcdf.writeTrajectory(cfg, ti, self, self.roscop)
