@@ -18,6 +18,7 @@ import tools
 from physical_parameter import Roscop
 from notanorm import SqliteDb 
 import ascii
+import odv
 import netcdf
 
 # define SQL station table
@@ -87,6 +88,8 @@ class Profile:
         self.encoding = "ISO-8859-1"
         self.n = 0
         self.m = 0
+        # for each profile, store the indice of the max value
+        self.size = {}
         self.lineHeader = 0
         self.db = SqliteDb(self.__dbname) 
 
@@ -109,6 +112,13 @@ class Profile:
     # @encoding.setter
     # def encoding(self, encoding):
     #     self.__encoding = encoding
+
+    def iskey(self, key):
+        ''' return true ik key is in dict self.__data '''
+        if key in self.__data:
+            return True
+        else:
+            return False
 
     # overloading operators
     def __getitem__(self, key):
@@ -190,6 +200,7 @@ class Profile:
             query = self.db.query(f"SELECT COUNT({self.keys[0]}) FROM data where station_id = {i}")
             #print(query)
             size = int(query[0][f"COUNT({self.keys[0]})"])
+            self.size[i] = size
             if size > m:
                 m = size
         
@@ -506,12 +517,17 @@ class Profile:
         self.set_regex(cfg, ti, 'header')
 
         self.read_files(cfg, ti)
-        #return fe
+
         # write ASCII hdr and data files
         ascii.writeProfile(cfg, ti, self, self.roscop)
 
+        # write ODV file
+        if cfg['global']['odv']:
+            odv.writeProfile(cfg, ti, self, self.roscop)
+
         # write the NetCDF file
         netcdf.writeProfile(cfg, ti, self, self.roscop)
+
 
 # for testing in standalone context
 # ---------------------------------
