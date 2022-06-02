@@ -279,7 +279,7 @@ julianOrigin = 1
 
 	[tsg.header]
 	isHeader = '^[*#]+\s+'
-	endHeader = '^[*]END[*]'
+	endHeader = '^[*]END[*]$'
 	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
 	
 	[tsg.split]

@@ -7,7 +7,7 @@ import tools
 import numpy as np
 from datetime import datetime
     
-def writeHeaderProfile(hdrFile, cfg, device, fe, r):
+def writeHeaderProfile(hdrFile, cfg, device, fe):
     f = open(hdrFile, 'w')
     # first line, header ex: 
     # PIRATA-FR30  THALASSA  IRD  SBE911+  09P-1263  BOURLES
@@ -76,7 +76,7 @@ def writeHeaderProfile(hdrFile, cfg, device, fe, r):
     f.close()
     
     
-def writeDataProfile(dataFile, cfg, device, fe, r):
+def writeDataProfile(dataFile, cfg, device, fe):
     f = open(dataFile, 'w')
 
     # write header, first line
@@ -130,23 +130,23 @@ def writeDataProfile(dataFile, cfg, device, fe, r):
                 f.write("\n")
     f.close()
 
-def writeProfile(cfg, device, fe, r):
+def writeProfile(cfg, device, fe):
     if not os.path.exists(cfg['global']['ASCII']):
         os.makedirs(cfg['global']['ASCII'])
         
     fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
-    writeHeaderProfile(fileName, cfg, device.lower(), fe, r, )
+    writeHeaderProfile(fileName, cfg, device.lower(), fe)
     print('writing header file: {}'.format(fileName), end='', flush=True)
     print(' done...')
     
     fileName = "{}/{}_{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
     print('writing data   file: {}'.format(fileName), end='', flush=True)
-    writeDataProfile(fileName, cfg, device.lower(), fe, r)
+    writeDataProfile(fileName, cfg, device.lower(), fe)
     print(' done...')
 
-def writeDecimalDataTrajectory(dataFile, cfg, device, fe, r):
+def writeDecimalDataTrajectory(dataFile, cfg, device, fe):
     f = open(dataFile, 'w')
 
     # write header, first line
@@ -175,7 +175,7 @@ def writeDecimalDataTrajectory(dataFile, cfg, device, fe, r):
         f.write("\n")
     f.close()
 
-def writeHumanDataTrajectory(dataFile, cfg, device, fe, r):
+def writeHumanDataTrajectory(dataFile, cfg, device, fe):
     f = open(dataFile, 'w')
 
     # write header, first line
@@ -219,7 +219,7 @@ def writeHumanDataTrajectory(dataFile, cfg, device, fe, r):
     f.close()
 
 
-def writeTrajectory(cfg, device, fe, r):
+def writeTrajectory(cfg, device, fe):
     if not os.path.exists(cfg['global']['ASCII']):
         os.makedirs(cfg['global']['ASCII'])
     
@@ -227,13 +227,13 @@ def writeTrajectory(cfg, device, fe, r):
     fileName = "{}/{}.{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
     print('writing file: {}'.format(fileName), end='', flush=True)
-    writeHumanDataTrajectory(fileName, cfg, device.lower(), fe, r, )
+    writeHumanDataTrajectory(fileName, cfg, device.lower(), fe)
     print(' done...')
     
     # write ascii file with decimal time and position
     fileName = "{}/{}_{}".format(cfg['global']['ASCII'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
     print('writing file: {}'.format(fileName), end='', flush=True)
-    writeDecimalDataTrajectory(fileName, cfg, device.lower(), fe, r)
+    writeDecimalDataTrajectory(fileName, cfg, device.lower(), fe)
     print(' done...')
    

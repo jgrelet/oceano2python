@@ -37,7 +37,7 @@ def writeGlobalAttributes(nc, cfg, device, type):
     nc.Netcdf_version = "3.6"
 
 
-def writeProfile(cfg, device, fe, r):
+def writeProfile(cfg, device, fe):
 
     # ncvars is a dictionary that store a NETCDF variable for each physical parameter key
     ncvars = {}
@@ -81,7 +81,7 @@ def writeProfile(cfg, device, fe, r):
 
         print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
-        hash = r[key]
+        hash = fe.roscop[key]
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
         if '_FillValue' in hash:
@@ -131,7 +131,7 @@ def writeProfile(cfg, device, fe, r):
     nc.close()
     print('done...')
 
-def writeTrajectory(cfg, device, fe, r):
+def writeTrajectory(cfg, device, fe):
 
     # ncvars is a dictionary that store a NETCDF variable for each physical parameter key
     ncvars = {}
@@ -171,7 +171,7 @@ def writeTrajectory(cfg, device, fe, r):
 
         print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
-        hash = r[key]
+        hash = fe.roscop[key]
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
         if '_FillValue' in hash:

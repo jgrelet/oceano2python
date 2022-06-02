@@ -7,105 +7,103 @@ from re import S
 import tools
 import numpy as np
 from datetime import datetime
-    
-def writeProfile(cfg, device, fe, r):
+
+def writeHeader(cfg, device, dataType):
+    '''Specifying * for Type (dataType) lets ODV make the choice. 
+    If Bot. Depth values are not available, you should leave this field empty.'''
     if not os.path.exists(cfg['global']['odv']):
         os.makedirs(cfg['global']['odv'])
     
     fileName = "{}/{}_{}_odv.txt".format(cfg['global']['odv'], 
         cfg['cruise']['CYCLEMESURE'], device.lower())
     print('writing data   file: {}'.format(fileName), end='', flush=True)
-    f = open(fileName, 'w')
+    fd = open(fileName, 'w')
 
     # write odv header
-    f.write(f"//ODV Spreadsheet file : {fileName}\n")
-    f.write(f"//Data treated : {datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')}\n")
-    f.write("//<DataType>Profiles</DataType>\n")
-    f.write(f"//<InstrumentType>{cfg[device.lower()]['typeInstrument']}</InstrumentType>\n")
-    f.write(f"//<Source>{os.getcwd()}</Sources>\n")
-    f.write(f"//<Creator>{cfg['cruise']['CREATOR']}</Creator>\n")
-    f.write("//\n")
-    f.write("Cruise\tStation\tType\tyyyy-mm-ddThh:mm:ss.sss\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]")
-
-    # write variables and unit
-    for k in fe.keys:
-        f.write(f"\t{k} [{fe.roscop[k]['units']}]")
-    f.write("\n")
-
+    fd.write(f"//ODV Spreadsheet file : {fileName}\n")
+    fd.write(f"//Data treated : {datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')}\n")
+    fd.write(f"//<DataType>{dataType}</DataType>\n")
+    fd.write(f"//<InstrumentType>{cfg[device.lower()]['typeInstrument']}</InstrumentType>\n")
+    fd.write(f"//<Source>{os.getcwd()}</Sources>\n")
+    fd.write(f"//<Creator>{cfg['cruise']['CREATOR']}</Creator>\n")
+    fd.write("//\n")
+    fd.write(f"Cruise\tStation\tType\tyyyy-mm-ddThh:mm:ss.sss\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]")
+    return fd
+    
+def writeProfile(cfg, device, fe):
+   
+    # You should use B for stations with less than about 250 samples (e.g., bottle data) and C for stations 
+    # with more than about 250 samples (e.g., CTD, XBT, etc.)
     if cfg[device.lower()] == 'btl':
-        type = 'B'
+        stationType = 'B'
     else:
-        type = 'C'
+        stationType = 'C'
+
+    # write header and return file descriptor
+    fd = writeHeader(cfg, device, 'Profiles')
+    # write following variables and unit
+    for k in fe.keys:
+        fd.write(f"\t{k} [{fe.roscop[k]['units']}]")
+    fd.write("\n")
+
     for i in range(fe.n):
         # for each valid line in array (not _fillvalue)
         
         for m in range(fe.size[i+1]):
             fmt = fe.roscop['PROFILE']['format']
-            f.write(f"%s\t{fmt}\t%s" % (cfg['cruise']['CYCLEMESURE'], fe['PROFILE'][i], type))
-            f.write(f"\t%s" % (tools.julian2format(fe['TIME'][i], "%Y-%m-%dT%H:%M:%S")))
+            fd.write(f"%s\t{fmt}\t%s" % (cfg['cruise']['CYCLEMESURE'], fe['PROFILE'][i], stationType))
+            fd.write(f"\t%s" % (tools.julian2format(fe['TIME'][i], "%Y-%m-%dT%H:%M:%S")))
             fmt = fe.roscop['LONGITUDE']['format']
-            f.write(f"\t{fmt}" % (fe['LONGITUDE'][i]))
+            fd.write(f"\t{fmt}" % (fe['LONGITUDE'][i]))
             fmt = fe.roscop['LATITUDE']['format']
-            f.write(f"\t{fmt}" % (fe['LATITUDE'][i]))
-            if fe.iskey('BATH'):
+            fd.write(f"\t{fmt}" % (fe['LATITUDE'][i]))
+            if fe.iskey('BATH') and not np.isnan(fe['BATH'][i]):
                 fmt = fe.roscop['BATH']['format']
-                f.write(f"\t{fmt}" % (fe['BATH'][i]))
+                fd.write(f"\t{fmt}" % (fe['BATH'][i]))
             else:
-                f.write("\t")
-            for k in fe.keys:        
-                if fe[k][i][m] != fe.roscop[k]['_FillValue']:
+                fd.write("\t")
+            for k in fe.keys:       
+                if not np.isnan(fe[k][i][m]):
+                #if fe[k][i][m] != fe.roscop[k]['_FillValue']:
                     fmt = fe.roscop[k]['format']
-                    f.write(f"\t{fmt}" % (fe[k][i][m]))
+                    fd.write(f"\t{fmt}" % (fe[k][i][m]))
                 else:
-                    f.write("\t")
-            f.write("\n")
-    f.close()
+                    fd.write("\t")
+            fd.write("\n")
+    fd.close()
     print(' done...')
 
-def writeTrajectory(cfg, device, fe, r):
-    if not os.path.exists(cfg['global']['odv']):
-        os.makedirs(cfg['global']['odv'])
+def writeTrajectory(cfg, device, fe):
     
-    fileName = "{}/{}_{}_odv.txt".format(cfg['global']['odv'], 
-        cfg['cruise']['CYCLEMESURE'], device.lower())
-    print('writing data   file: {}'.format(fileName), end='', flush=True)
-    f = open(fileName, 'w')
-
-    # write odv header
-    f.write(f"//ODV Spreadsheet file : {fileName}\n")
-    f.write(f"//Data treated : {datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')}\n")
-    f.write("//<DataType>Profiles</DataType>\n")
-    f.write(f"//<InstrumentType>{cfg[device.lower()]['typeInstrument']}</InstrumentType>\n")
-    f.write(f"//<Source>{os.getcwd()}</Sources>\n")
-    f.write(f"//<Creator>{cfg['cruise']['CREATOR']}</Creator>\n")
-    f.write("//\n")
-    f.write("Cruise\tStation\tType\tyyyy-mm-ddThh:mm:ss.sss\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]")
-
+    # write header and return file descriptor
+    fd = writeHeader(cfg, device, 'Trajectories')
     # write variables and unit
     for k in fe.keys:
         if k == 'ID' or k == 'DAYD' or k == 'LATITUDE' or k == 'LONGITUDE':
             continue
         else: 
-            f.write(f"\t{k} [{fe.roscop[k]['units']}]")
-    f.write("\n")
+            fd.write(f"\t{k} [{fe.roscop[k]['units']}]")
+    fd.write("\n")
 
-    type = 'B'
+    # If Bot. Depth values are not available, you should leave this field empty, 
+    # usually the case for trajectory
+    stationType = ''
 
     for i in range(fe.n):
         # Trajectory data of this form have exactly one sample per station. The number of stations
         # equals the number of observation along the trajectory, which is usually large.     
         fmt = "%06d"
-        f.write(f"%s\t{fmt}\t%s" % (cfg['cruise']['CYCLEMESURE'], i+1, type))
-        f.write(f"\t%s" % (tools.julian2format(fe['DAYD'][i], "%Y-%m-%dT%H:%M:%S")))
+        fd.write(f"%s\t{fmt}\t%s" % (cfg['cruise']['CYCLEMESURE'], i+1, stationType))
+        fd.write(f"\t%s" % (tools.julian2format(fe['DAYD'][i], "%Y-%m-%dT%H:%M:%S")))
         fmt = fe.roscop['LONGITUDE']['format']
-        f.write(f"\t{fmt}" % (fe['LONGITUDE'][i]))
+        fd.write(f"\t{fmt}" % (fe['LONGITUDE'][i]))
         fmt = fe.roscop['LATITUDE']['format']
-        f.write(f"\t{fmt}" % (fe['LATITUDE'][i]))
-        if fe.iskey('BATH'):
+        fd.write(f"\t{fmt}" % (fe['LATITUDE'][i]))
+        if fe.iskey('BATH') and not np.isnan(fe['BATH'][i]):
             fmt = fe.roscop['BATH']['format']
-            f.write(f"\t{fmt}" % (fe['BATH'][i]))
+            fd.write(f"\t{fmt}" % (fe['BATH'][i]))
         else:
-            f.write("\t")
+            fd.write("\t")
         
         for k in fe.keys: 
             if k == 'ID' or k == 'DAYD' or k == 'LATITUDE' or k == 'LONGITUDE':
@@ -113,11 +111,11 @@ def writeTrajectory(cfg, device, fe, r):
             else: 
                 if fe[k][i] != fe.roscop[k]['_FillValue']:
                     fmt = fe.roscop[k]['format']
-                    f.write(f"\t{fmt}" % (fe[k][i]))
+                    fd.write(f"\t{fmt}" % (fe[k][i]))
                 else:
-                    f.write("\t")
-        f.write("\n")
-    f.close()
+                    fd.write("\t")
+        fd.write("\n")
+    fd.close()
     print(' done...')
 
   
