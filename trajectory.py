@@ -317,7 +317,10 @@ class Trajectory:
                                 logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
                                 sql[key] = float(p[hash[key]].replace(',','.')) 
                         self.db.insert("data",  sql )
-                        process_data = False
+                        if 'isData' in self.__regex and self.__regex['isData'].search(line):
+                            process_data = False
+                        #process_data = True
+                        
                 # end of readline in file
 
         self.update_arrays()
@@ -364,13 +367,13 @@ class Trajectory:
         self.read_files(cfg, ti)
         
         # write ASCII hdr and data files
-        ascii.writeTrajectory(cfg, ti, self, self.roscop)
+        ascii.writeTrajectory(cfg, ti, self)
 
         if cfg['global']['odv']:
-            odv.writeTrajectory(cfg, ti, self, self.roscop)
+            odv.writeTrajectory(cfg, ti, self)
 
         # write the NetCDF file
-        netcdf.writeTrajectory(cfg, ti, self, self.roscop)
+        netcdf.writeTrajectory(cfg, ti, self)
 
 # for testing in standalone context
 # ---------------------------------
