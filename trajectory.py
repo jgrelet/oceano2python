@@ -367,13 +367,16 @@ class Trajectory:
         self.read_files(cfg, ti)
         
         # write ASCII hdr and data files
-        ascii.writeTrajectory(cfg, ti, self)
+        if cfg['global']['ASCII']:
+            ascii.writeTrajectory(cfg, ti, self)
 
+        # write the ODV file
         if cfg['global']['odv']:
             odv.writeTrajectory(cfg, ti, self)
 
         # write the NetCDF file
-        netcdf.writeTrajectory(cfg, ti, self)
+        if cfg['global']['NETCDF']:
+            netcdf.writeTrajectory(cfg, ti, self)
 
 # for testing in standalone context
 # ---------------------------------

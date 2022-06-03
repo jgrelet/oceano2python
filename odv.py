@@ -77,7 +77,7 @@ def writeTrajectory(cfg, device, fe):
     
     # write header and return file descriptor
     fd = writeHeader(cfg, device, 'Trajectories')
-    # write variables and unit
+    # write variables and unit, deletes variables already in the header
     for k in fe.keys:
         if k == 'ID' or k == 'DAYD' or k == 'LATITUDE' or k == 'LONGITUDE':
             continue

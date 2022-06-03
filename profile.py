@@ -519,14 +519,16 @@ class Profile:
         self.read_files(cfg, ti)
 
         # write ASCII hdr and data files
-        ascii.writeProfile(cfg, ti, self)
+        if cfg['global']['ASCII']:
+            ascii.writeProfile(cfg, ti, self)
 
-        # write ODV file
+        # write the ODV file
         if cfg['global']['odv']:
             odv.writeProfile(cfg, ti, self)
 
         # write the NetCDF file
-        netcdf.writeProfile(cfg, ti, self)
+        if cfg['global']['NETCDF']:
+            netcdf.writeProfile(cfg, ti, self)
 
 
 # for testing in standalone context
