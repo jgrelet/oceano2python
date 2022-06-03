@@ -1,5 +1,5 @@
 '''
-file_extractor.py
+profile.py
 '''
 import fileinput
 import linecache
@@ -125,7 +125,7 @@ class Profile:
         ''' overload r[key] '''
         if key not in self.__data:
             logging.error(
-                " file_extractor.py: invalid key: \"{}\"".format(key))
+                " profile.py: invalid key: \"{}\"".format(key))
         else:
             return self.__data[key]
 
@@ -536,10 +536,10 @@ class Profile:
 if __name__ == "__main__":
 
     # usage:
-    # python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
-    # python file_extractor.py data/CTD/cnv/dfr2900*.cnv -i CTD -k PRES ETDD TEMP PSAL DOX2 DENS
-    # python file_extractor.py data/XBT/T7_0000*.EDF -k DEPTH TEMP SVEL -i XBT
-    # python file_extractor.py data/CTD/btl/fr290*.btl -i BTL -k BOTL DEPTH ETDD TE01 PSA1 DO11
+    # python profile.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
+    # python profile.py data/CTD/cnv/dfr2900*.cnv -i CTD -k PRES ETDD TEMP PSAL DOX2 DENS
+    # python profile.py data/XBT/T7_0000*.EDF -k DEPTH TEMP SVEL -i XBT
+    # python profile.py data/CTD/btl/fr290*.btl -i BTL -k BOTL DEPTH ETDD TE01 PSA1 DO11
 
     # typeInstrument is a dictionary as key: files extension
     typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (

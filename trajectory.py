@@ -1,5 +1,5 @@
 '''
-file_extractor.py
+trajectory.py
 '''
 import fileinput
 import linecache
@@ -94,7 +94,7 @@ class Trajectory:
         ''' overload r[key] '''
         if key not in self.__data:
             logging.error(
-                " file_extractor.py: invalid key: \"{}\"".format(key))
+                " trajectory.py: invalid key: \"{}\"".format(key))
         else:
             return self.__data[key]
 
@@ -383,10 +383,9 @@ class Trajectory:
 if __name__ == "__main__":
 
     # usage:
-    # python file_extractor.py data/CTD/cnv/dfr2900[1-3].cnv -i CTD -d
-    # python file_extractor.py data/CTD/cnv/dfr2900*.cnv -i CTD -k PRES ETDD TEMP PSAL DOX2 DENS
-    # python file_extractor.py data/XBT/T7_0000*.EDF -k DEPTH TEMP SVEL -i XBT
-    # python file_extractor.py data/CTD/btl/fr290*.btl -i BTL -k BOTL DEPTH ETDD TE01 PSA1 DO11
+    # python trajectory.py data/TSG/SEASAVE/*.cnv -i TSG -d
+    # python trajectory.py data/TSG/SEASAVE/*1.cnv -i TSG -k ETDD LATITUDE LONGITUDE SSJT SSTP SSPS
+    # python trajectory.py data/TSG/COLCOR/*.COLCOR -i TSG -k ETDD LATITUDE LONGITUDE SSJT SSTP SSPS
 
     # typeInstrument is a dictionary as key: files extension
     typeInstrument = {'CTD': ('cnv', 'CNV'), 'XBT': (
@@ -450,5 +449,5 @@ if __name__ == "__main__":
     logging.debug(fe.getlist())
     for k in fe.keys:
         for i in range(fe.n):
-            logging.debug(f"{fe[k][i][1]} : {fe[k][i][fe.m-1]}")
+            logging.debug(f"{k}: {fe[k][i]}")
     fe.close()
