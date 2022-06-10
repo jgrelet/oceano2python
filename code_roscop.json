@@ -1,0 +1,3453 @@
+{
+    "ID": {
+        "types": "int32",
+        "long_name": "acquisiton number",
+        "units": "1.0",
+        "format": "%05d",
+        "_FillValue": 99999.0,
+        "comment": "Acquisition number",
+        "default_value": " usually for trajectory or Time-serie"
+    },
+    "PRLF": {
+        "types": "int32",
+        "long_name": "profile number",
+        "units": "1.0",
+        "format": "%05d",
+        "_FillValue": 99999.0,
+        "comment": "Station number",
+        "default_value": " a station could be have more than one cast"
+    },
+    "PROFILE": {
+        "types": "int32",
+        "long_name": "profile number",
+        "units": "1.0",
+        "format": "%05d",
+        "_FillValue": 99999.0,
+        "comment": "Station number",
+        "default_value": " a station could be have more than one cast"
+    },
+    "LATITUDE": {
+        "types": "float32",
+        "long_name": "latitude of measurement",
+        "standard_name": "latitude",
+        "units": "degrees_north",
+        "format": "%8.5f",
+        "axis": "Y",
+        "reference": "WGS84",
+        "coordinate_reference_frame": "urn:ogc:crs:EPSG::4326"
+    },
+    "LONGITUDE": {
+        "types": "float32",
+        "long_name": "longitude of measurement",
+        "standard_name": "longitude",
+        "units": "degrees_east",
+        "format": "%9.5f",
+        "axis": "X",
+        "reference": "WGS84",
+        "coordinate_reference_frame": "urn:ogc:crs:EPSG::4327"
+    },
+    "TIME": {
+        "types": "float64",
+        "long_name": "time of measurement",
+        "standard_name": "time",
+        "units": "days since 1950-01-01T00:00:00Z",
+        "conventions": "Relative julian days with decimal part (as parts of the day)",
+        "valid_min": 0.0,
+        "valid_max": 90000.0,
+        "format": "%6.6f",
+        "axis": "T"
+    },
+    "ETDD": {
+        "types": "float64",
+        "long_name": "ellapsed time",
+        "units": "1.0",
+        "valid_min": 0.0,
+        "valid_max": 90000.0,
+        "format": "%9.5f",
+        "_FillValue": 1e+36
+    },
+    "DEPH": {
+        "types": "float32",
+        "long_name": "depth of measurement",
+        "standard_name": "depth",
+        "units": "meter",
+        "positive": "down",
+        "valid_min": 0.0,
+        "valid_max": 9000.0,
+        "format": "%7.2f",
+        "_FillValue": 1e+36,
+        "axis": "Z",
+        "coordinate_reference_frame": "urn:ogc:crs:EPSG::5831"
+    },
+    "DEPTH": {
+        "types": "float32",
+        "long_name": "depth of measurement",
+        "standard_name": "depth",
+        "units": "meter",
+        "positive": "down",
+        "valid_min": 0.0,
+        "valid_max": 9000.0,
+        "format": "%7.2f",
+        "_FillValue": 1e+36,
+        "axis": "Z",
+        "coordinate_reference_frame": "urn:ogc:crs:EPSG::5831"
+    },
+    "PRES": {
+        "types": "float32",
+        "long_name": "sea water pressure",
+        "standard_name": "sea_water_pressure",
+        "units": "decibar",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 9000.0,
+        "format": "%7.2f",
+        "_FillValue": 1e+36,
+        "comment": "Pressure (dbar) of the measurement"
+    },
+    "ABCP": {
+        "types": "float32",
+        "long_name": "alpha beta carotenes",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "ALKW": {
+        "types": "float32",
+        "long_name": "alkalinity",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 9000.0,
+        "format": "%6.1lf",
+        "_FillValue": 9999.9
+    },
+    "ALKY": {
+        "types": "float32",
+        "long_name": "alkalinity",
+        "units": "millimole/m3",
+        "valid_min": 1500.0,
+        "valid_max": 2500.0,
+        "format": "%4.0lf",
+        "_FillValue": 9999.0
+    },
+    "AMIS": {
+        "types": "float32",
+        "long_name": "sediment amino-acids",
+        "units": "microgram/g",
+        "valid_min": 0.0,
+        "valid_max": 7000.0,
+        "format": "%4.0lf",
+        "_FillValue": 9999.0
+    },
+    "AMON": {
+        "types": "float32",
+        "long_name": "ammonium (nh4-n) content",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "AMOW": {
+        "types": "float32",
+        "long_name": "ammonium (nh4-n) content",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "ASDW": {
+        "types": "float32",
+        "long_name": "absorption standard deviation",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "ATMP": {
+        "types": "float32",
+        "long_name": "atmospheric pressure",
+        "units": "hectopascal",
+        "valid_min": 1000.0,
+        "valid_max": 1030.0,
+        "format": "%8.3lf",
+        "_FillValue": 9999.999
+    },
+    "ATMS": {
+        "types": "float32",
+        "long_name": "atmospheric pressure - sea lev",
+        "standard_name": "air_pressure_at_sea_level",
+        "units": "hectoPascal",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 940.0,
+        "valid_max": 1030.0,
+        "format": "%6.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Atmospheric pressure at sea level"
+    },
+    "AXAP": {
+        "types": "float32",
+        "long_name": "alloxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "BATH": {
+        "types": "float32",
+        "long_name": "bathymetric depth",
+        "units": "meter",
+        "valid_min": 0.0,
+        "valid_max": 11000.0,
+        "format": "%6.1f",
+        "_FillValue": -1.0,
+        "resolution": 0.1
+    },
+    "BCCS": {
+        "types": "float32",
+        "long_name": "bacteria number sediment",
+        "units": "10+9 cell/dm3",
+        "valid_min": 0.0,
+        "valid_max": 9999.9,
+        "format": "%6.1lf",
+        "_FillValue": 9999.9
+    },
+    "BCCW": {
+        "types": "float32",
+        "long_name": "number of sw bacteria",
+        "units": "10+9 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 9000.0,
+        "format": "%7.2lf",
+        "_FillValue": 9999.99
+    },
+    "BCMW": {
+        "types": "float32",
+        "long_name": "bacterial biomass in sea water",
+        "units": "milligram C/m3",
+        "valid_min": 0.0,
+        "valid_max": 16.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "BFUP": {
+        "types": "float32",
+        "long_name": "19'butanoyloxyfucoxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "BOTL": {
+        "types": "int32",
+        "long_name": "sea water sample bottle number",
+        "units": "1.0",
+        "valid_min": 1.0,
+        "valid_max": 36.0,
+        "format": "%3d",
+        "_FillValue": 99999.0
+    },
+    "C13D": {
+        "types": "float32",
+        "long_name": "delta 13c (13c/12c)",
+        "units": "per thousand",
+        "valid_min": -50.0,
+        "valid_max": 100.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "C1UW": {
+        "types": "float32",
+        "long_name": "14c uptake 0.2-1 micron",
+        "units": "milligram carbon/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "CDFW": {
+        "types": "float32",
+        "long_name": "dark fixation",
+        "units": "milligram carbon/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 2.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CE1W": {
+        "types": "float32",
+        "long_name": "dissolved cfc11 error",
+        "units": "picomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 0.5,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CE2W": {
+        "types": "float32",
+        "long_name": "dissolved cfc12 error",
+        "units": "picomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 0.5,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CE3W": {
+        "types": "float32",
+        "long_name": "dissolved cfc113 error",
+        "units": "picomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 0.5,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CF1W": {
+        "types": "float32",
+        "long_name": "dissolved cfc11",
+        "units": "picomole/kg",
+        "valid_min": -0.01,
+        "valid_max": 90.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "CF2W": {
+        "types": "float32",
+        "long_name": "dissolved cfc12",
+        "units": "picomole/kg",
+        "valid_min": -0.01,
+        "valid_max": 90.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "CF3W": {
+        "types": "float32",
+        "long_name": "dissolved cfc113",
+        "units": "picomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CH1P": {
+        "types": "float32",
+        "long_name": "chl-a(less divinylchl-a)",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 3.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CH1T": {
+        "types": "float32",
+        "long_name": "chlorophyll total",
+        "units": "microgram/kg",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CH2P": {
+        "types": "float32",
+        "long_name": "chl-b(less divinylchl-b)",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHAD": {
+        "types": "float32",
+        "long_name": "divinyl chlorophyll-a",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 9.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHAE": {
+        "types": "float32",
+        "long_name": "epimere chlorophyll-a",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHAF": {
+        "types": "float32",
+        "long_name": "chlorophyll-a vertical flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHBD": {
+        "types": "float32",
+        "long_name": "divinyl-chlorophyll-b",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHC3": {
+        "types": "float32",
+        "long_name": "chlorophyll-c3",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHCZ": {
+        "types": "float32",
+        "long_name": "chlorophyll-c1+c2",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHLB": {
+        "types": "float32",
+        "long_name": "chlorophyll-b total",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CHLC": {
+        "types": "float32",
+        "long_name": "chlorophyll-c total",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHLT": {
+        "types": "float32",
+        "long_name": "chlorophyll-total",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CHTF": {
+        "types": "float32",
+        "long_name": "part. total carbohydrates flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CHTS": {
+        "types": "float32",
+        "long_name": "sediment carbohydrates",
+        "units": "microgram/g",
+        "valid_min": 0.0,
+        "valid_max": 7000.0,
+        "format": "%4.0lf",
+        "_FillValue": 9999.0
+    },
+    "CICW": {
+        "types": "float32",
+        "long_name": "number of sw ciliates",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 90000.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "CL4W": {
+        "types": "float32",
+        "long_name": "dissolved c-tetrachloride",
+        "units": "picomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "CLAY": {
+        "types": "float32",
+        "long_name": "clay in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "CND1": {
+        "types": "float32",
+        "long_name": "electrical conductivity primary sensor",
+        "units": "mho/meter",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 3.0,
+        "valid_max": 7.0,
+        "format": "%5.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "CND2": {
+        "types": "float32",
+        "long_name": "electrical conductivity secondary sensor",
+        "units": "mho/meter",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 3.0,
+        "valid_max": 7.0,
+        "format": "%5.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "CNDC": {
+        "types": "float32",
+        "long_name": "electrical conductivity",
+        "units": "mS/cm",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 30.0,
+        "valid_max": 70.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.002
+    },
+    "CO2W": {
+        "types": "float32",
+        "long_name": "dissolved carbon dioxyd (co2)",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 4800.0,
+        "format": "%6.1lf",
+        "_FillValue": 9999.9
+    },
+    "CO3F": {
+        "types": "float32",
+        "long_name": "part. caco3 flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 600.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "CO3P": {
+        "types": "float32",
+        "long_name": "carbonates content",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.99,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CO3S": {
+        "types": "float32",
+        "long_name": "sediment carbonates",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "COCW": {
+        "types": "float32",
+        "long_name": "number of sw coccolithophorids",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "CODW": {
+        "types": "float32",
+        "long_name": "chemical oxygen demand",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 650.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "COG": {
+        "types": "float32",
+        "long_name": "course over ground",
+        "format": "%5.1f"
+    },
+    "COPF": {
+        "types": "float32",
+        "long_name": "coccolithophoridae ppc flux",
+        "units": "milligram C/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "COPP": {
+        "types": "float32",
+        "long_name": "number of copepods",
+        "units": "number/m3",
+        "valid_min": 0.0,
+        "valid_max": 99999.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "CORG": {
+        "types": "float32",
+        "long_name": "dissolved organic carbon",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 1000.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "CPH1": {
+        "types": "float32",
+        "long_name": "chlorophyll-a total",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CPH2": {
+        "types": "float32",
+        "long_name": "chlorophyll-a total",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CPH3": {
+        "types": "float32",
+        "long_name": "chlorophyll-a/2 micron filter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CPH4": {
+        "types": "float32",
+        "long_name": "chlorophyll-a/20 micron filter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CPHL": {
+        "types": "float32",
+        "long_name": "chlorophyll-a total",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "CRYPTOPHYTA": {
+        "types": "float32",
+        "long_name": "cryptophyta",
+        "format": "%6.3f",
+        "_FillValue": -300.0
+    },
+    "CUPW": {
+        "types": "float32",
+        "long_name": "14c production unknown filter",
+        "units": "milligram carbon/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "D13C": {
+        "types": "float32",
+        "long_name": "delta 13 c signature",
+        "units": "%",
+        "valid_min": -50.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "DATE": {
+        "types": "float32",
+        "long_name": "date",
+        "units": "mmdd",
+        "valid_min": 101.0,
+        "valid_max": 1231.0,
+        "format": "%4.4d",
+        "_FillValue": 9999.0
+    },
+    "DAYD": {
+        "types": "float32",
+        "long_name": "decimal julian day time origin 0",
+        "units": "1.0",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 3660.0,
+        "format": "%9.5f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DAYS": {
+        "types": "float32",
+        "long_name": "day within year",
+        "units": "decimal day",
+        "valid_min": 1.0,
+        "valid_max": 366.0,
+        "format": "%9.5lf",
+        "_FillValue": 999.99999
+    },
+    "DAYX": {
+        "types": "float32",
+        "long_name": "day within month",
+        "units": "dd",
+        "valid_min": 1.0,
+        "valid_max": 31.0,
+        "format": "%2.2d",
+        "_FillValue": 99.0
+    },
+    "DCAW": {
+        "types": "float32",
+        "long_name": "dark carbon absorption",
+        "units": "milligram/m3",
+        "valid_min": -0.05,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "DEN1": {
+        "types": "float32",
+        "long_name": "density (sigma-theta) primary sensors",
+        "units": "kg/m3",
+        "valid_min": 10.0,
+        "valid_max": 35.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "DEN2": {
+        "types": "float32",
+        "long_name": "density (sigma-theta) secondary sensors",
+        "units": "kg/m3",
+        "valid_min": 10.0,
+        "valid_max": 35.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "DENS": {
+        "types": "float32",
+        "long_name": "density",
+        "standard_name": "sea_water_density",
+        "units": "kg/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Ocean density"
+    },
+    "DFCW": {
+        "types": "float32",
+        "long_name": "number of sw dinoflagellates",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "DFPF": {
+        "types": "float32",
+        "long_name": "dinoflagellates ppc flux",
+        "units": "milligram C/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "DIATOMS": {
+        "types": "float32",
+        "long_name": "diatoms",
+        "format": "%6.3f",
+        "_FillValue": -300.0
+    },
+    "DIPF": {
+        "types": "float32",
+        "long_name": "diatoms ppc flux",
+        "units": "milligram C/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "DO11": {
+        "types": "float32",
+        "long_name": "dissolved oxygen primary sensor",
+        "units": "ml/l",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DO12": {
+        "types": "float32",
+        "long_name": "dissolved oxygen primary sensor",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 450.0,
+        "format": "%7.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DO21": {
+        "types": "float32",
+        "long_name": "dissolved oxygen secondary sensor",
+        "units": "ml/l",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DO22": {
+        "types": "float32",
+        "long_name": "dissolved oxygen secondary sensor",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 450.0,
+        "format": "%7.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DOPW": {
+        "types": "float32",
+        "long_name": "dissolved organic phosphorus",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 50.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "DOV1": {
+        "types": "float32",
+        "long_name": "dissolved oxygen primary sensor voltage",
+        "units": "V",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.4f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DOV2": {
+        "types": "float32",
+        "long_name": "dissolved oxygen secondary sensor voltage",
+        "units": "V",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.4f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DOX1": {
+        "types": "float32",
+        "long_name": "dissolved oxygen",
+        "standard_name": "volume_fraction_of_oxygen_in_sea_water",
+        "units": "ml/l",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Ocean oxygen in ml per liter"
+    },
+    "DOX2": {
+        "types": "float32",
+        "long_name": "dissolved oxygen",
+        "standard_name": "moles_of_oxygen_per_unit_mass_in_sea_water",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 450.0,
+        "format": "%7.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Ocean oxygen in micromole by kg"
+    },
+    "DOXY": {
+        "types": "float32",
+        "long_name": "dissolved oxygen",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 650.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "DPS1": {
+        "types": "float32",
+        "long_name": "depth below bottom-lower limit",
+        "units": "meters",
+        "valid_min": 0.0,
+        "valid_max": 11000.0,
+        "format": "%6.1lf",
+        "_FillValue": -999.9
+    },
+    "DPSF": {
+        "types": "float32",
+        "long_name": "depth below sea floor",
+        "units": "meters",
+        "valid_min": 0.0,
+        "valid_max": 11000.0,
+        "format": "%6.1lf",
+        "_FillValue": -999.9
+    },
+    "DRDD": {
+        "types": "float32",
+        "long_name": "duration (days)",
+        "units": "ddd",
+        "valid_min": 0.0,
+        "valid_max": 999.0,
+        "format": "%3.0lf",
+        "_FillValue": 999.0
+    },
+    "DRYT": {
+        "types": "float32",
+        "long_name": "air temperature",
+        "standard_name": "air_temperature",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Air temperature"
+    },
+    "DTCW": {
+        "types": "float32",
+        "long_name": "number of sw diatoms",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "DVT1": {
+        "types": "float32",
+        "long_name": "dissolved oxygen primary sensor dv/dt",
+        "units": "dv/dt",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.0,
+        "valid_max": 1.0,
+        "format": "%+7.5f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "DVT2": {
+        "types": "float32",
+        "long_name": "dissolved oxygen secondary sensor dv/dt",
+        "units": "dv/dt",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.0,
+        "valid_max": 1.0,
+        "format": "%+7.5f",
+        "_FillValue": 1e+36,
+        "resolution": 0.002
+    },
+    "DXAP": {
+        "types": "float32",
+        "long_name": "diadinoxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "EF1W": {
+        "types": "float32",
+        "long_name": "dissolved cfc11 error",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "EF2W": {
+        "types": "float32",
+        "long_name": "dissolved cfc12 error",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "EF3W": {
+        "types": "float32",
+        "long_name": "dissolved cfc113 error",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "EPMP": {
+        "types": "float32",
+        "long_name": "total susp. part. matter/ester",
+        "units": "gram/m3",
+        "valid_min": 0.0,
+        "valid_max": 9.0,
+        "format": "%5.3lf",
+        "_FillValue": 9.999
+    },
+    "ETHP": {
+        "types": "float32",
+        "long_name": "particulate 234 th act. error",
+        "units": "Bq/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "ETHW": {
+        "types": "float32",
+        "long_name": "dissolved 234 th act. error",
+        "units": "Bq/m3",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "EWCS": {
+        "types": "float32",
+        "long_name": "current east  std. deviation",
+        "units": "cm/s",
+        "valid_min": 0.0,
+        "valid_max": 20.0,
+        "format": "%+6.3lf",
+        "_FillValue": 99.999
+    },
+    "EWCT": {
+        "types": "float32",
+        "long_name": "current east component",
+        "units": "cm/second",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -100.0,
+        "valid_max": 100.0,
+        "format": "%7.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.02,
+        "comment": "Current east"
+    },
+    "FCO2": {
+        "types": "float32",
+        "long_name": "co2 fugacity",
+        "units": "microatmosphere",
+        "valid_min": 0.0,
+        "valid_max": 1000.0,
+        "format": "%6.1lf",
+        "_FillValue": 9999.9
+    },
+    "FLOW": {
+        "types": "float32",
+        "long_name": "water flow in the instrument",
+        "units": "l/m",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%4.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.1
+    },
+    "FLPF": {
+        "types": "float32",
+        "long_name": "flagellates ppc flux",
+        "units": "milligram C/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "FLU1": {
+        "types": "float32",
+        "long_name": "fluorescence",
+        "units": "volt",
+        "valid_min": -1.0,
+        "valid_max": 3.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "FLU2": {
+        "types": "float32",
+        "long_name": "fluorescence",
+        "units": "milligram/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%8.4f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "FLU3": {
+        "types": "float32",
+        "long_name": "secondary fluorescence",
+        "units": "milligram/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%8.4f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "FLUO": {
+        "types": "float32",
+        "long_name": "fluorescence",
+        "units": "relative unit",
+        "valid_min": -0.1,
+        "valid_max": 10.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "FUCP": {
+        "types": "float32",
+        "long_name": "fucoxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "GLUC": {
+        "types": "float32",
+        "long_name": "glucide",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "GPMP": {
+        "types": "float32",
+        "long_name": "total susp. part. matter/glass",
+        "units": "gram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "GREENALGEA": {
+        "types": "float32",
+        "long_name": "greenalgae",
+        "format": "%6.3f",
+        "_FillValue": -300.0
+    },
+    "GSPD": {
+        "types": "float32",
+        "long_name": "gust wind speed",
+        "units": "meters/second",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%2.0lf",
+        "_FillValue": 99.0
+    },
+    "H2OS": {
+        "types": "float32",
+        "long_name": "water content",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "HBAW": {
+        "types": "float32",
+        "long_name": "nb of heterotrophic bacteria",
+        "units": "10+6 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "HCDT": {
+        "types": "float32",
+        "long_name": "direction rel. true north",
+        "units": "degree",
+        "valid_min": 0.0,
+        "valid_max": 360.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "HCSP": {
+        "types": "float32",
+        "long_name": "horizontal current speed",
+        "units": "cm/s",
+        "valid_min": 0.0,
+        "valid_max": 9.0,
+        "format": "%5.3lf",
+        "_FillValue": 9.999
+    },
+    "HEAD": {
+        "types": "float32",
+        "long_name": "platform heading rel. north",
+        "units": "degree",
+        "valid_min": -360.0,
+        "valid_max": 360.0,
+        "format": "%+5.1lf",
+        "_FillValue": -999.9
+    },
+    "HEADING": {
+        "types": "float32",
+        "long_name": "heading",
+        "format": "%5.1f"
+    },
+    "HEADING_DRIFT": {
+        "types": "float32",
+        "long_name": "heading drift",
+        "format": "%5.1f"
+    },
+    "HEDE": {
+        "types": "float32",
+        "long_name": "helium isotopic ratio error",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%8.4lf",
+        "_FillValue": 999.9999
+    },
+    "HEDW": {
+        "types": "float32",
+        "long_name": "helium dev. of isotopic ratio",
+        "units": "%",
+        "valid_min": -1.5,
+        "valid_max": 100.0,
+        "format": "%8.4lf",
+        "_FillValue": 999.9999
+    },
+    "HEEW": {
+        "types": "float32",
+        "long_name": "dissolved helium error",
+        "units": "nanomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "HEIG": {
+        "types": "float32",
+        "long_name": "atmospheric height",
+        "units": "meter",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "positive": "up",
+        "valid_min": 0.0,
+        "valid_max": 40000.0,
+        "format": "%8.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.1,
+        "coordinate_reference_frame": "urn:ogc:crs:EPSG::5829"
+    },
+    "HELD": {
+        "types": "float32",
+        "long_name": "delta helium 3",
+        "units": "%",
+        "valid_min": -99.0,
+        "valid_max": 99.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "HELW": {
+        "types": "float32",
+        "long_name": "dissolved helium",
+        "units": "nanomole/kg",
+        "valid_min": 1.0,
+        "valid_max": 2.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "HFUP": {
+        "types": "float32",
+        "long_name": "19'hexanoyloxyfucoxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "HSUL": {
+        "types": "float32",
+        "long_name": "hydrogen sulphide (h2s)",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 500.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "IODI": {
+        "types": "float32",
+        "long_name": "iodine",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "ISMP": {
+        "types": "float32",
+        "long_name": "inorganic suspended matter",
+        "units": "gram/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "LATD": {
+        "types": "float32",
+        "long_name": "latitude degrees",
+        "units": "degree",
+        "valid_min": -90.0,
+        "valid_max": 90.0,
+        "format": "%+3.0lf",
+        "_FillValue": 99.0
+    },
+    "LATM": {
+        "types": "float32",
+        "long_name": "latitude minutes",
+        "units": "minute",
+        "valid_min": 0.0,
+        "valid_max": 59.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "LATX": {
+        "types": "float32",
+        "long_name": "latitude",
+        "units": "decimal degree",
+        "valid_min": -90.0,
+        "valid_max": 90.0,
+        "format": "%+8.4lf",
+        "_FillValue": 99.9999
+    },
+    "LCAW": {
+        "types": "float32",
+        "long_name": "light carbon absorption",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 40.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "LGH3": {
+        "types": "float32",
+        "long_name": "light irradiance corrected par",
+        "units": "micromole photon/(m2.s)",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 3000.0,
+        "format": "%8.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "LGH4": {
+        "types": "float32",
+        "long_name": "light irradiance surface par",
+        "units": "micromole photon/(m2.s)",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 3000.0,
+        "format": "%8.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "LGH5": {
+        "types": "float32",
+        "long_name": "immerged/surf irradiance ratio",
+        "units": "%",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.01
+    },
+    "LGHT": {
+        "types": "float32",
+        "long_name": "light irradiance immerged par",
+        "units": "micromole photon/(m2.s)",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 4000.0,
+        "format": "%8.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "LINC": {
+        "types": "float32",
+        "long_name": "long wave incoming radiation",
+        "units": "milligram/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -500.0,
+        "valid_max": 500.0,
+        "format": "%+5.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.1
+    },
+    "LIPI": {
+        "types": "float32",
+        "long_name": "lipids in the water column",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "LIPS": {
+        "types": "float32",
+        "long_name": "sediment lipids",
+        "units": "microgram/g",
+        "valid_min": 0.0,
+        "valid_max": 5000.0,
+        "format": "%4.0lf",
+        "_FillValue": 9999.0
+    },
+    "LOND": {
+        "types": "float32",
+        "long_name": "longitude degrees",
+        "units": "degree",
+        "valid_min": -179.0,
+        "valid_max": 180.0,
+        "format": "%+4.0lf",
+        "_FillValue": 999.0
+    },
+    "LONM": {
+        "types": "float32",
+        "long_name": "longitude minutes",
+        "units": "minute",
+        "valid_min": 0.0,
+        "valid_max": 59.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "LONX": {
+        "types": "float32",
+        "long_name": "longitude",
+        "units": "decimal degree",
+        "valid_min": -180.0,
+        "valid_max": 180.0,
+        "format": "%+9.4lf",
+        "_FillValue": 999.9999
+    },
+    "LSCT": {
+        "types": "float32",
+        "long_name": "scattering",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%4.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.1
+    },
+    "LSIC": {
+        "types": "float32",
+        "long_name": "lithogenic content",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.99,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "LTHF": {
+        "types": "float32",
+        "long_name": "lithogenic fraction flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 3400.0,
+        "format": "%7.2lf",
+        "_FillValue": 9999.99
+    },
+    "LTUW": {
+        "types": "float32",
+        "long_name": "leucine uptake rate",
+        "units": "microgram carbon/(m3.h)",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "MALF": {
+        "types": "float32",
+        "long_name": "al flux in settling particles",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 180.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MALP": {
+        "types": "float32",
+        "long_name": "al in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MALS": {
+        "types": "float32",
+        "long_name": "al in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MBAP": {
+        "types": "float32",
+        "long_name": "ba in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.9999,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "MBAS": {
+        "types": "float32",
+        "long_name": "ba in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 5000.0,
+        "format": "%7.2lf",
+        "_FillValue": 9999.99
+    },
+    "MBRS": {
+        "types": "float32",
+        "long_name": "br in the sediment",
+        "units": "ppm",
+        "valid_min": -50.0,
+        "valid_max": 50.0,
+        "format": "%+6.2lf",
+        "_FillValue": -99.99
+    },
+    "MCAP": {
+        "types": "float32",
+        "long_name": "ca in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MCAS": {
+        "types": "float32",
+        "long_name": "ca in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MCES": {
+        "types": "float32",
+        "long_name": "ce in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MCLP": {
+        "types": "float32",
+        "long_name": "cl in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MCRS": {
+        "types": "float32",
+        "long_name": "cr in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MCUF": {
+        "types": "float32",
+        "long_name": "cu flux in settling particles",
+        "units": "microgram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 120.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MCUS": {
+        "types": "float32",
+        "long_name": "cu in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MFEF": {
+        "types": "float32",
+        "long_name": "fe flux in settling particles",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MFEP": {
+        "types": "float32",
+        "long_name": "fe in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MFES": {
+        "types": "float32",
+        "long_name": "fe in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MIIS": {
+        "types": "float32",
+        "long_name": "i in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MKKP": {
+        "types": "float32",
+        "long_name": "k in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MKKS": {
+        "types": "float32",
+        "long_name": "k in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MLAS": {
+        "types": "float32",
+        "long_name": "la in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MMGP": {
+        "types": "float32",
+        "long_name": "mg in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MMGS": {
+        "types": "float32",
+        "long_name": "mg in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MMNF": {
+        "types": "float32",
+        "long_name": "mn flux in settling particles",
+        "units": "microgram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 3400.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MMNP": {
+        "types": "float32",
+        "long_name": "mn in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MMNS": {
+        "types": "float32",
+        "long_name": "mn in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MMOS": {
+        "types": "float32",
+        "long_name": "mo in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MNAS": {
+        "types": "float32",
+        "long_name": "na in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MNBS": {
+        "types": "float32",
+        "long_name": "nb in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MNDS": {
+        "types": "float32",
+        "long_name": "nd in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MNIS": {
+        "types": "float32",
+        "long_name": "ni in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MNTH": {
+        "types": "float32",
+        "long_name": "month",
+        "units": "mm",
+        "valid_min": 1.0,
+        "valid_max": 12.0,
+        "format": "%2.2d",
+        "_FillValue": 99.0
+    },
+    "MPBF": {
+        "types": "float32",
+        "long_name": "pb flux in settling particles",
+        "units": "microgram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MPBS": {
+        "types": "float32",
+        "long_name": "pb in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MPPP": {
+        "types": "float32",
+        "long_name": "p in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MPPS": {
+        "types": "float32",
+        "long_name": "p in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MRBS": {
+        "types": "float32",
+        "long_name": "rb in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MSCS": {
+        "types": "float32",
+        "long_name": "sc in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MSDP": {
+        "types": "float32",
+        "long_name": "mean spheric diam. of particle",
+        "units": "millimeter",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "MSIP": {
+        "types": "float32",
+        "long_name": "si in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 999.999,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "MSIS": {
+        "types": "float32",
+        "long_name": "si in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MSMP": {
+        "types": "float32",
+        "long_name": "mean spheric diam. median",
+        "units": "millimeter",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "MSRS": {
+        "types": "float32",
+        "long_name": "sr in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MSSP": {
+        "types": "float32",
+        "long_name": "s in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MSZW": {
+        "types": "float32",
+        "long_name": "mesozooplancton dry weight",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "MTHS": {
+        "types": "float32",
+        "long_name": "th in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MTIP": {
+        "types": "float32",
+        "long_name": "ti in suspended matter",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MTIS": {
+        "types": "float32",
+        "long_name": "ti in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "MUUS": {
+        "types": "float32",
+        "long_name": "u in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MVVS": {
+        "types": "float32",
+        "long_name": "v in the sediment",
+        "units": "ppm",
+        "valid_min": -50.0,
+        "valid_max": 900.0,
+        "format": "%+6.2lf",
+        "_FillValue": 99.99
+    },
+    "MYYS": {
+        "types": "float32",
+        "long_name": "y in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MZNF": {
+        "types": "float32",
+        "long_name": "zn flux in settling particles",
+        "units": "microgram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 7600.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MZNS": {
+        "types": "float32",
+        "long_name": "zn in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "MZRS": {
+        "types": "float32",
+        "long_name": "zr in the sediment",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "N15D": {
+        "types": "float32",
+        "long_name": "delta 15n (15n/14n)",
+        "units": "per thousand",
+        "valid_min": -2.0,
+        "valid_max": 10.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "NAVG": {
+        "types": "int32",
+        "long_name": "averaged data cycle number",
+        "units": "1.0",
+        "valid_min": 0.0,
+        "valid_max": 999.0,
+        "format": "%3d",
+        "_FillValue": 9999.0
+    },
+    "NEEW": {
+        "types": "float32",
+        "long_name": "dissolved neon error",
+        "units": "nanomole/kg",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "NEOW": {
+        "types": "float32",
+        "long_name": "dissolved neon",
+        "units": "nanomole/kg",
+        "valid_min": 4.0,
+        "valid_max": 8.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "NETR": {
+        "types": "float32",
+        "long_name": "net radiation",
+        "units": "watt/m2",
+        "valid_min": -500.0,
+        "valid_max": 500.0,
+        "format": "%+5.1lf",
+        "_FillValue": -999.9
+    },
+    "NFAW": {
+        "types": "float32",
+        "long_name": "autotrophic nanoflagellates",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "NFCW": {
+        "types": "float32",
+        "long_name": "number of sw nanoflagellates",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "NFHW": {
+        "types": "float32",
+        "long_name": "heterotrophic nanoflagellates",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "NHRW": {
+        "types": "float32",
+        "long_name": "ammonium regeneration",
+        "units": "micromole nitrogen/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "NHUW": {
+        "types": "float32",
+        "long_name": "ammonium uptake",
+        "units": "micromole nitrogen/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "NODW": {
+        "types": "float32",
+        "long_name": "dissolved organic nitrogen",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "NORG": {
+        "types": "float32",
+        "long_name": "dissolved organic nitrogen",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 50.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "NORW": {
+        "types": "float32",
+        "long_name": "nitrification",
+        "units": "micromole nitrogen/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "NOTT": {
+        "types": "float32",
+        "long_name": "total organic nitrogen (d+p)",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "NOUW": {
+        "types": "float32",
+        "long_name": "nitrate uptake",
+        "units": "micromole nitrogen/(m3.day)",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "NSCS": {
+        "types": "float32",
+        "long_name": "current north std. deviation",
+        "units": "cm/s",
+        "valid_min": 0.0,
+        "valid_max": 20.0,
+        "format": "%+7.3lf",
+        "_FillValue": -99.999
+    },
+    "NSCT": {
+        "types": "float32",
+        "long_name": "current north component",
+        "units": "cm/second",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -100.0,
+        "valid_max": 100.0,
+        "format": "%7.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.01,
+        "comment": " Current north"
+    },
+    "NT1P": {
+        "types": "float32",
+        "long_name": "total particulate nitrogen",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "NTAW": {
+        "types": "float32",
+        "long_name": "nitrate (no3-n) ",
+        "standard_name": "moles_of_nitrate_per_unit_mass_in_sea_water",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%5.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "NTIW": {
+        "types": "float32",
+        "long_name": "nitrite (no2-n) ",
+        "standard_name": "moles_of_nitrite_per_unit_mass_in_sea_water",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%7.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "NTOT": {
+        "types": "float32",
+        "long_name": "total nitrogen (n) content",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "NTRA": {
+        "types": "float32",
+        "long_name": "nitrate (no3-n) ",
+        "standard_name": "moles_concentration_of_nitrate_in_sea_water",
+        "units": "millimole/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 56.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "NTRI": {
+        "types": "float32",
+        "long_name": "nitrite (no2-n) ",
+        "standard_name": "moles_concentration_of_nitrite_in_sea_water",
+        "units": "millimole/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "NTRZ": {
+        "types": "float32",
+        "long_name": "nitrate + nitrite content",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "NTZW": {
+        "types": "float32",
+        "long_name": "nitrate + nitrite",
+        "standard_name": "moles_of_nitrate_and_nitrite_per_unit_mass_in_sea_water",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "NUMP": {
+        "types": "float32",
+        "long_name": "number of particles",
+        "units": "number/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 999999.0,
+        "format": "%9.0f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "OMMF": {
+        "types": "float32",
+        "long_name": "part. organic matter flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 600.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "OPAP": {
+        "types": "float32",
+        "long_name": "opal content",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.99,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "OSAT": {
+        "types": "float32",
+        "long_name": "oxygen saturation",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "OSMP": {
+        "types": "float32",
+        "long_name": "organic suspended matter",
+        "units": "gramm/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.01
+    },
+    "OXIR": {
+        "types": "float32",
+        "long_name": "isotopic ratio o18/o16",
+        "units": "per thousand",
+        "valid_min": -10.0,
+        "valid_max": 10.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "PC1P": {
+        "types": "float32",
+        "long_name": "particulate organic carbon/poc",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "PCEW": {
+        "types": "float32",
+        "long_name": "number of sw picoeucaryotes",
+        "units": "10+6 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 90000.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "PCO2": {
+        "types": "float32",
+        "long_name": "co2 part. pres in dry/wet gas",
+        "units": "microatmosphere",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 100.0,
+        "valid_max": 700.0,
+        "format": "%7.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "PERP": {
+        "types": "float32",
+        "long_name": "peridinine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "PHCW": {
+        "types": "float32",
+        "long_name": "num. of sw phytoplankton cells",
+        "units": "10+3 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "PHEA": {
+        "types": "float32",
+        "long_name": "pheophytin-a",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PHEB": {
+        "types": "float32",
+        "long_name": "pheophytin-b",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PHEC": {
+        "types": "float32",
+        "long_name": "pheophytin-c",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PHINSA": {
+        "types": "float32",
+        "long_name": "starboard phins",
+        "format": "%6.3f"
+    },
+    "PHINSB": {
+        "types": "float32",
+        "long_name": "portside phins",
+        "format": "%6.3f"
+    },
+    "PHINST": {
+        "types": "float32",
+        "long_name": "starboard phins",
+        "format": "%6.3f"
+    },
+    "PHNS": {
+        "types": "float32",
+        "long_name": "sediment phenols",
+        "units": "microgram/g",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "PHOS": {
+        "types": "float32",
+        "long_name": "phosphate (po4-p)",
+        "standard_name": "moles_phosphate_of_nitrate_in_sea_water",
+        "units": "millimole/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 4.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "PHOW": {
+        "types": "float32",
+        "long_name": "phosphate (po4-p)",
+        "standard_name": "moles_of_phosphate_per_unit_mass_in_sea_water",
+        "units": "micromole/kg",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "PHPH": {
+        "types": "float32",
+        "long_name": "ph",
+        "units": "pH unit",
+        "valid_min": 7.4,
+        "valid_max": 8.4,
+        "format": "%5.3lf",
+        "_FillValue": 9.999
+    },
+    "PHPT": {
+        "types": "float32",
+        "long_name": "total pheophytin",
+        "units": "milligramm/m3",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.01
+    },
+    "PHTF": {
+        "types": "float32",
+        "long_name": "phaeopigments vertical flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "PHTP": {
+        "types": "float32",
+        "long_name": "total pheophytine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PN1P": {
+        "types": "float32",
+        "long_name": "particulate organic nitrogen",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 2.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "POCF": {
+        "types": "float32",
+        "long_name": "part. organic carbon flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "POCP": {
+        "types": "float32",
+        "long_name": "particulate organic carbon/poc",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 999.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "PODW": {
+        "types": "float32",
+        "long_name": "dissolved organic phosphorus",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PONP": {
+        "types": "float32",
+        "long_name": "particulate organic nitrogen",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "POTT": {
+        "types": "float32",
+        "long_name": "total organic phosphorus (d+p)",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PP1P": {
+        "types": "float32",
+        "long_name": "part. organic phosphorus (p)",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "PRCW": {
+        "types": "float32",
+        "long_name": "number of sw prochlorococcus",
+        "units": "10+6 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "PREC": {
+        "types": "float32",
+        "long_name": "corrected sea pressure",
+        "units": "decibar=10000 pascals",
+        "valid_min": 0.0,
+        "valid_max": 6500.0,
+        "format": "%6.1lf",
+        "_FillValue": -999.9
+    },
+    "PROT": {
+        "types": "float32",
+        "long_name": "protein",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 500.0,
+        "format": "%5.0lf",
+        "_FillValue": 99999.0
+    },
+    "PRRT": {
+        "types": "float32",
+        "long_name": "precipitation rate",
+        "units": "millimeters/hour",
+        "valid_min": 0.0,
+        "valid_max": 900.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "PSA1": {
+        "types": "float32",
+        "long_name": "practical salinity primary sensor",
+        "units": "pss",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 33.0,
+        "valid_max": 37.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "PSA2": {
+        "types": "float32",
+        "long_name": "practical salinity secondary sensor",
+        "units": "pss",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 33.0,
+        "valid_max": 37.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "PSAL": {
+        "types": "float32",
+        "long_name": "practical salinity",
+        "standard_name": "sea_water_salinity",
+        "units": "1.0",
+        "conventions": "PSU",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%7.4f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Ocean practical salinity (PSS-78)"
+    },
+    "PT1P": {
+        "types": "float32",
+        "long_name": "total particulate phosphorus",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PTNP": {
+        "types": "float32",
+        "long_name": "total particulate nitrogen",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PTPP": {
+        "types": "float32",
+        "long_name": "total particulate phosphorus",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "PTZF": {
+        "types": "float32",
+        "long_name": "protozoa ppc flux",
+        "units": "milligram C/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "PXAP": {
+        "types": "float32",
+        "long_name": "prasinoxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "RDIN": {
+        "types": "float32",
+        "long_name": "incident radiation",
+        "units": "watt/m2",
+        "valid_min": -500.0,
+        "valid_max": 500.0,
+        "format": "%+5.1lf",
+        "_FillValue": -999.9
+    },
+    "REDS": {
+        "types": "float32",
+        "long_name": "redox potential",
+        "units": "millivolt",
+        "valid_min": -110.0,
+        "valid_max": 200.0,
+        "format": "%+4.0lf",
+        "_FillValue": -999.0
+    },
+    "RELH": {
+        "types": "float32",
+        "long_name": "relative humidity",
+        "standard_name": "relative_humidity",
+        "units": "%",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%4.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Relative humidity"
+    },
+    "SACC": {
+        "types": "float32",
+        "long_name": "salinity accuracy",
+        "units": ".",
+        "valid_min": 0.0,
+        "valid_max": 4.0,
+        "format": "%2d",
+        "_FillValue": -9.0
+    },
+    "SAND": {
+        "types": "float32",
+        "long_name": "sand in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "SCDT": {
+        "types": "float32",
+        "long_name": "sea surf current dir. rel t. n",
+        "units": "degree",
+        "valid_min": 0.0,
+        "valid_max": 360.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "SCSP": {
+        "types": "float32",
+        "long_name": "sea surface current speed",
+        "units": "cm/s",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "SECS": {
+        "types": "float32",
+        "long_name": "seconds within minute",
+        "units": "ss",
+        "valid_min": 0.0,
+        "valid_max": 59.0,
+        "format": "%2.2d",
+        "_FillValue": 99.0
+    },
+    "SILT": {
+        "types": "float32",
+        "long_name": "silt in the sediment",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "SIOF": {
+        "types": "float32",
+        "long_name": "part. biogenic si flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 600.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "SIOS": {
+        "types": "float32",
+        "long_name": "sediment biogenic sio2",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "SLCA": {
+        "types": "float32",
+        "long_name": "silicate (sio4-si) content",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "SLCP": {
+        "types": "float32",
+        "long_name": "particulate organic silica(si)",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "SLCW": {
+        "types": "float32",
+        "long_name": "silicate (sio4-si) content",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 195.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "SLEV": {
+        "types": "float32",
+        "long_name": "observed sea level",
+        "units": "meters",
+        "valid_min": 0.0,
+        "valid_max": 6000.0,
+        "format": "%8.3lf",
+        "_FillValue": 9999.999
+    },
+    "SNCW": {
+        "types": "float32",
+        "long_name": "number of sw synechococcus",
+        "units": "10+6 cell/m3",
+        "valid_min": 0.0,
+        "valid_max": 900000.0,
+        "format": "%6.0lf",
+        "_FillValue": 999999.0
+    },
+    "SOG": {
+        "types": "float32",
+        "long_name": "speed over ground",
+        "format": "%4.1f"
+    },
+    "SPDI": {
+        "types": "float32",
+        "long_name": "indicated platform speed-ship",
+        "units": "meters/second",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "SPEED": {
+        "types": "float32",
+        "long_name": "speed",
+        "format": "%4.1f"
+    },
+    "SPEED_DRIFT": {
+        "types": "float32",
+        "long_name": "speed drift",
+        "format": "%4.1f"
+    },
+    "SSAL": {
+        "types": "float32",
+        "long_name": "salinity (pre-1978 defn)",
+        "units": "P.S.U.",
+        "valid_min": 0.0,
+        "valid_max": 40.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "SSJT": {
+        "types": "float32",
+        "long_name": "sea surface water jacket temperature",
+        "standard_name": "sea_water_temperature",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%6.3f",
+        "_FillValue": -300.0,
+        "resolution": 0.001,
+        "comment": "Ocean temperature"
+    },
+    "SSPS": {
+        "types": "float32",
+        "long_name": "sea surface practical salinity",
+        "standard_name": "sea_water_salinity ",
+        "units": "pss",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%6.3f",
+        "_FillValue": -1.0,
+        "resolution": 0.001,
+        "comment": "Ocean salinity"
+    },
+    "SSTM": {
+        "types": "float32",
+        "long_name": "model sea surface temperature",
+        "units": "Celsius degree",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "SSTP": {
+        "types": "float32",
+        "long_name": "sea surface water temperature",
+        "standard_name": "sea_water_temperature",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%6.3f",
+        "_FillValue": -300.0,
+        "resolution": 0.001,
+        "comment": "Sea surface Ocean temperature"
+    },
+    "SVEL": {
+        "types": "float32",
+        "long_name": "sound velocity",
+        "standard_name": "speed_of_sound_in_sea_water",
+        "units": "meter/second",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 1350.0,
+        "valid_max": 1600.0,
+        "format": "%7.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Ocean sound velocity"
+    },
+    "SWDR": {
+        "types": "float32",
+        "long_name": "swell direction  rel true n.",
+        "units": "degree",
+        "valid_min": 0.0,
+        "valid_max": 360.0,
+        "format": "%5.1lf",
+        "_FillValue": 999.9
+    },
+    "SWHT": {
+        "types": "float32",
+        "long_name": "swell height",
+        "units": "meters",
+        "valid_min": 0.0,
+        "valid_max": 30.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "TACC": {
+        "types": "float32",
+        "long_name": "temperature accuracy",
+        "units": ".",
+        "valid_min": 0.0,
+        "valid_max": 4.0,
+        "format": "%2d",
+        "_FillValue": -9.0
+    },
+    "TCCF": {
+        "types": "float32",
+        "long_name": "part. total carbon flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 999.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "TCCS": {
+        "types": "float32",
+        "long_name": "sediment total carbon",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "TCO2": {
+        "types": "float32",
+        "long_name": "total carbon dioxyd (co2)",
+        "units": "mole/m3",
+        "valid_min": 0.0,
+        "valid_max": 5000.0,
+        "format": "%8.3lf",
+        "_FillValue": 9999.999
+    },
+    "TDCW": {
+        "types": "float32",
+        "long_name": "total dissolved carbon",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 9999.0,
+        "format": "%4.0lf",
+        "_FillValue": 9999.0
+    },
+    "TDPW": {
+        "types": "float32",
+        "long_name": "total dissolved phosphorus",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 40.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE01": {
+        "types": "float32",
+        "long_name": "sea temperature primary sensor",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "TE02": {
+        "types": "float32",
+        "long_name": "sea temperature secondary sensor",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "TE03": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE04": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE05": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celcius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE07": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE08": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE09": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE10": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE11": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE12": {
+        "types": "float32",
+        "long_name": "sea temperature",
+        "units": "Celsius degree",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TE35": {
+        "types": "float32",
+        "long_name": "sea temperature sbe35 high precision sensor",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -2.0,
+        "valid_max": 32.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "TEMP": {
+        "types": "float32",
+        "long_name": "sea water temperature",
+        "standard_name": "sea_water_temperature",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": -1.5,
+        "valid_max": 38.0,
+        "format": "%7.4f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Ocean temperature in Degrees Celsius"
+    },
+    "TH4P": {
+        "types": "float32",
+        "long_name": "particulate 234th activty",
+        "units": "Bq/m3",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TH4W": {
+        "types": "float32",
+        "long_name": "dissolved 234th",
+        "units": "Bq/m3",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TICW": {
+        "types": "float32",
+        "long_name": "total inorganic carbon",
+        "units": "micromole/kg",
+        "valid_min": 0.0,
+        "valid_max": 9000.0,
+        "format": "%7.2lf",
+        "_FillValue": 9999.99
+    },
+    "TINW": {
+        "types": "float32",
+        "long_name": "dissolved inorganic nitrogen",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TNNF": {
+        "types": "float32",
+        "long_name": "part. total nitrogen flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TNNS": {
+        "types": "float32",
+        "long_name": "sediment total nitrogen",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "TOCS": {
+        "types": "float32",
+        "long_name": "sediment total organic carbon",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "TOCW": {
+        "types": "float32",
+        "long_name": "total organic carbon",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 999.999,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "TOMP": {
+        "types": "float32",
+        "long_name": "organic matter content",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 99.99,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "TPAW": {
+        "types": "float32",
+        "long_name": "diss. triphosphate adenosine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 1.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TPHP": {
+        "types": "float32",
+        "long_name": "total phaeopigments",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TPHS": {
+        "types": "float32",
+        "long_name": "total phosphorus (p) content",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "TREW": {
+        "types": "float32",
+        "long_name": "dissolved tritium error",
+        "units": "TU",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TRIW": {
+        "types": "float32",
+        "long_name": "dissolved tritium",
+        "units": "TU",
+        "valid_min": 0.0,
+        "valid_max": 2.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TSMF": {
+        "types": "float32",
+        "long_name": "total mass flux",
+        "units": "milligram/(m2.day)",
+        "valid_min": 0.0,
+        "valid_max": 9999.9,
+        "format": "%6.1lf",
+        "_FillValue": 9999.9
+    },
+    "TSMP": {
+        "types": "float32",
+        "long_name": "total suspended matter",
+        "units": "gram/m3",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "TUR0": {
+        "types": "float32",
+        "long_name": "light transmission -  not used",
+        "units": "%",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "TUR1": {
+        "types": "float32",
+        "long_name": "light diffusion coefficient",
+        "units": "m-1",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "TUR2": {
+        "types": "float32",
+        "long_name": "light attenuation coefficient",
+        "units": "m-1",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%6.3f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "TUR3": {
+        "types": "float32",
+        "long_name": "light transmission",
+        "units": "%",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "TUR4": {
+        "types": "float32",
+        "long_name": "turbidity",
+        "units": "N.T.U Nephelo Turb. Unit",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "TUR5": {
+        "types": "float32",
+        "long_name": "turbidity",
+        "units": "relative unit",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%7.4lf",
+        "_FillValue": 99.9999
+    },
+    "TUR6": {
+        "types": "float32",
+        "long_name": "turbidity",
+        "units": "milliF.T.U Formaz Turb Unit",
+        "valid_min": 0.0,
+        "valid_max": 5000.0,
+        "format": "%6.1lf",
+        "_FillValue": 9999.9
+    },
+    "TXAP": {
+        "types": "float32",
+        "long_name": "diatoxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "TYPECAST": {
+        "types": "int32",
+        "long_name": "type of cast: unknow=0;phy=1;bio=2;geo=3",
+        "units": "1.0",
+        "valid_min": 0.0,
+        "valid_max": 9.0,
+        "format": "%1d",
+        "_FillValue": 99999.0
+    },
+    "UREA": {
+        "types": "float32",
+        "long_name": "urea",
+        "units": "millimole/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "VAVH": {
+        "types": "float32",
+        "long_name": "aver. height highest 1/3 wave",
+        "units": "metre",
+        "valid_min": 0.0,
+        "valid_max": 30.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "VCSP": {
+        "types": "float32",
+        "long_name": "vertical current speed",
+        "units": "cm/s",
+        "valid_min": 0.0,
+        "valid_max": 9.0,
+        "format": "%5.3lf",
+        "_FillValue": 9.999
+    },
+    "VERR": {
+        "types": "float32",
+        "long_name": "velocity error",
+        "units": "cm/s",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "VERT": {
+        "types": "float32",
+        "long_name": "vertical displacement",
+        "units": "meters",
+        "valid_min": 0.0,
+        "valid_max": 9999.0,
+        "format": "%8.3lf",
+        "_FillValue": 9999.999
+    },
+    "VOCP": {
+        "types": "float32",
+        "long_name": "volume conc. of particles",
+        "units": "p.p.m.",
+        "valid_min": 0.0,
+        "valid_max": 99.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "VTDH": {
+        "types": "float32",
+        "long_name": "significant wave height",
+        "units": "meters",
+        "valid_min": 0.0,
+        "valid_max": 99.999,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    },
+    "VTZA": {
+        "types": "float32",
+        "long_name": "aver zero crossing wave period",
+        "units": "second",
+        "valid_min": 0.0,
+        "valid_max": 500.0,
+        "format": "%3.0lf",
+        "_FillValue": 999.0
+    },
+    "VZMX": {
+        "types": "float32",
+        "long_name": "maxi zero crossing wave height",
+        "units": "metre",
+        "valid_min": 0.0,
+        "valid_max": 10.0,
+        "format": "%5.2lf",
+        "_FillValue": 99.99
+    },
+    "WDIR": {
+        "types": "float32",
+        "long_name": "wind direction rel. true north",
+        "standard_name": "wind_to_direction",
+        "units": "degree",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 360.0,
+        "format": "%3.0f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Horizontal wind speed"
+    },
+    "WETT": {
+        "types": "float32",
+        "long_name": "wet bulb temperature",
+        "units": "degree_Celsius",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 90.0,
+        "format": "%5.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001
+    },
+    "WMSP": {
+        "types": "float32",
+        "long_name": "wind speed - max aver per 2 mn",
+        "standard_name": "wind_speed",
+        "units": "meter/second",
+        "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
+        "valid_min": 0.0,
+        "valid_max": 200.0,
+        "format": "%4.1f",
+        "_FillValue": 1e+36,
+        "resolution": 0.001,
+        "comment": "Horizontal wind speed"
+    },
+    "WSPD": {
+        "types": "float32",
+        "long_name": "horizontal wind speed",
+        "units": "meters/second",
+        "valid_min": 0.0,
+        "valid_max": 300.0,
+        "format": "%6.2lf",
+        "_FillValue": 999.99
+    },
+    "WSPE": {
+        "types": "float32",
+        "long_name": "wind speed eastward component",
+        "units": "meters/second",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "WSPN": {
+        "types": "float32",
+        "long_name": "wind speed northward component",
+        "units": "meters/second",
+        "valid_min": 0.0,
+        "valid_max": 100.0,
+        "format": "%7.3lf",
+        "_FillValue": 999.999
+    },
+    "XCO2": {
+        "types": "float32",
+        "long_name": "co2 mole fraction in dry gas",
+        "units": "ppm",
+        "valid_min": 0.0,
+        "valid_max": 5000.0,
+        "format": "%8.3lf",
+        "_FillValue": 9999.999
+    },
+    "YEAR": {
+        "types": "float32",
+        "long_name": "year",
+        "units": "yyyy",
+        "valid_min": 1900.0,
+        "valid_max": 2100.0,
+        "format": "%4.4d",
+        "_FillValue": 9999.0
+    },
+    "YELLOWSUB": {
+        "types": "float32",
+        "long_name": "yellowsub",
+        "format": "%6.3f",
+        "_FillValue": -300.0
+    },
+    "ZXAP": {
+        "types": "float32",
+        "long_name": "zeaxanthine",
+        "units": "milligram/m3",
+        "valid_min": 0.0,
+        "valid_max": 5.0,
+        "format": "%6.3lf",
+        "_FillValue": 99.999
+    }
+}

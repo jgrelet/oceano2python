@@ -1,90 +1,372 @@
-key,types,long_name,standard_name,units,conventions,coordinates,positive,valid_min,valid_max,format,_FillValue,axis,resolution,comment,default_value,flag_values,flag_meanings,reference,coordinate_reference_frame
-string,string,string,string,string,string,string,string,numeric,numeric,string,numeric,string,numeric,string,string,string,string,string,string
-ID,int32,acquisiton number,,1,,,,,,%05d,99999,,,Acquisition number," usually for trajectory or Time-serie",,,,
-PRLF,int32,profile number,,1,,,,,,%05d,99999,,,Station number," a station could be have more than one cast",,,,
-PROFILE,int32,profile number,,1,,,,,,%05d,99999,,,Station number," a station could be have more than one cast",,,,
-LATITUDE,float32,latitude of measurement,latitude,degrees_north,,,,,,%8.5f,,Y,,,,,,WGS84,urn:ogc:crs:EPSG::4326
-LONGITUDE,float32,longitude of measurement,longitude,degrees_east,,,,,,%9.5f,,X,,,,,,WGS84,urn:ogc:crs:EPSG::4327
-TIME,float64,time of measurement,time,days since 1950-01-01T00:00:00Z,Relative julian days with decimal part (as parts of the day),,,0.0,90000.0,%6.6f,,T,,,,,,,
-ETDD,float64,ellapsed time,,1,,,,0,90000,%9.5f,1E+36,,,,,,,,
-DEPH,float32,depth of measurement,depth,meter,,,down,0,9000,%7.2f,1E+36,Z,,,,,,,urn:ogc:crs:EPSG::5831
-DEPTH,float32,depth of measurement,depth,meter,,,down,0,9000,%7.2f,1E+36,Z,,,,,,,urn:ogc:crs:EPSG::5831
-PRES,float32,sea water pressure,sea_water_pressure,decibar,,TIME DEPTH LATITUDE LONGITUDE,,0,9000,%7.2f,1E+36,,,Pressure (dbar) of the measurement,,,,,
-TEMP,float32,sea water temperature,sea_water_temperature,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%7.4f,1E+36,,0.001,Ocean temperature in Degrees Celsius,,,,,
-PSAL,float32,practical salinity,sea_water_salinity,1,PSU,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%7.4f,1E+36,,0.001,Ocean practical salinity (PSS-78),,,,,
-CNDC,float32,electrical conductivity,,mS/cm,,TIME DEPTH LATITUDE LONGITUDE,,30,70,%6.3f,1E+36,,0.002,,,,,,
-DOX1,float32,dissolved oxygen,volume_fraction_of_oxygen_in_sea_water,ml/l,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%5.3f,1E+36,,0.001,Ocean oxygen in ml per liter,,,,,
-DOX2,float32,dissolved oxygen,moles_of_oxygen_per_unit_mass_in_sea_water,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,450,%7.3f,1E+36,,0.001,Ocean oxygen in micromole by kg,,,,,
-DENS,float32,density,sea_water_density,kg/m3,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%6.3f,1E+36,,0.001,Ocean density,,,,,
-SVEL,float32,sound velocity,speed_of_sound_in_sea_water,meter/second,,TIME DEPTH LATITUDE LONGITUDE,,1350,1600,%7.2f,1E+36,,0.001,Ocean sound velocity,,,,,
-DRYT,float32,air temperature,air_temperature,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%6.3f,1E+36,,0.001,Air temperature,,,,,
-WMSP,float32,wind speed - max aver per 2 mn,wind_speed,meter/second,,TIME DEPTH LATITUDE LONGITUDE,,0,200,%4.1f,1E+36,,0.001,Horizontal wind speed,,,,,
-WDIR,float32,wind direction rel. true north,wind_to_direction,degree,,TIME DEPTH LATITUDE LONGITUDE,,0,360,%3.0f,1E+36,,0.001,Horizontal wind speed,,,,,
-ATMS,float32,atmospheric pressure - sea lev,air_pressure_at_sea_level,hectoPascal,,TIME DEPTH LATITUDE LONGITUDE,,940,1030,%6.1f,1E+36,,0.001,Atmospheric pressure at sea level,,,,,
-RELH,float32,relative humidity,relative_humidity,%,,TIME DEPTH LATITUDE LONGITUDE,,0,100,%4.1f,1E+36,,0.001,Relative humidity,,,,,
-NSCT,float32,current north component,,cm/second,,TIME DEPTH LATITUDE LONGITUDE,,-100,100,%7.2f,1E+36,,0.01," Current north",,,,,
-EWCT,float32,current east component,,cm/second,,TIME DEPTH LATITUDE LONGITUDE,,-100,100,%7.2f,1E+36,,0.02,Current east,,,,,
-SSJT,float32,sea surface water jacket temperature,sea_water_temperature,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%6.3f,-300,,0.001,Ocean temperature,,,,,
-SSTP,float32,sea surface water temperature,sea_water_temperature,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%6.3f,-300,,0.001,Sea surface Ocean temperature,,,,,
-SSPS,float32,sea surface practical salinity,"sea_water_salinity ",pss,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%6.3f,-1,,0.001,Ocean salinity,,,,,
-PCO2,float32,co2 part. pres in dry/wet gas,,microatmosphere,,TIME DEPTH LATITUDE LONGITUDE,,100,700,%7.3f,1E+36,,0.001,,,,,,
-FLU2,float32,fluorescence,,milligram/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,1,%8.4f,1E+36,,0.001,,,,,,
-FLU3,float32,secondary fluorescence,,milligram/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,1,%8.4f,1E+36,,0.001,,,,,,
-TUR1,float32,light diffusion coefficient,,m-1,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%6.3f,1E+36,,0.001,,,,,,
-TUR2,float32,light attenuation coefficient,,m-1,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%6.3f,1E+36,,0.001,,,,,,
-TUR3,float32,light transmission,,%,,TIME DEPTH LATITUDE LONGITUDE,,0,100,%6.2f,1E+36,,0.001,,,,,,
-LGH3,float32,light irradiance corrected par,,micromole photon/(m2.s),,TIME DEPTH LATITUDE LONGITUDE,,0,3000,%8.3f,1E+36,,0.001,,,,,,
-LGHT,float32,light irradiance immerged par,,micromole photon/(m2.s),,TIME DEPTH LATITUDE LONGITUDE,,0,4000,%8.3f,1E+36,,0.001,,,,,,
-LGH3,float32,light irradiance corrected par,,micromole photon/(m2.s),,TIME DEPTH LATITUDE LONGITUDE,,0,3000,%8.3f,1E+36,,0.001,,,,,,
-LGH4,float32,light irradiance surface par,,micromole photon/(m2.s),,TIME DEPTH LATITUDE LONGITUDE,,0,3000,%8.3f,1E+36,,0.001,,,,,,
-LGH5,float32,immerged/surf irradiance ratio,,%,,TIME DEPTH LATITUDE LONGITUDE,,0,100,%6.2f,1E+36,,0.01,,,,,,
-NUMP,float32,number of particles,,number/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,999999,%9.0f,1E+36,,0.001,,,,,,
-LINC,float32,long wave incoming radiation,,milligram/m3,,TIME DEPTH LATITUDE LONGITUDE,,-500,500,%+5.1f,1E+36,,0.1,,,,,,
-SSJT,float32,sea surface water jacket temperature,,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-1.5,38,%6.3f,-300,,0.001,,,,,,
-DAYD,float32,decimal julian day time origin 0,,1,,TIME DEPTH LATITUDE LONGITUDE,,0.0,3660.0,%9.5f,1E+36,,0.001,,,,,,
-TE01,float32,sea temperature primary sensor,,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-2,32,%6.3f,1E+36,,0.001,,,,,,
-TE02,float32,sea temperature secondary sensor,,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-2,32,%6.3f,1E+36,,0.001,,,,,,
-PSA1,float32,practical salinity primary sensor,,pss,,TIME DEPTH LATITUDE LONGITUDE,,33,37,%6.3f,1E+36,,0.001,,,,,,
-PSA2,float32,practical salinity secondary sensor,,pss,,TIME DEPTH LATITUDE LONGITUDE,,33,37,%6.3f,1E+36,,0.001,,,,,,
-CND1,float32,electrical conductivity primary sensor,,mho/meter,,TIME DEPTH LATITUDE LONGITUDE,,3,7,%5.3f,1E+36,,0.001,,,,,,
-CND2,float32,electrical conductivity secondary sensor,,mho/meter,,TIME DEPTH LATITUDE LONGITUDE,,3,7,%5.3f,1E+36,,0.001,,,,,,
-DO11,float32,dissolved oxygen primary sensor,,ml/l,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%5.2f,1E+36,,0.001,,,,,,
-DO21,float32,dissolved oxygen secondary sensor,,ml/l,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%5.2f,1E+36,,0.001,,,,,,
-DO12,float32,dissolved oxygen primary sensor,,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,450,%7.3f,1E+36,,0.001,,,,,,
-DO22,float32,dissolved oxygen secondary sensor,,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,450,%7.3f,1E+36,,0.001,,,,,,
-DOV1,float32,dissolved oxygen primary sensor voltage,,V,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%6.4f,1E+36,,0.001,,,,,,
-DOV2,float32,dissolved oxygen secondary sensor voltage,,V,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%6.4f,1E+36,,0.001,,,,,,
-DVT1,float32,dissolved oxygen primary sensor dv/dt,,dv/dt,,TIME DEPTH LATITUDE LONGITUDE,,-1,1,%+7.5f,1E+36,,0.001,,,,,,
-DVT2,float32,dissolved oxygen secondary sensor dv/dt,,dv/dt,,TIME DEPTH LATITUDE LONGITUDE,,-1,1,%+7.5f,1E+36,,0.002,,,,,,
-NTIW,float32,"nitrite (no2-n) ",moles_of_nitrite_per_unit_mass_in_sea_water,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,100,%7.3f,1E+36,,0.001,,,,,,
-NTRI,float32,"nitrite (no2-n) ",moles_concentration_of_nitrite_in_sea_water,millimole/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%6.3f,1E+36,,0.001,,,,,,
-NTAW,float32,"nitrate (no3-n) ",moles_of_nitrate_per_unit_mass_in_sea_water,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,90,%5.2f,1E+36,,0.001,,,,,,
-NTRA,float32,"nitrate (no3-n) ",moles_concentration_of_nitrate_in_sea_water,millimole/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,56,%6.3f,1E+36,,0.001,,,,,,
-NTZW,float32,nitrate + nitrite,moles_of_nitrate_and_nitrite_per_unit_mass_in_sea_water,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%6.3f,1E+36,,0.001,,,,,,
-PHOW,float32,phosphate (po4-p),moles_of_phosphate_per_unit_mass_in_sea_water,micromole/kg,,TIME DEPTH LATITUDE LONGITUDE,,0,10,%5.3f,1E+36,,0.001,,,,,,
-PHOS,float32,phosphate (po4-p),moles_phosphate_of_nitrate_in_sea_water,millimole/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,4,%6.3f,1E+36,,0.001,,,,,,
-PHPT,float32,total pheophytin,,milligramm/m3,,TIME DEPTH LATITUDE LONGITUDE,,0,99,%5.2f,1E+36,,0.01,,,,,,
-OSMP,float32,organic suspended matter,,gramm/m3,,,,0,10,%5.2f,1E+36,,0.01,,,,,,
-LSCT,float32,scattering,,%,,,,0,100,%4.1f,1E+36,,0.1,,,,,,
-WETT,float32,wet bulb temperature,,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,0,90,%5.1f,1E+36,,0.001,,,,,,
-HEIG,float32,atmospheric height,,meter,,TIME DEPTH LATITUDE LONGITUDE,up,0,40000,%8.2f,1E+36,,0.1,,,,,,urn:ogc:crs:EPSG::5829
-NAVG,int32,averaged data cycle number,,1,,,,0,999,%3d,9999,,,,,,,,
-BOTL,int32,sea water sample bottle number,,1,,,,1,36,%3d,99999,,,,,,,,
-TYPECAST,int32,type of cast: unknow=0;phy=1;bio=2;geo=3,,1,,,,0,9,%1d,99999,,,,,,,,
-BATH,float32,bathymetric depth,,meter,,,,0,11000,%6.1f,-1.0,,0.1,,,,,,
-TE35,float32,sea temperature sbe35 high precision sensor,,degree_Celsius,,TIME DEPTH LATITUDE LONGITUDE,,-2,32,%6.3f,1E+36,,0.001,,,,,,
-GREENALGEA,float32,greenalgae,,,,,,,,%6.3f,-300,,,,,,,,
-DIATOMS,float32,diatoms,,,,,,,,%6.3f,-300,,,,,,,,
-CRYPTOPHYTA,float32,cryptophyta,,,,,,,,%6.3f,-300,,,,,,,,
-YELLOWSUB,float32,yellowsub,,,,,,,,%6.3f,-300,,,,,,,,
-SOG,float32,speed over ground,,,,,,,,%4.1f,,,,,,,,,
-COG,float32,course over ground,,,,,,,,%5.1f,,,,,,,,,
-SPEED,float32,speed,,,,,,,,%4.1f,,,,,,,,,
-HEADING,float32,heading,,,,,,,,%5.1f,,,,,,,,,
-SPEED_DRIFT,float32,speed drift,,,,,,,,%4.1f,,,,,,,,,
-HEADING_DRIFT,float32,heading drift,,,,,,,,%5.1f,,,,,,,,,
-PHINSB,float32,portside phins,,,,,,,,%6.3f,,,,,,,,,
-PHINSA,float32,starboard phins,,,,,,,,%6.3f,,,,,,,,,
-PHINST,float32,starboard phins,,,,,,,,%6.3f,,,,,,,,,
-FLOW,float32,water flow in the instrument,,l/m,,,,0,100,%4.1f,1E+36,,0.1,,,,,,
-,,,,,,,,,,,,,,,,,,,
+key;types;long_name;standard_name;units;conventions;coordinates;positive;valid_min;valid_max;format;_FillValue;axis;resolution;comment;default_value;flag_values;flag_meanings;reference;coordinate_reference_frame
+string;string;string;string;string;string;string;string;numeric;numeric;string;numeric;string;numeric;string;string;string;string;string;string
+ID;int32;acquisiton number;;1;;;;;;%05d;99999;;;Acquisition number; usually for trajectory or Time-serie;;;;
+PRLF;int32;profile number;;1;;;;;;%05d;99999;;;Station number; a station could be have more than one cast;;;;
+PROFILE;int32;profile number;;1;;;;;;%05d;99999;;;Station number; a station could be have more than one cast;;;;
+LATITUDE;float32;latitude of measurement;latitude;degrees_north;;;;;;%8.5f;;Y;;;;;;WGS84;urn:ogc:crs:EPSG::4326
+LONGITUDE;float32;longitude of measurement;longitude;degrees_east;;;;;;%9.5f;;X;;;;;;WGS84;urn:ogc:crs:EPSG::4327
+TIME;float64;time of measurement;time;days since 1950-01-01T00:00:00Z;Relative julian days with decimal part (as parts of the day);;;0;90000;%6.6f;;T;;;;;;;
+ETDD;float64;ellapsed time;;1;;;;0;90000;%9.5f;1E+36;;;;;;;;
+DEPH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
+DEPTH;float32;depth of measurement;depth;meter;;;down;0;9000;%7.2f;1E+36;Z;;;;;;;urn:ogc:crs:EPSG::5831
+PRES;float32;sea water pressure;sea_water_pressure;decibar;;TIME DEPTH LATITUDE LONGITUDE;;0;9000;%7.2f;1E+36;;;Pressure (dbar) of the measurement;;;;;
+ABCP;float32;alpha beta carotenes;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+ALKW;float32;alkalinity;;micromole/kg;;;;0;9000;%6.1lf;9999.9;;;;;;;;
+ALKY;float32;alkalinity;;millimole/m3;;;;1500;2500;%4.0lf;9999;;;;;;;;
+AMIS;float32;sediment amino-acids;;microgram/g;;;;0;7000;%4.0lf;9999;;;;;;;;
+AMON;float32;ammonium (nh4-n) content;;millimole/m3;;;;0;10;%6.2lf;999.99;;;;;;;;
+AMOW;float32;ammonium (nh4-n) content;;micromole/kg;;;;0;1;%6.3lf;99.999;;;;;;;;
+ASDW;float32;absorption standard deviation;;milligram/m3;;;;0;10;%5.2lf;99.99;;;;;;;;
+ATMP;float32;atmospheric pressure;;hectopascal;;;;1000;1030;%8.3lf;9999.999;;;;;;;;
+ATMS;float32;atmospheric pressure - sea lev;air_pressure_at_sea_level;hectoPascal;;TIME DEPTH LATITUDE LONGITUDE;;940;1030;%6.1f;1E+36;;0.001;Atmospheric pressure at sea level;;;;;
+AXAP;float32;alloxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+BATH;float32;bathymetric depth;;meter;;;;0;11000;%6.1f;-1;;0.1;;;;;;
+BCCS;float32;bacteria number sediment;;10+9 cell/dm3;;;;0;9999.9;%6.1lf;9999.9;;;;;;;;
+BCCW;float32;number of sw bacteria;;10+9 cell/m3;;;;0;9000;%7.2lf;9999.99;;;;;;;;
+BCMW;float32;bacterial biomass in sea water;;milligram C/m3;;;;0;16;%6.3lf;99.999;;;;;;;;
+BFUP;float32;19'butanoyloxyfucoxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+BOTL;int32;sea water sample bottle number;;1;;;;1;36;%3d;99999;;;;;;;;
+C13D;float32;delta 13c (13c/12c);;per thousand;;;;-50;100;%5.1lf;999.9;;;;;;;;
+C1UW;float32;14c uptake 0.2-1 micron;;milligram carbon/(m3.day);;;;0;100;%6.2lf;999.99;;;;;;;;
+CDFW;float32;dark fixation;;milligram carbon/(m3.day);;;;0;2;%5.2lf;99.99;;;;;;;;
+CE1W;float32;dissolved cfc11 error;;picomole/kg;;;;0;0.5;%6.3lf;99.999;;;;;;;;
+CE2W;float32;dissolved cfc12 error;;picomole/kg;;;;0;0.5;%6.3lf;99.999;;;;;;;;
+CE3W;float32;dissolved cfc113 error;;picomole/kg;;;;0;0.5;%6.3lf;99.999;;;;;;;;
+CF1W;float32;dissolved cfc11;;picomole/kg;;;;-0.01;90;%7.4lf;99.9999;;;;;;;;
+CF2W;float32;dissolved cfc12;;picomole/kg;;;;-0.01;90;%7.4lf;99.9999;;;;;;;;
+CF3W;float32;dissolved cfc113;;picomole/kg;;;;0;5;%6.3lf;99.999;;;;;;;;
+CH1P;float32;chl-a(less divinylchl-a);;milligram/m3;;;;0;3;%6.3lf;99.999;;;;;;;;
+CH1T;float32;chlorophyll total;;microgram/kg;;;;0;10;%5.2lf;99.99;;;;;;;;
+CH2P;float32;chl-b(less divinylchl-b);;milligram/m3;;;;0;1;%6.3lf;99.999;;;;;;;;
+CHAD;float32;divinyl chlorophyll-a;;milligram/m3;;;;0;9;%6.3lf;99.999;;;;;;;;
+CHAE;float32;epimere chlorophyll-a;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+CHAF;float32;chlorophyll-a vertical flux;;milligram/(m2.day);;;;0;99;%6.3lf;99.999;;;;;;;;
+CHBD;float32;divinyl-chlorophyll-b;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+CHC3;float32;chlorophyll-c3;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+CHCZ;float32;chlorophyll-c1+c2;;milligram/m3;;;;0;900;%6.3lf;99.999;;;;;;;;
+CHLB;float32;chlorophyll-b total;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CHLC;float32;chlorophyll-c total;;milligram/m3;;;;0;99;%6.3lf;99.999;;;;;;;;
+CHLT;float32;chlorophyll-total;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CHTF;float32;part. total carbohydrates flux;;milligram/(m2.day);;;;0;99;%6.3lf;99.999;;;;;;;;
+CHTS;float32;sediment carbohydrates;;microgram/g;;;;0;7000;%4.0lf;9999;;;;;;;;
+CICW;float32;number of sw ciliates;;10+3 cell/m3;;;;0;90000;%5.0lf;99999;;;;;;;;
+CL4W;float32;dissolved c-tetrachloride;;picomole/kg;;;;0;10;%6.3lf;99.999;;;;;;;;
+CLAY;float32;clay in the sediment;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+CND1;float32;electrical conductivity primary sensor;;mho/meter;;TIME DEPTH LATITUDE LONGITUDE;;3;7;%5.3f;1E+36;;0.001;;;;;;
+CND2;float32;electrical conductivity secondary sensor;;mho/meter;;TIME DEPTH LATITUDE LONGITUDE;;3;7;%5.3f;1E+36;;0.001;;;;;;
+CNDC;float32;electrical conductivity;;mS/cm;;TIME DEPTH LATITUDE LONGITUDE;;30;70;%6.3f;1E+36;;0.002;;;;;;
+CO2W;float32;dissolved carbon dioxyd (co2);;millimole/m3;;;;0;4800;%6.1lf;9999.9;;;;;;;;
+CO3F;float32;part. caco3 flux;;milligram/(m2.day);;;;0;600;%7.3lf;999.999;;;;;;;;
+CO3P;float32;carbonates content;;%;;;;0;99.99;%5.2lf;99.99;;;;;;;;
+CO3S;float32;sediment carbonates;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+COCW;float32;number of sw coccolithophorids;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+CODW;float32;chemical oxygen demand;;millimole/m3;;;;0;650;%7.3lf;999.999;;;;;;;;
+COG;float32;course over ground;;;;;;;;%5.1f;;;;;;;;;
+COPF;float32;coccolithophoridae ppc flux;;milligram C/(m2.day);;;;0;99.999;%6.3lf;99.999;;;;;;;;
+COPP;float32;number of copepods;;number/m3;;;;0;99999;%5.0lf;99999;;;;;;;;
+CORG;float32;dissolved organic carbon;;millimole/m3;;;;0;1000;%5.0lf;99999;;;;;;;;
+CPH1;float32;chlorophyll-a total;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CPH2;float32;chlorophyll-a total;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CPH3;float32;chlorophyll-a/2 micron filter;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CPH4;float32;chlorophyll-a/20 micron filter;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CPHL;float32;chlorophyll-a total;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+CRYPTOPHYTA;float32;cryptophyta;;;;;;;;%6.3f;-300;;;;;;;;
+CUPW;float32;14c production unknown filter;;milligram carbon/(m3.day);;;;0;200;%6.2lf;999.99;;;;;;;;
+D13C;float32;delta 13 c signature;;%;;;;-50;100;%6.2lf;999.99;;;;;;;;
+DATE;float32;date;;mmdd;;;;101;1231;%4.4d;9999;;;;;;;;
+DAYD;float32;decimal julian day time origin 0;;1;;TIME DEPTH LATITUDE LONGITUDE;;0;3660;%9.5f;1E+36;;0.001;;;;;;
+DAYS;float32;day within year;;decimal day;;;;1;366;%9.5lf;999.99999;;;;;;;;
+DAYX;float32;day within month;;dd;;;;1;31;%2.2d;99;;;;;;;;
+DCAW;float32;dark carbon absorption;;milligram/m3;;;;-0.05;10;%5.2lf;99.99;;;;;;;;
+DEN1;float32;density (sigma-theta) primary sensors;;kg/m3;;;;10;35;%6.3lf;99.999;;;;;;;;
+DEN2;float32;density (sigma-theta) secondary sensors;;kg/m3;;;;10;35;%6.3lf;99.999;;;;;;;;
+DENS;float32;density;sea_water_density;kg/m3;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Ocean density;;;;;
+DFCW;float32;number of sw dinoflagellates;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+DFPF;float32;dinoflagellates ppc flux;;milligram C/(m2.day);;;;0;99.999;%6.3lf;99.999;;;;;;;;
+DIATOMS;float32;diatoms;;;;;;;;%6.3f;-300;;;;;;;;
+DIPF;float32;diatoms ppc flux;;milligram C/(m2.day);;;;0;99.999;%6.3lf;99.999;;;;;;;;
+DO11;float32;dissolved oxygen primary sensor;;ml/l;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%5.2f;1E+36;;0.001;;;;;;
+DO12;float32;dissolved oxygen primary sensor;;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;450;%7.3f;1E+36;;0.001;;;;;;
+DO21;float32;dissolved oxygen secondary sensor;;ml/l;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%5.2f;1E+36;;0.001;;;;;;
+DO22;float32;dissolved oxygen secondary sensor;;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;450;%7.3f;1E+36;;0.001;;;;;;
+DOPW;float32;dissolved organic phosphorus;;millimole/m3;;;;0;50;%6.3lf;99.999;;;;;;;;
+DOV1;float32;dissolved oxygen primary sensor voltage;;V;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.4f;1E+36;;0.001;;;;;;
+DOV2;float32;dissolved oxygen secondary sensor voltage;;V;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.4f;1E+36;;0.001;;;;;;
+DOX1;float32;dissolved oxygen;volume_fraction_of_oxygen_in_sea_water;ml/l;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%5.3f;1E+36;;0.001;Ocean oxygen in ml per liter;;;;;
+DOX2;float32;dissolved oxygen;moles_of_oxygen_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;450;%7.3f;1E+36;;0.001;Ocean oxygen in micromole by kg;;;;;
+DOXY;float32;dissolved oxygen;;millimole/m3;;;;0;650;%7.3lf;999.999;;;;;;;;
+DPS1;float32;depth below bottom-lower limit;;meters;;;;0;11000;%6.1lf;-999.9;;;;;;;;
+DPSF;float32;depth below sea floor;;meters;;;;0;11000;%6.1lf;-999.9;;;;;;;;
+DRDD;float32;duration (days);;ddd;;;;0;999;%3.0lf;999;;;;;;;;
+DRYT;float32;air temperature;air_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;1E+36;;0.001;Air temperature;;;;;
+DTCW;float32;number of sw diatoms;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+DVT1;float32;dissolved oxygen primary sensor dv/dt;;dv/dt;;TIME DEPTH LATITUDE LONGITUDE;;-1;1;%+7.5f;1E+36;;0.001;;;;;;
+DVT2;float32;dissolved oxygen secondary sensor dv/dt;;dv/dt;;TIME DEPTH LATITUDE LONGITUDE;;-1;1;%+7.5f;1E+36;;0.002;;;;;;
+DXAP;float32;diadinoxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+EF1W;float32;dissolved cfc11 error;;%;;;;0;100;%6.3lf;99.999;;;;;;;;
+EF2W;float32;dissolved cfc12 error;;%;;;;0;100;%6.3lf;99.999;;;;;;;;
+EF3W;float32;dissolved cfc113 error;;%;;;;0;100;%6.3lf;99.999;;;;;;;;
+EPMP;float32;total susp. part. matter/ester;;gram/m3;;;;0;9;%5.3lf;9.999;;;;;;;;
+ETHP;float32;particulate 234 th act. error;;Bq/m3;;;;0;99;%6.3lf;99.999;;;;;;;;
+ETHW;float32;dissolved 234 th act. error;;Bq/m3;;;;0;90;%6.3lf;99.999;;;;;;;;
+EWCS;float32;current east  std. deviation;;cm/s;;;;0;20;%+6.3lf;99.999;;;;;;;;
+EWCT;float32;current east component;;cm/second;;TIME DEPTH LATITUDE LONGITUDE;;-100;100;%7.2f;1E+36;;0.02;Current east;;;;;
+FCO2;float32;co2 fugacity;;microatmosphere;;;;0;1000;%6.1lf;9999.9;;;;;;;;
+FLOW;float32;water flow in the instrument;;l/m;;;;0;100;%4.1f;1E+36;;0.1;;;;;;
+FLPF;float32;flagellates ppc flux;;milligram C/(m2.day);;;;0;99.999;%6.3lf;99.999;;;;;;;;
+FLU1;float32;fluorescence;;volt;;;;-1;3;%6.3lf;99.999;;;;;;;;
+FLU2;float32;fluorescence;;milligram/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;1;%8.4f;1E+36;;0.001;;;;;;
+FLU3;float32;secondary fluorescence;;milligram/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;1;%8.4f;1E+36;;0.001;;;;;;
+FLUO;float32;fluorescence;;relative unit;;;;-0.1;10;%6.3lf;99.999;;;;;;;;
+FUCP;float32;fucoxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+GLUC;float32;glucide;;milligram/m3;;;;0;200;%5.0lf;99999;;;;;;;;
+GPMP;float32;total susp. part. matter/glass;;gram/m3;;;;0;99;%6.3lf;99.999;;;;;;;;
+GREENALGEA;float32;greenalgae;;;;;;;;%6.3f;-300;;;;;;;;
+GSPD;float32;gust wind speed;;meters/second;;;;0;99;%2.0lf;99;;;;;;;;
+H2OS;float32;water content;;%;;;;0;100;%5.1lf;999.9;;;;;;;;
+HBAW;float32;nb of heterotrophic bacteria;;10+6 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+HCDT;float32;direction rel. true north;;degree;;;;0;360;%5.1lf;999.9;;;;;;;;
+HCSP;float32;horizontal current speed;;cm/s;;;;0;9;%5.3lf;9.999;;;;;;;;
+HEAD;float32;platform heading rel. north;;degree;;;;-360;360;%+5.1lf;-999.9;;;;;;;;
+HEADING;float32;heading;;;;;;;;%5.1f;;;;;;;;;
+HEADING_DRIFT;float32;heading drift;;;;;;;;%5.1f;;;;;;;;;
+HEDE;float32;helium isotopic ratio error;;%;;;;0;100;%8.4lf;999.9999;;;;;;;;
+HEDW;float32;helium dev. of isotopic ratio;;%;;;;-1.5;100;%8.4lf;999.9999;;;;;;;;
+HEEW;float32;dissolved helium error;;nanomole/kg;;;;0;1;%7.4lf;99.9999;;;;;;;;
+HEIG;float32;atmospheric height;;meter;;TIME DEPTH LATITUDE LONGITUDE;up;0;40000;%8.2f;1E+36;;0.1;;;;;;urn:ogc:crs:EPSG::5829
+HELD;float32;delta helium 3;;%;;;;-99;99;%6.2lf;999.99;;;;;;;;
+HELW;float32;dissolved helium;;nanomole/kg;;;;1;2;%7.4lf;99.9999;;;;;;;;
+HFUP;float32;19'hexanoyloxyfucoxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+HSUL;float32;hydrogen sulphide (h2s);;millimole/m3;;;;0;500;%6.2lf;999.99;;;;;;;;
+IODI;float32;iodine;;millimole/m3;;;;0;10;%5.2lf;99.99;;;;;;;;
+ISMP;float32;inorganic suspended matter;;gram/m3;;;;0;10;%6.3lf;99.999;;;;;;;;
+LATD;float32;latitude degrees;;degree;;;;-90;90;%+3.0lf;99;;;;;;;;
+LATM;float32;latitude minutes;;minute;;;;0;59.999;%6.3lf;99.999;;;;;;;;
+LATX;float32;latitude;;decimal degree;;;;-90;90;%+8.4lf;99.9999;;;;;;;;
+LCAW;float32;light carbon absorption;;milligram/m3;;;;0;40;%5.2lf;99.99;;;;;;;;
+LGH3;float32;light irradiance corrected par;;micromole photon/(m2.s);;TIME DEPTH LATITUDE LONGITUDE;;0;3000;%8.3f;1E+36;;0.001;;;;;;
+LGH4;float32;light irradiance surface par;;micromole photon/(m2.s);;TIME DEPTH LATITUDE LONGITUDE;;0;3000;%8.3f;1E+36;;0.001;;;;;;
+LGH5;float32;immerged/surf irradiance ratio;;%;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%6.2f;1E+36;;0.01;;;;;;
+LGHT;float32;light irradiance immerged par;;micromole photon/(m2.s);;TIME DEPTH LATITUDE LONGITUDE;;0;4000;%8.3f;1E+36;;0.001;;;;;;
+LINC;float32;long wave incoming radiation;;milligram/m3;;TIME DEPTH LATITUDE LONGITUDE;;-500;500;%+5.1f;1E+36;;0.1;;;;;;
+LIPI;float32;lipids in the water column;;milligram/m3;;;;0;200;%5.0lf;99999;;;;;;;;
+LIPS;float32;sediment lipids;;microgram/g;;;;0;5000;%4.0lf;9999;;;;;;;;
+LOND;float32;longitude degrees;;degree;;;;-179;180;%+4.0lf;999;;;;;;;;
+LONM;float32;longitude minutes;;minute;;;;0;59.999;%6.3lf;99.999;;;;;;;;
+LONX;float32;longitude;;decimal degree;;;;-180;180;%+9.4lf;999.9999;;;;;;;;
+LSCT;float32;scattering;;%;;;;0;100;%4.1f;1E+36;;0.1;;;;;;
+LSIC;float32;lithogenic content;;%;;;;0;99.99;%5.2lf;99.99;;;;;;;;
+LTHF;float32;lithogenic fraction flux;;milligram/(m2.day);;;;0;3400;%7.2lf;9999.99;;;;;;;;
+LTUW;float32;leucine uptake rate;;microgram carbon/(m3.h);;;;0;90;%5.2lf;99.99;;;;;;;;
+MALF;float32;al flux in settling particles;;milligram/(m2.day);;;;0;180;%6.2lf;999.99;;;;;;;;
+MALP;float32;al in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MALS;float32;al in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MBAP;float32;ba in suspended matter;;milligram/m3;;;;0;99.9999;%7.4lf;99.9999;;;;;;;;
+MBAS;float32;ba in the sediment;;ppm;;;;0;5000;%7.2lf;9999.99;;;;;;;;
+MBRS;float32;br in the sediment;;ppm;;;;-50;50;%+6.2lf;-99.99;;;;;;;;
+MCAP;float32;ca in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MCAS;float32;ca in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MCES;float32;ce in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MCLP;float32;cl in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MCRS;float32;cr in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MCUF;float32;cu flux in settling particles;;microgram/(m2.day);;;;0;120;%6.2lf;999.99;;;;;;;;
+MCUS;float32;cu in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MFEF;float32;fe flux in settling particles;;milligram/(m2.day);;;;0;100;%6.2lf;999.99;;;;;;;;
+MFEP;float32;fe in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MFES;float32;fe in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MIIS;float32;i in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MKKP;float32;k in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MKKS;float32;k in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MLAS;float32;la in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MMGP;float32;mg in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MMGS;float32;mg in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MMNF;float32;mn flux in settling particles;;microgram/(m2.day);;;;0;3400;%6.2lf;999.99;;;;;;;;
+MMNP;float32;mn in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MMNS;float32;mn in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MMOS;float32;mo in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MNAS;float32;na in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MNBS;float32;nb in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MNDS;float32;nd in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MNIS;float32;ni in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MNTH;float32;month;;mm;;;;1;12;%2.2d;99;;;;;;;;
+MPBF;float32;pb flux in settling particles;;microgram/(m2.day);;;;0;200;%6.2lf;999.99;;;;;;;;
+MPBS;float32;pb in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MPPP;float32;p in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MPPS;float32;p in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MRBS;float32;rb in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MSCS;float32;sc in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MSDP;float32;mean spheric diam. of particle;;millimeter;;;;0;99;%5.2lf;99.99;;;;;;;;
+MSIP;float32;si in suspended matter;;milligram/m3;;;;0;999.999;%7.3lf;999.999;;;;;;;;
+MSIS;float32;si in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MSMP;float32;mean spheric diam. median;;millimeter;;;;0;99;%5.2lf;99.99;;;;;;;;
+MSRS;float32;sr in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MSSP;float32;s in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MSZW;float32;mesozooplancton dry weight;;milligram/m3;;;;0;90;%5.2lf;99.99;;;;;;;;
+MTHS;float32;th in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MTIP;float32;ti in suspended matter;;milligram/m3;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+MTIS;float32;ti in the sediment;;%;;;;0;99;%6.3lf;99.999;;;;;;;;
+MUUS;float32;u in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MVVS;float32;v in the sediment;;ppm;;;;-50;900;%+6.2lf;99.99;;;;;;;;
+MYYS;float32;y in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MZNF;float32;zn flux in settling particles;;microgram/(m2.day);;;;0;7600;%6.2lf;999.99;;;;;;;;
+MZNS;float32;zn in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+MZRS;float32;zr in the sediment;;ppm;;;;0;900;%6.2lf;999.99;;;;;;;;
+N15D;float32;delta 15n (15n/14n);;per thousand;;;;-2;10;%5.1lf;999.9;;;;;;;;
+NAVG;int32;averaged data cycle number;;1;;;;0;999;%3d;9999;;;;;;;;
+NEEW;float32;dissolved neon error;;nanomole/kg;;;;0;1;%7.4lf;99.9999;;;;;;;;
+NEOW;float32;dissolved neon;;nanomole/kg;;;;4;8;%7.4lf;99.9999;;;;;;;;
+NETR;float32;net radiation;;watt/m2;;;;-500;500;%+5.1lf;-999.9;;;;;;;;
+NFAW;float32;autotrophic nanoflagellates;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+NFCW;float32;number of sw nanoflagellates;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+NFHW;float32;heterotrophic nanoflagellates;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+NHRW;float32;ammonium regeneration;;micromole nitrogen/(m3.day);;;;0;99;%5.0lf;99999;;;;;;;;
+NHUW;float32;ammonium uptake;;micromole nitrogen/(m3.day);;;;0;900;%5.0lf;99999;;;;;;;;
+NODW;float32;dissolved organic nitrogen;;micromole/kg;;;;0;99;%5.2lf;99.99;;;;;;;;
+NORG;float32;dissolved organic nitrogen;;millimole/m3;;;;0;50;%6.3lf;99.999;;;;;;;;
+NORW;float32;nitrification;;micromole nitrogen/(m3.day);;;;0;100;%5.0lf;99999;;;;;;;;
+NOTT;float32;total organic nitrogen (d+p);;micromole/kg;;;;0;10;%5.2lf;99.99;;;;;;;;
+NOUW;float32;nitrate uptake;;micromole nitrogen/(m3.day);;;;0;900;%5.0lf;99999;;;;;;;;
+NSCS;float32;current north std. deviation;;cm/s;;;;0;20;%+7.3lf;-99.999;;;;;;;;
+NSCT;float32;current north component;;cm/second;;TIME DEPTH LATITUDE LONGITUDE;;-100;100;%7.2f;1E+36;;0.01; Current north;;;;;
+NT1P;float32;total particulate nitrogen;;micromole/kg;;;;0;10;%5.2lf;99.99;;;;;;;;
+NTAW;float32;nitrate (no3-n) ;moles_of_nitrate_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;90;%5.2f;1E+36;;0.001;;;;;;
+NTIW;float32;nitrite (no2-n) ;moles_of_nitrite_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%7.3f;1E+36;;0.001;;;;;;
+NTOT;float32;total nitrogen (n) content;;millimole/m3;;;;0;90;%5.2lf;99.99;;;;;;;;
+NTRA;float32;nitrate (no3-n) ;moles_concentration_of_nitrate_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;56;%6.3f;1E+36;;0.001;;;;;;
+NTRI;float32;nitrite (no2-n) ;moles_concentration_of_nitrite_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
+NTRZ;float32;nitrate + nitrite content;;millimole/m3;;;;0;100;%6.2lf;999.99;;;;;;;;
+NTZW;float32;nitrate + nitrite;moles_of_nitrate_and_nitrite_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
+NUMP;float32;number of particles;;number/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;999999;%9.0f;1E+36;;0.001;;;;;;
+OMMF;float32;part. organic matter flux;;milligram/(m2.day);;;;0;600;%6.2lf;999.99;;;;;;;;
+OPAP;float32;opal content;;%;;;;0;99.99;%5.2lf;99.99;;;;;;;;
+OSAT;float32;oxygen saturation;;%;;;;0;10;%5.2lf;99.99;;;;;;;;
+OSMP;float32;organic suspended matter;;gramm/m3;;;;0;10;%5.2f;1E+36;;0.01;;;;;;
+OXIR;float32;isotopic ratio o18/o16;;per thousand;;;;-10;10;%6.2lf;999.99;;;;;;;;
+PC1P;float32;particulate organic carbon/poc;;millimole/m3;;;;0;100;%6.3lf;99.999;;;;;;;;
+PCEW;float32;number of sw picoeucaryotes;;10+6 cell/m3;;;;0;90000;%5.0lf;99999;;;;;;;;
+PCO2;float32;co2 part. pres in dry/wet gas;;microatmosphere;;TIME DEPTH LATITUDE LONGITUDE;;100;700;%7.3f;1E+36;;0.001;;;;;;
+PERP;float32;peridinine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+PHCW;float32;num. of sw phytoplankton cells;;10+3 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+PHEA;float32;pheophytin-a;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+PHEB;float32;pheophytin-b;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+PHEC;float32;pheophytin-c;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+PHINSA;float32;starboard phins;;;;;;;;%6.3f;;;;;;;;;
+PHINSB;float32;portside phins;;;;;;;;%6.3f;;;;;;;;;
+PHINST;float32;starboard phins;;;;;;;;%6.3f;;;;;;;;;
+PHNS;float32;sediment phenols;;microgram/g;;;;0;200;%5.1lf;999.9;;;;;;;;
+PHOS;float32;phosphate (po4-p);moles_phosphate_of_nitrate_in_sea_water;millimole/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;4;%6.3f;1E+36;;0.001;;;;;;
+PHOW;float32;phosphate (po4-p);moles_of_phosphate_per_unit_mass_in_sea_water;micromole/kg;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%5.3f;1E+36;;0.001;;;;;;
+PHPH;float32;ph;;pH unit;;;;7.4;8.4;%5.3lf;9.999;;;;;;;;
+PHPT;float32;total pheophytin;;milligramm/m3;;TIME DEPTH LATITUDE LONGITUDE;;0;99;%5.2f;1E+36;;0.01;;;;;;
+PHTF;float32;phaeopigments vertical flux;;milligram/(m2.day);;;;0;10;%6.3lf;99.999;;;;;;;;
+PHTP;float32;total pheophytine;;milligram/m3;;;;0;99;%5.2lf;99.99;;;;;;;;
+PN1P;float32;particulate organic nitrogen;;millimole/m3;;;;0;2;%6.3lf;99.999;;;;;;;;
+POCF;float32;part. organic carbon flux;;milligram/(m2.day);;;;0;99;%5.2lf;99.99;;;;;;;;
+POCP;float32;particulate organic carbon/poc;;milligram/m3;;;;0;999;%6.2lf;999.99;;;;;;;;
+PODW;float32;dissolved organic phosphorus;;micromole/kg;;;;0;5;%5.2lf;99.99;;;;;;;;
+PONP;float32;particulate organic nitrogen;;milligram/m3;;;;0;100;%6.2lf;999.99;;;;;;;;
+POTT;float32;total organic phosphorus (d+p);;micromole/kg;;;;0;5;%5.2lf;99.99;;;;;;;;
+PP1P;float32;part. organic phosphorus (p);;millimole/m3;;;;0;10;%6.3lf;99.999;;;;;;;;
+PRCW;float32;number of sw prochlorococcus;;10+6 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+PREC;float32;corrected sea pressure;;decibar=10000 pascals;;;;0;6500;%6.1lf;-999.9;;;;;;;;
+PROT;float32;protein;;milligram/m3;;;;0;500;%5.0lf;99999;;;;;;;;
+PRRT;float32;precipitation rate;;millimeters/hour;;;;0;900;%7.3lf;999.999;;;;;;;;
+PSA1;float32;practical salinity primary sensor;;pss;;TIME DEPTH LATITUDE LONGITUDE;;33;37;%6.3f;1E+36;;0.001;;;;;;
+PSA2;float32;practical salinity secondary sensor;;pss;;TIME DEPTH LATITUDE LONGITUDE;;33;37;%6.3f;1E+36;;0.001;;;;;;
+PSAL;float32;practical salinity;sea_water_salinity;1;PSU;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%7.4f;1E+36;;0.001;Ocean practical salinity (PSS-78);;;;;
+PT1P;float32;total particulate phosphorus;;micromole/kg;;;;0;5;%5.2lf;99.99;;;;;;;;
+PTNP;float32;total particulate nitrogen;;milligram/m3;;;;0;5;%5.2lf;99.99;;;;;;;;
+PTPP;float32;total particulate phosphorus;;milligram/m3;;;;0;5;%5.2lf;99.99;;;;;;;;
+PTZF;float32;protozoa ppc flux;;milligram C/(m2.day);;;;0;99.999;%6.3lf;99.999;;;;;;;;
+PXAP;float32;prasinoxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+RDIN;float32;incident radiation;;watt/m2;;;;-500;500;%+5.1lf;-999.9;;;;;;;;
+REDS;float32;redox potential;;millivolt;;;;-110;200;%+4.0lf;-999;;;;;;;;
+RELH;float32;relative humidity;relative_humidity;%;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%4.1f;1E+36;;0.001;Relative humidity;;;;;
+SACC;float32;salinity accuracy;;.;;;;0;4;%2d;-9;;;;;;;;
+SAND;float32;sand in the sediment;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+SCDT;float32;sea surf current dir. rel t. n;;degree;;;;0;360;%5.1lf;999.9;;;;;;;;
+SCSP;float32;sea surface current speed;;cm/s;;;;0;10;%5.2lf;99.99;;;;;;;;
+SECS;float32;seconds within minute;;ss;;;;0;59;%2.2d;99;;;;;;;;
+SILT;float32;silt in the sediment;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+SIOF;float32;part. biogenic si flux;;milligram/(m2.day);;;;0;600;%7.3lf;999.999;;;;;;;;
+SIOS;float32;sediment biogenic sio2;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+SLCA;float32;silicate (sio4-si) content;;millimole/m3;;;;0;200;%7.3lf;999.999;;;;;;;;
+SLCP;float32;particulate organic silica(si);;millimole/m3;;;;0;1;%6.3lf;99.999;;;;;;;;
+SLCW;float32;silicate (sio4-si) content;;micromole/kg;;;;0;195;%5.1lf;999.9;;;;;;;;
+SLEV;float32;observed sea level;;meters;;;;0;6000;%8.3lf;9999.999;;;;;;;;
+SNCW;float32;number of sw synechococcus;;10+6 cell/m3;;;;0;900000;%6.0lf;999999;;;;;;;;
+SOG;float32;speed over ground;;;;;;;;%4.1f;;;;;;;;;
+SPDI;float32;indicated platform speed-ship;;meters/second;;;;0;90;%6.3lf;99.999;;;;;;;;
+SPEED;float32;speed;;;;;;;;%4.1f;;;;;;;;;
+SPEED_DRIFT;float32;speed drift;;;;;;;;%4.1f;;;;;;;;;
+SSAL;float32;salinity (pre-1978 defn);;P.S.U.;;;;0;40;%6.3lf;99.999;;;;;;;;
+SSJT;float32;sea surface water jacket temperature;sea_water_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;-300;;0.001;Ocean temperature;;;;;
+SSPS;float32;sea surface practical salinity;sea_water_salinity ;pss;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;-1;;0.001;Ocean salinity;;;;;
+SSTM;float32;model sea surface temperature;;Celsius degree;;;;-1.5;38;%6.3lf;99.999;;;;;;;;
+SSTP;float32;sea surface water temperature;sea_water_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%6.3f;-300;;0.001;Sea surface Ocean temperature;;;;;
+SVEL;float32;sound velocity;speed_of_sound_in_sea_water;meter/second;;TIME DEPTH LATITUDE LONGITUDE;;1350;1600;%7.2f;1E+36;;0.001;Ocean sound velocity;;;;;
+SWDR;float32;swell direction  rel true n.;;degree;;;;0;360;%5.1lf;999.9;;;;;;;;
+SWHT;float32;swell height;;meters;;;;0;30;%5.2lf;99.99;;;;;;;;
+TACC;float32;temperature accuracy;;.;;;;0;4;%2d;-9;;;;;;;;
+TCCF;float32;part. total carbon flux;;milligram/(m2.day);;;;0;999;%7.3lf;999.999;;;;;;;;
+TCCS;float32;sediment total carbon;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+TCO2;float32;total carbon dioxyd (co2);;mole/m3;;;;0;5000;%8.3lf;9999.999;;;;;;;;
+TDCW;float32;total dissolved carbon;;millimole/m3;;;;0;9999;%4.0lf;9999;;;;;;;;
+TDPW;float32;total dissolved phosphorus;;millimole/m3;;;;0;40;%6.3lf;99.999;;;;;;;;
+TE01;float32;sea temperature primary sensor;;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-2;32;%6.3f;1E+36;;0.001;;;;;;
+TE02;float32;sea temperature secondary sensor;;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-2;32;%6.3f;1E+36;;0.001;;;;;;
+TE03;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE04;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE05;float32;sea temperature;;Celcius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE07;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE08;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE09;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE10;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE11;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE12;float32;sea temperature;;Celsius degree;;;;-2;32;%6.3lf;99.999;;;;;;;;
+TE35;float32;sea temperature sbe35 high precision sensor;;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-2;32;%6.3f;1E+36;;0.001;;;;;;
+TEMP;float32;sea water temperature;sea_water_temperature;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%7.4f;1E+36;;0.001;Ocean temperature in Degrees Celsius;;;;;
+TH4P;float32;particulate 234th activty;;Bq/m3;;;;0;99;%6.3lf;99.999;;;;;;;;
+TH4W;float32;dissolved 234th;;Bq/m3;;;;0;90;%6.3lf;99.999;;;;;;;;
+TICW;float32;total inorganic carbon;;micromole/kg;;;;0;9000;%7.2lf;9999.99;;;;;;;;
+TINW;float32;dissolved inorganic nitrogen;;millimole/m3;;;;0;100;%6.3lf;99.999;;;;;;;;
+TNNF;float32;part. total nitrogen flux;;milligram/(m2.day);;;;0;99;%6.3lf;99.999;;;;;;;;
+TNNS;float32;sediment total nitrogen;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+TOCS;float32;sediment total organic carbon;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+TOCW;float32;total organic carbon;;millimole/m3;;;;0;999.999;%7.3lf;999.999;;;;;;;;
+TOMP;float32;organic matter content;;%;;;;0;99.99;%5.2lf;99.99;;;;;;;;
+TPAW;float32;diss. triphosphate adenosine;;milligram/m3;;;;0;1;%6.3lf;99.999;;;;;;;;
+TPHP;float32;total phaeopigments;;milligram/m3;;;;0;100;%6.3lf;99.999;;;;;;;;
+TPHS;float32;total phosphorus (p) content;;millimole/m3;;;;0;10;%5.2lf;99.99;;;;;;;;
+TREW;float32;dissolved tritium error;;TU;;;;0;5;%6.3lf;99.999;;;;;;;;
+TRIW;float32;dissolved tritium;;TU;;;;0;2;%6.3lf;99.999;;;;;;;;
+TSMF;float32;total mass flux;;milligram/(m2.day);;;;0;9999.9;%6.1lf;9999.9;;;;;;;;
+TSMP;float32;total suspended matter;;gram/m3;;;;0;100;%7.3lf;999.999;;;;;;;;
+TUR0;float32;light transmission -  not used;;%;;;;0;100;%6.2lf;999.99;;;;;;;;
+TUR1;float32;light diffusion coefficient;;m-1;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
+TUR2;float32;light attenuation coefficient;;m-1;;TIME DEPTH LATITUDE LONGITUDE;;0;10;%6.3f;1E+36;;0.001;;;;;;
+TUR3;float32;light transmission;;%;;TIME DEPTH LATITUDE LONGITUDE;;0;100;%6.2f;1E+36;;0.001;;;;;;
+TUR4;float32;turbidity;;N.T.U Nephelo Turb. Unit;;;;0;100;%6.2lf;999.99;;;;;;;;
+TUR5;float32;turbidity;;relative unit;;;;0;10;%7.4lf;99.9999;;;;;;;;
+TUR6;float32;turbidity;;milliF.T.U Formaz Turb Unit;;;;0;5000;%6.1lf;9999.9;;;;;;;;
+TXAP;float32;diatoxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;
+TYPECAST;int32;"type of cast: unknow=0;phy=1;bio=2;geo=3";;1;;;;0;9;%1d;99999;;;;;;;;
+UREA;float32;urea;;millimole/m3;;;;0;5;%5.2lf;99.99;;;;;;;;
+VAVH;float32;aver. height highest 1/3 wave;;metre;;;;0;30;%5.2lf;99.99;;;;;;;;
+VCSP;float32;vertical current speed;;cm/s;;;;0;9;%5.3lf;9.999;;;;;;;;
+VERR;float32;velocity error;;cm/s;;;;0;90;%6.3lf;99.999;;;;;;;;
+VERT;float32;vertical displacement;;meters;;;;0;9999;%8.3lf;9999.999;;;;;;;;
+VOCP;float32;volume conc. of particles;;p.p.m.;;;;0;99;%6.3lf;99.999;;;;;;;;
+VTDH;float32;significant wave height;;meters;;;;0;99.999;%6.3lf;99.999;;;;;;;;
+VTZA;float32;aver zero crossing wave period;;second;;;;0;500;%3.0lf;999;;;;;;;;
+VZMX;float32;maxi zero crossing wave height;;metre;;;;0;10;%5.2lf;99.99;;;;;;;;
+WDIR;float32;wind direction rel. true north;wind_to_direction;degree;;TIME DEPTH LATITUDE LONGITUDE;;0;360;%3.0f;1E+36;;0.001;Horizontal wind speed;;;;;
+WETT;float32;wet bulb temperature;;degree_Celsius;;TIME DEPTH LATITUDE LONGITUDE;;0;90;%5.1f;1E+36;;0.001;;;;;;
+WMSP;float32;wind speed - max aver per 2 mn;wind_speed;meter/second;;TIME DEPTH LATITUDE LONGITUDE;;0;200;%4.1f;1E+36;;0.001;Horizontal wind speed;;;;;
+WSPD;float32;horizontal wind speed;;meters/second;;;;0;300;%6.2lf;999.99;;;;;;;;
+WSPE;float32;wind speed eastward component;;meters/second;;;;0;100;%7.3lf;999.999;;;;;;;;
+WSPN;float32;wind speed northward component;;meters/second;;;;0;100;%7.3lf;999.999;;;;;;;;
+XCO2;float32;co2 mole fraction in dry gas;;ppm;;;;0;5000;%8.3lf;9999.999;;;;;;;;
+YEAR;float32;year;;yyyy;;;;1900;2100;%4.4d;9999;;;;;;;;
+YELLOWSUB;float32;yellowsub;;;;;;;;%6.3f;-300;;;;;;;;
+ZXAP;float32;zeaxanthine;;milligram/m3;;;;0;5;%6.3lf;99.999;;;;;;;;

@@ -13,7 +13,7 @@ class Roscop:
     '''
 
     # constructor with values by default
-    def __init__(self, file, separator=','):
+    def __init__(self, file, separator=';'):
         # attibutes
         # public:
         self.file = file
