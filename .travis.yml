@@ -3,7 +3,7 @@ python:
   #- "3.7"
   #- "3.8"
   - "3.9"
-  #- "3.10"
+  - "3.10"
 install:
   # We do this conditionally because it saves us some downloading if the
   # version is the same.
@@ -17,7 +17,7 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n oceano python=3.9
+  - conda create -q -n oceano python=$TRAVIS_PYTHON_VERSION 3.9 3.10
   - conda activate oceano
   - conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller 
   - pip install julian notanorm
