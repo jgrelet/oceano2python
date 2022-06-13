@@ -2522,6 +2522,7 @@
     "PSA1": {
         "types": "float32",
         "long_name": "practical salinity primary sensor",
+        "standard_name": "sea_water_salinity",
         "units": "PSS-78",
         "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
         "valid_min": 33.0,
@@ -2533,6 +2534,7 @@
     "PSA2": {
         "types": "float32",
         "long_name": "practical salinity secondary sensor",
+        "standard_name": "sea_water_salinity",
         "units": "PSS-78",
         "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
         "valid_min": 33.0,
@@ -2545,8 +2547,7 @@
         "types": "float32",
         "long_name": "practical salinity",
         "standard_name": "sea_water_salinity",
-        "units": "1.0",
-        "conventions": "PSU",
+        "units": "PSS-78",
         "coordinates": "TIME DEPTH LATITUDE LONGITUDE",
         "valid_min": -1.5,
         "valid_max": 38.0,

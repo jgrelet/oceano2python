@@ -271,9 +271,9 @@ PRCW;float32;number of sw prochlorococcus;;10+6 cell/m3;;;;0;900000;%6.0f;999999
 PREC;float32;corrected sea pressure;;decibar=10000 pascals;;;;0;6500;%6.1f;-999.9;;;;;;;;
 PROT;float32;protein;;milligram/m3;;;;0;500;%5.0f;99999;;;;;;;;
 PRRT;float32;precipitation rate;;millimeters/hour;;;;0;900;%7.3f;999.999;;;;;;;;
-PSA1;float32;practical salinity primary sensor;;PSS-78;;TIME DEPTH LATITUDE LONGITUDE;;33;37;%6.3f;1E+36;;0.001;;;;;;
-PSA2;float32;practical salinity secondary sensor;;PSS-78;;TIME DEPTH LATITUDE LONGITUDE;;33;37;%6.3f;1E+36;;0.001;;;;;;
-PSAL;float32;practical salinity;sea_water_salinity;1;PSU;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%7.4f;1E+36;;0.001;Ocean practical salinity (PSS-78);;;;;
+PSA1;float32;practical salinity primary sensor;sea_water_salinity;PSS-78;;TIME DEPTH LATITUDE LONGITUDE;;33;37;%6.3f;1E+36;;0.001;;;;;;
+PSA2;float32;practical salinity secondary sensor;sea_water_salinity;PSS-78;;TIME DEPTH LATITUDE LONGITUDE;;33;37;%6.3f;1E+36;;0.001;;;;;;
+PSAL;float32;practical salinity;sea_water_salinity;PSS-78;;TIME DEPTH LATITUDE LONGITUDE;;-1.5;38;%7.4f;1E+36;;0.001;Ocean practical salinity (PSS-78);;;;;
 PT1P;float32;total particulate phosphorus;;micromole/kg;;;;0;5;%5.2f;99.99;;;;;;;;
 PTNP;float32;total particulate nitrogen;;milligram/m3;;;;0;5;%5.2f;99.99;;;;;;;;
 PTPP;float32;total particulate phosphorus;;milligram/m3;;;;0;5;%5.2f;99.99;;;;;;;;
