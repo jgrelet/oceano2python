@@ -9,6 +9,4 @@ and extract data from header files and write result into ASCII, ODV and NetCDF O
 
 The last version use an embedded Sqlite3 database to normalize, save and retreive data from memory.
 
-See the [wiki](https://github.com/jgrelet/oceano2python/wiki) for documentation and technical description
-
-
+See the [wiki](https://github.com/jgrelet/oceano2python/wiki) for documentation and technical description.
