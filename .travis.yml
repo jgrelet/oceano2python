@@ -17,7 +17,7 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n oceano python=$TRAVIS_PYTHON_VERSION 3.9 3.10
+  - conda create -q -n oceano python=$TRAVIS_PYTHON_VERSION
   - conda activate oceano
   - conda install -c conda-forge netCDF4 toml matplotlib xarray seawater PyInstaller 
   - pip install julian notanorm
