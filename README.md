@@ -1,4 +1,4 @@
-# oceano2python
+# oceano2python [![Build Status](https://travis-ci.com/jgrelet/oceano2python.svg?branch=master)](https://app.travis-ci.com/github/jgrelet/oceano2python)
 
 This program read ASCII file(s) from oceanographic instruments:
 

@@ -14,7 +14,8 @@
 *.nc
 *.xml
 *.yml
-!environment.yml
+!.travis.yml
+!environment*.yml
 *.stackdump
 *_tmp
 __pycache__/
