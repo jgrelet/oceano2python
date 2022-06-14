@@ -14,10 +14,10 @@ class testConfig(unittest.TestCase):
         """Initialisation des tests."""
         self.cfg = toml.load('config.toml')
 
-        self.glob = {'author': 'jgrelet IRD March 2019 PIRATA-FR29 cruise',
+        self.glob = {'author': 'jgrelet IRD - Oceano2python test files',
                      'debug': False, 'echo': True,
                      'codeRoscop': 'code_roscop.csv',
-                     'roscopSeparator': ',',
+                     'roscopSeparator': ';',
                      'defaultEncoding': "ISO-8859-1",
                      'ASCII': "ascii",
                      'NETCDF': "netcdf",
@@ -29,14 +29,14 @@ class testConfig(unittest.TestCase):
                     'comment':'',
                     'references':''}
 
-        self.cruise = {'CYCLEMESURE': 'PIRATA-FR29',
-                       'PLATEFORME': 'THALASSA',
-                       'callsign': 'FNFP',
+        self.cruise = {'CYCLEMESURE': 'OCEANO-TESTS',
+                       'PLATEFORME': 'SHIP NAME',
+                       'callsign': 'XXXX',
                        'INSTITUTE': 'IRD',
                        'TIMEZONE': 'GMT',
                        'BEGINDATE': '01/03/2019',
                        'ENDDATE': '04/04/2019',
-                       'PI': 'BOURLES',
+                       'PI': 'ThePI',
                        'CREATOR': 'Jacques.Grelet@ird.fr'}
 
         self.ctd = {'station': 'fr29(\d{3})',
