@@ -13,10 +13,6 @@ from glob import glob
 from physical_parameter import Roscop
 import os.path as path
 
-
-EXIT_SUCCESS = 0
-EXIT_FAILURE = 1
-
 # todo: move type_of_data and typeInstrument to config.toml
 type_of_data = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR', 'MVP'], 'TRAJECTORY': ['TSG','COLCOR','MTO', 'CASINO']}
 
@@ -32,8 +28,6 @@ typeInstrument =   {'CTD': ('cnv', 'CNV'),
                     'BTL': ('btl', 'BTL')}
 
 ti = typeInstrument  # an alias
-filesBrowsePosition_row = 2
-filesBrowsePosition_column = 1
 
 # initialize filename use to save GUI configuration
 configfile = 'oceano.cfg'
@@ -57,8 +51,6 @@ def processArgs():
         epilog='J. Grelet IRD US191 - March 2019 / Feb 2020')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
-    parser.add_argument('--demo', nargs='?', choices=ti.keys(),
-                        help='specify the commande line for instrument, eg CTD, XBT, TSG, LADCP')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",
                         default='config.toml')
     parser.add_argument('-i', '--instrument', nargs='?', choices=ti.keys(),
@@ -109,24 +101,20 @@ if __name__ == "__main__":
         defaultRoscop = args.roscop
     roscop = Roscop(defaultRoscop)
 
-    # demo mode, only in command line
-    if args.demo != None:
-        print('demo mode: {}'.format(args.demo))
+    # test if the file exist from command line
+    if args.files == []:
+        print(
+            'Error, you need to specify one or more files to process !!!', end='\n\n')
+        parser.print_help(sys.stderr)
         sys.exit(1)
-    # test if a or more file are selected
-    else:
-        if args.files == []:
-            print(
-                'Error, you need to specify one or more files to process !!!', end='\n\n')
-            parser.print_help(sys.stderr)
-            sys.exit(1)
-        
-        # work with DOs, Git bash and Linux
-        files = []
-        for file in args.files:  
-            files += glob(file)  
-        args.files = files
+    
+    # retreive files list from command line, works under DOS, Git bash and Linux
+    files = []
+    for file in args.files:  
+        files += glob(file)  
+    args.files = files
 
+    # device (instrument) is mandatory
     if device == 'None':
         print(
             'Error: missing option -i or --instrument, instrument = {}\n'.format(device))
@@ -150,8 +138,9 @@ if __name__ == "__main__":
         context = Trajectory(args.files, roscop, args.keys)
     else:
         print(f"Invalide type: {type}")
-        sys.exit()
+        sys.exit(1)
         
+    # start processing
     context.process(args, cfg, device)
     
     
