@@ -17,8 +17,8 @@ import os.path as path
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
-# todo: move dict_type and typeInstrument to config.toml
-dict_type = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR'], 'TRAJECTORY': ['TSG','COLCOR','MTO', 'CASINO']}
+# todo: move type_of_data and typeInstrument to config.toml
+type_of_data = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR'], 'TRAJECTORY': ['TSG','COLCOR','MTO', 'CASINO']}
 
 # typeInstrument is a dictionary as key: files extension
 typeInstrument =   {'CTD': ('cnv', 'CNV'), 
@@ -133,13 +133,13 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # return the type of data, eg PROFILE or TRAJECTORY from device
-    def search_dict(dict_type, instrument):
-        for k,i in dict_type.items():
+    def search_dict(type_of_data, instrument):
+        for k,i in type_of_data.items():
             if instrument in i:
                 return(k)
 
     # get the type of data, eg PROFILE or TRAJECTORY
-    type = search_dict(dict_type, args.instrument)
+    type = search_dict(type_of_data, args.instrument)
     logging.debug(type)
 
     # call the right object
