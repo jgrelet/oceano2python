@@ -1,7 +1,7 @@
 [global]
-author         = "jgrelet IRD March 2019 PIRATA-FR29 cruise"
+author         = "jgrelet IRD - Oceano2python test files"
 codeRoscop     = 'code_roscop.csv'
-roscopSeparator = ','
+roscopSeparator = ';'
 defaultEncoding = "ISO-8859-1"
 #defaultEncoding = "utf-8"
 ASCII          = "ascii"
@@ -15,14 +15,14 @@ comment        = ''
 references     = ''
 
 [cruise]
-CYCLEMESURE    = "PIRATA-FR29"
-PLATEFORME     = "THALASSA"
-callsign       = "FNFP"
+CYCLEMESURE    = "OCEANO-TESTS"
+PLATEFORME     = "SHIP NAME"
+callsign       = "XXXX"
 INSTITUTE      = "IRD"
 TIMEZONE       = "GMT"
 BEGINDATE      = "01/03/2019"
 ENDDATE        = "04/04/2019"
-PI             = "BOURLES"
+PI             = "ThePI"
 CREATOR        = "Jacques.Grelet@ird.fr"
 
 [ctd]
@@ -229,6 +229,41 @@ comment   = "Extract from .txt files"
 	PSAL = 7
 	SVEL = 8
 	DENS = 10
+	
+[mvp]
+# extract profile/station number from name
+#station = '(\d{3})'
+separator = ","
+titleSummary  = "MVP profiles processed during RESILIENCE cruise"
+typeInstrument   = "AML"
+instrumentNumber  = "9113"
+dateTimeFormat = "%m/%d/%Y %H:%M:%S"
+#julianOrigin = 1
+
+	[mvp.header]
+	#isHeader = '^[*#]+\s+'
+	#endHeader = '^[<]END_OF_HEADER[>]'
+	endHeader = '^\s+dbar,\s+m,'
+	station = 'Index\s*:\s*(\d*)'
+	#DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = 'LAT\s*\(\s*ddmm.mmmmmmm,N\):\s*(\d{2})(\d{2}\.\d+),(\w)'
+	LONGITUDE = 'LON\s*\(\s*dddmm.mmmmmmm,E\):\s*(\d{3})(\d{2}\.\d+),(\w)'
+	DATE = 'PC Date\s*:\s*(\d+)-(\d+)-(\d+)'
+	TIME = 'PC Time\s*:\s*(\d+)[:hH](\d+):(\d+)'
+	BATH = 'Bottom Depth \(m\):\s*(\d*\.?\d+?)'
+	#operator = 'Operator\s*:\s*(.*)'
+	type = 'SER1 Type:\s*(.*)'
+
+	[mvp.split]
+	# column start at 0
+	PRES = 0
+	DEPTH = 1
+	TEMP = 3
+	PSAL = 5
+	DENS = 6
+	SVEL = 2
+	COND = 4
+
 
 [colcor]
 separator = ","

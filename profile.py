@@ -290,8 +290,8 @@ class Profile:
             new_fileName_dict = { key:value for (key, value) in sorted(fileName_dict.items())}
         else:
             # we have to build a dictionary from the list of files
-            for i in range(1, len(self.fname)):
-                new_fileName_dict[i] = self.fname[i-1]
+            for i in range(0, len(self.fname)):
+                new_fileName_dict[i] = self.fname[i]
 
         # read each file from dict and extract header and data, fill sqlite tables and array
         for station, file in new_fileName_dict.items():
@@ -440,6 +440,7 @@ class Profile:
                         # split the line, remove leading and trailing space before
                         p = line.strip().split(self.__separator)
                         logging.debug(f"line split: {p}")
+
                         #logging.debug(f"line end: {p[-1]}")
 
                         # skip if list p is empty, case of empty line
