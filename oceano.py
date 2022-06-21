@@ -12,6 +12,7 @@ from pathlib import Path
 from glob import glob
 from physical_parameter import Roscop
 import os.path as path
+from __init__ import __version__, __date__, __author__
 
 # todo: move type_of_data and typeInstrument to config.toml
 type_of_data = {'PROFILE': ['CTD', 'BTL','XBT','LADCP','RBR', 'MVP'], 'TRAJECTORY': ['TSG','COLCOR','MTO', 'CASINO']}
@@ -49,6 +50,8 @@ def processArgs():
         'python oceano.py data/CTD/btl/fr290*.btl -i BTL -k BOTL PRES DEPTH ETDD TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2'
         ' \n',
         epilog='J. Grelet IRD US191 - March 2019 / Feb 2020')
+    parser.add_argument('-v', '--version', help='display version number',
+                        action='version', version=f'%(prog)s  v{__version__} - {__author__} - {__date__} ')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     parser.add_argument('-c', '--config', help="toml configuration file, (default: %(default)s)",

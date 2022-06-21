@@ -1,3 +1,3 @@
-__version__ = '0.10.0'
-
-#from physicalParameter import Roscop
+__version__ = '1.0.0'
+__date__ = '2022-06-21'
+__author__ = 'IRD'
