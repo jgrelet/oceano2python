@@ -32,7 +32,7 @@ lint:
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 
-all: ctd xbt ladcp btl rbr colcor casino
+all: ctd xbt ladcp btl rbr mvp colcor casino tsg
 
 # to run program in debug mode : make ctd OPT=-d
 ctd:
