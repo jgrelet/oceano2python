@@ -3,7 +3,7 @@
 This program read ASCII file(s) from oceanographic instruments:
 
 - Profile: Seabird CTD or RBR, Bottle, Sippican XBT, RDI LADCP
-- Trajectory: Seabird TSG, IFREMER COLCOR (realtime), IFREMER CASINO
+- Trajectory: Seabird [Thermosalinograph](https://www.seabird.com/sbe-21-seacat-thermosalinograph/product?id=60762467702) (TSG), Ifremer COLCOR (realtime), Ifremer ship's log [CASINO+](https://www.flotteoceanographique.fr/en/Facilities/Shipboard-software/Gestion-de-missions-et-des-donnees/TECHSAS/Ship-s-log-CASINO)
 
 and extract data from header files and write result into ASCII, ODV and NetCDF OceanSITES files.
 
