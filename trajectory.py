@@ -210,7 +210,7 @@ class Trajectory:
         dt = datetime
 
         # get the dictionary from toml block, device must be is in lower case
-        hash = cfg[device.lower()]['split']
+        split_map = cfg[device.lower()]['split']
 
         # set separator field if declared in toml section, none by default
         if 'separator' in cfg[device.lower()]:
@@ -297,30 +297,30 @@ class Trajectory:
                         if not p:
                             continue
 
-                        # insert data from list p with indice hash[key]
+                        # insert data from list p with indices from the split map
                         for key in self.keys:
                             if key == 'ETDD':
-                                if key in hash:
-                                    sql['DAYD'] = float(p[hash[key]].replace(',','.')) + \
+                                if key in split_map:
+                                    sql['DAYD'] = float(p[split_map[key]].replace(',','.')) + \
                                         tools.dt2julian(datetime(self.year, day=1, month=1)) - float(self.julianOrigin)
-                                    sql['ETDD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                                    sql['ETDD'] = float(p[split_map[key]].replace(',','.')) - float(self.julianOrigin)
                                 elif 'DAYD' in sql:
                                     year_origin = tools.dt2julian(datetime(self.year, day=1, month=1))
                                     sql['ETDD'] = sql['DAYD'] - year_origin - float(self.julianOrigin)
                                 else:
                                     raise KeyError("ETDD requires either a split column or parsed DATE/TIME fields")
                             elif key == 'DAYD':
-                                if key in hash:
-                                    sql['DAYD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                                if key in split_map:
+                                    sql['DAYD'] = float(p[split_map[key]].replace(',','.')) - float(self.julianOrigin)
                             elif key == 'LATITUDE':
-                                if key in hash:
-                                    sql['LATITUDE'] = float(p[hash[key]].replace(',','.')) 
+                                if key in split_map:
+                                    sql['LATITUDE'] = float(p[split_map[key]].replace(',','.')) 
                             elif key == 'LONGITUDE':
-                                if key in hash:
-                                    sql['LONGITUDE'] = float(p[hash[key]].replace(',','.')) 
+                                if key in split_map:
+                                    sql['LONGITUDE'] = float(p[split_map[key]].replace(',','.')) 
                             else:
-                                logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
-                                sql[key] = float(p[hash[key]].replace(',','.')) 
+                                logging.debug(f"{key}, {split_map[key]}, {p[split_map[key]]}")
+                                sql[key] = float(p[split_map[key]].replace(',','.')) 
                         self.db.insert("data",  sql )
                         if 'isData' in self.__regex and self.__regex['isData'].search(line):
                             process_data = False
@@ -329,6 +329,16 @@ class Trajectory:
                 # end of readline in file
 
         self.update_arrays()
+
+    def prepare_processing(self, args, cfg, device):
+        # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
+        if args.keys == None:
+            args.keys = cfg[device.lower()]['split'].keys()
+
+        self.create_tables()
+        self.set_regex(cfg, device, 'header')
+        if 'format' in cfg[device.lower()]:
+            self.set_regex(cfg, device, 'format')
 
     def write_outputs(self, cfg, device):
         # write ASCII hdr and data files
@@ -366,22 +376,7 @@ class Trajectory:
         logging.debug("File(s): {}, config: {}, Keys: {}".format(
             args.files, args.config, args.keys))
 
-        # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
-        if args.keys == None:
-            args.keys = cfg[ti.lower()]['split'].keys()
-
-        # extract header and data from files
-        # if args.database:
-        #     fe = Profile(args.files, self.roscop, args.keys, dbname='test.db')
-        # else:
-        #     fe = Profile(args.files, r, args.keys)
-        self.create_tables()
-
-        # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
-        self.set_regex(cfg, ti, 'header')
-        if 'format' in cfg[ti.lower()]:
-            self.set_regex(cfg, ti, 'format')
-
+        self.prepare_processing(args, cfg, ti)
         self.read_files(cfg, ti)
         self.write_outputs(cfg, ti)
 

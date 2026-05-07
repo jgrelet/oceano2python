@@ -132,17 +132,17 @@ if __name__ == "__main__":
                 return(k)
 
     # get the type of data, eg PROFILE or TRAJECTORY
-    type = search_dict(type_of_data, args.instrument)
-    logging.debug(type)
-    validate_runtime_config(cfg, device, type, args.keys)
+    data_type = search_dict(type_of_data, args.instrument)
+    logging.debug(data_type)
+    validate_runtime_config(cfg, device, data_type, args.keys)
 
     # call the right object
-    if type == 'PROFILE':
+    if data_type == 'PROFILE':
         context = Profile(args.files, roscop, args.keys)
-    elif type == 'TRAJECTORY':
+    elif data_type == 'TRAJECTORY':
         context = Trajectory(args.files, roscop, args.keys)
     else:
-        print(f"Invalide type: {type}")
+        print(f"Invalide type: {data_type}")
         sys.exit(1)
         
     # start processing

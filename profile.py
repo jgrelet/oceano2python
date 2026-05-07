@@ -264,7 +264,7 @@ class Profile:
         new_fileName_dict ={}
 
         # get the dictionary from toml split block, device must be is in lower case
-        hash = cfg[device.lower()]['split']
+        split_map = cfg[device.lower()]['split']
 
         # set separator field if declared in toml section, none by default
         if 'separator' in cfg[device.lower()]:
@@ -450,15 +450,15 @@ class Profile:
                             if cfg[device.lower()]['skipLineWith'] in p[-1]:
                                 continue
 
-                        # insert data from list p with indice hash[key]
-                        #[sql[key] = p[hash[key]]  for key in self.keys]
+                        # insert data from list p with indices from the split map
+                        #[sql[key] = p[split_map[key]]  for key in self.keys]
                         sql['station_id'] = pk
                         for key in self.keys:          
                             if key == 'ETDD' and  'julianOrigin' in cfg[device.lower()]: 
-                                sql[key] = float(p[hash[key]]) - float(self.julianOrigin)
+                                sql[key] = float(p[split_map[key]]) - float(self.julianOrigin)
                             else:
-                                logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
-                                sql[key] = float(p[hash[key]]) 
+                                logging.debug(f"{key}, {split_map[key]}, {p[split_map[key]]}")
+                                sql[key] = float(p[split_map[key]]) 
                             # memorize last value of julian day if selected to use in table station, 
                             if key == 'ETDD':
                                 jd = float(sql['ETDD'])
@@ -476,6 +476,14 @@ class Profile:
                 self.db.update("station", id = pk, end_date_time = tmp)
 
         self.update_arrays()
+
+    def prepare_processing(self, args, cfg, device):
+        # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
+        if args.keys == None:
+            args.keys = cfg[device.lower()]['split'].keys()
+
+        self.create_tables()
+        self.set_regex(cfg, device, 'header')
 
     def write_outputs(self, cfg, device):
         # write ASCII hdr and data files
@@ -513,20 +521,7 @@ class Profile:
         logging.debug("File(s): {}, config: {}, Keys: {}".format(
             args.files, args.config, args.keys))
 
-        # if physical parameters are not given from cmd line, option -k, use the toml <device>.split values
-        if args.keys == None:
-            args.keys = cfg[ti.lower()]['split'].keys()
-
-        # extract header and data from files
-        # if args.database:
-        #     fe = Profile(args.files, self.roscop, args.keys, dbname='test.db')
-        # else:
-        #     fe = Profile(args.files, r, args.keys)
-        self.create_tables()
-
-        # prepare (compile) each regular expression inside toml file under section [<device=ti>.header]
-        self.set_regex(cfg, ti, 'header')
-
+        self.prepare_processing(args, cfg, ti)
         self.read_files(cfg, ti)
         self.write_outputs(cfg, ti)
 

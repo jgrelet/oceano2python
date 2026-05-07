@@ -14,10 +14,10 @@ PROFILE_DIMENSIONS = {
 }
 
 # add global attributes
-def writeGlobalAttributes(nc, cfg, device, type):
+def writeGlobalAttributes(nc, cfg, device, data_kind):
 
     print("Writing global attributes")
-    nc.data_type = f"OceanSITES {type} data"
+    nc.data_type = f"OceanSITES {data_kind} data"
     nc.Conventions = "CF-1.7"
     if 'title' in cfg['global']:
         nc.title = cfg['global']['title']
@@ -88,13 +88,13 @@ def writeProfile(cfg, device, fe):
 
         print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
-        hash = dict(fe.roscop[key])
+        metadata = dict(fe.roscop[key])
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
-        if '_FillValue' in hash:
-            fillvalue = hash['_FillValue']
+        if '_FillValue' in metadata:
+            fillvalue = metadata['_FillValue']
             # remove from the dictionary
-            hash.pop('_FillValue')
+            metadata.pop('_FillValue')
         else:
             fillvalue = None
 
@@ -102,17 +102,17 @@ def writeProfile(cfg, device, fe):
         if any(key in item for item in fe.variables_1D):
             dims_1d = PROFILE_DIMENSIONS[key]
             ncvars[key] = nc.createVariable(
-                key, dtype(hash['types']).char, dims_1d, fill_value=fillvalue)
+                key, dtype(metadata['types']).char, dims_1d, fill_value=fillvalue)
         else:
             ncvars[key] = nc.createVariable(
-                key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
+                key, dtype(metadata['types']).char, dims_2D, fill_value=fillvalue)
 
         # remove from the dictionary
-        hash.pop('types')
+        metadata.pop('types')
 
         # create dynamically variable attributes
-        for k in hash.keys():
-            setattr(ncvars[key], k, hash[k])
+        for k in metadata.keys():
+            setattr(ncvars[key], k, metadata[k])
 
     nc._enddef()
 
@@ -173,26 +173,26 @@ def writeTrajectory(cfg, device, fe):
 
         print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
-        hash = dict(fe.roscop[key])
+        metadata = dict(fe.roscop[key])
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
-        if '_FillValue' in hash:
-            fillvalue = hash['_FillValue']
+        if '_FillValue' in metadata:
+            fillvalue = metadata['_FillValue']
             # remove from the dictionary
-            hash.pop('_FillValue')
+            metadata.pop('_FillValue')
         else:
             fillvalue = None
 
         # create the variable
         ncvars[key] = nc.createVariable(
-                key, dtype(hash['types']).char, dims, fill_value=fillvalue)
+                key, dtype(metadata['types']).char, dims, fill_value=fillvalue)
   
         # remove from the dictionary
-        hash.pop('types')
+        metadata.pop('types')
         
         # create dynamically variable attributes
-        for k in hash.keys():
-            setattr(ncvars[key], k, hash[k])
+        for k in metadata.keys():
+            setattr(ncvars[key], k, metadata[k])
 
     nc._enddef()
 
