@@ -1,0 +1,357 @@
+[global]
+author         = "prousselot IRD March 2023 PIRATA-FR33 cruise"
+debug          = false
+echo           = true
+codeRoscop     = 'code_roscop.csv'
+ASCII          = "ascii"
+NETCDF         = "netcdf"
+odv            = "odv"
+title			= ''
+history		= ''
+institution = 'IRD'
+source = ''
+comment = ''
+references = ''
+
+[cruise]
+CYCLEMESURE    = "PIRATA-FR33"
+PLATEFORME     = "THALASSA"
+callsign       = "FNFP"
+INSTITUTE      = "IRD"
+TIMEZONE       = "GMT"
+BEGINDATE      = "22/02/2022"
+ENDDATE        = "09/04/2022"
+PI             = "LLIDO"
+CREATOR        = "pierre.rousselot@ird.fr"
+
+[ctd]
+station = 'fr33(\d{3})'
+titleSummary  = "CTD profiles processed during PIRATA-FR33 cruise"
+typeInstrument   = "SBE911+"
+instrumentNumber  = "09P1263"
+dateTimeFormat = "%d/%b/%Y %H:%M:%S"
+julianOrigin = 1
+
+	[ctd.header]
+	isHeader = '^[*#]+\s+'
+	endHeader = '^[*]END[*]'
+	station = 'Station\s*:\s*\D*(\d*)'
+	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
+	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+	DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
+	TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
+	BATH = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+	operator = 'Operator\s*:\s*(.*)'
+	type = 'Type\s*:\s*(.*)'
+
+	# column start at 0
+	[ctd.split]
+	#SCAN = 0
+	ETDD = 1
+	PRES = 2
+	DEPTH = 3
+	TEMP = 4
+	PSAL = 18
+	DENS = 20
+	SVEL = 22
+	DOX2 = 16
+	FLU2 = 13
+	FLU3 = 14
+	TUR3 = 12
+	NAVG = 24
+
+	[ctdAll.split]
+	ETDD = 1
+	PRES = 2
+	DEPTH = 3
+	TE01 = 4
+	TE02 = 5
+	CND1 = 6
+	CND2 = 7
+	DOV1 = 8
+	DOV2 = 9
+	DVT1 = 10
+	DVT2 = 11
+	TUR3 = 12
+	FLU2 = 13
+	FLU3 = 14
+	DO12 = 16
+	DO22 = 17
+	PSA1 = 18
+	PSA2 = 19
+	DEN1 = 20
+	DEN2 = 21
+	SVEL = 22
+	NAVG = 24
+
+
+[btl]
+station = 'fr33(\d{3})'
+typeInstrument           = "SBE32 standard 24 Niskin bottles"
+instrumentNumber         = "unknown"
+titleSummary   = "Water sample during PIRATA-FR33 cruise with 22 levels"
+comment        = "CTD bottles water sampling with temperature, salinity and oxygen from primary and secondary sensors"
+dateTimeFormat = "%d/%b/%Y %H:%M:%S"
+julianOrigin = 1
+skipLineWith = "(sdev)"
+
+	[btl.header]
+	endHeader = '^\s+Position\s+Time\s+$'
+	station = 'Station\s*:\s*\D*(\d*)'
+	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = 'NMEA\s+Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)\s+(\w)'
+	LONGITUDE = 'NMEA\s+Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)\s+(\w)'
+	DATE = 'Date\s*:\s*(\d+)/(\d+)/(\d+)'
+	TIME = '[Heure|Hour]\s*:\s*(\d+)[:hH](\d+):(\d+)'
+	BATH = 'Bottom Depth\s*:\s*(\d*\.?\d+?)\s*\S*'
+	operator = 'Operator\s*:\s*(.*)'
+	type = 'Type\s*:\s*(.*)'
+
+	[btl.split]
+	BOTL = 0
+	PSA1 = 4
+	PSA2 = 5
+	DO11 = 6
+	DO12 = 7
+	DO21 = 8
+	DO22 = 9
+	Potemp090C = 10
+	Potemp190C = 11
+	ETDD = 12
+	PRES = 13
+	DEPTH = 14
+	TE01 = 15
+	TE02 = 16
+	CND1 = 17
+	CND2 = 18
+	DOV1 = 19
+	DOV2 = 20
+	DVT1 = 21
+	DVT2 = 22
+	TUR3 = 23
+	FLU2 = 24
+
+
+[sbe35]
+station = 'FR33(\d{3})'
+typeInstrument           = "SBE35 high precision realtime thermometer"
+instrumentNumber         = 102
+
+
+    [sbe35.header]
+	endHeader = '^dd\d+,\d+$'
+	#station = '^[*]\s+FileName\s+=\s+(.*)$'
+    station = '^[*]+\s+Station:(\d+)$'
+
+	[sb35.split]
+	BOTL = 0
+	TE35 = 16
+
+[xbt]
+station = 'XBT_T-7_(\d{5})'
+typeInstrument   = "SIPPICAN+"
+instrumentNumber  = "N/A"
+acquisitionSoftware = "WinMK21"
+acquisitionVersion = "2.10.1" 
+processingSoftware = ""
+processingVersion = ""
+dateTimeFormat = "%d/%m/%Y %H:%M:%S"
+type           = "SIPPICAN"
+sn             = "01150"
+title_summary  = "XBT profiles processed during PIRATA-FR33 cruise"
+comment        = "Extract from .edf files"
+
+	[xbt.header]
+    endHeader = '^//\s*Data$'
+	#endHeader = '^Depth\s*\(m\)'
+	station = 'Sequence\s*Number\s*:\s*(\d*)'
+	#station = 'Sequence\s*#\s*:\s*(\d*)'
+	TIME = 'Time of Launch\s*[:=]\s*(\d+):(\d+):(\d+)'
+	DATE = 'Date of Launch\s*[:=]\s*(\d+)/(\d+)/(\d+)'
+	DATETIME = 'System UpLoad Time\s*=\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+):(\d+):(\d+)'
+	LATITUDE = 'Latitude\s*[:=]\s*(\d+)\s+(\d+\.\d+)(\w)'
+	LONGITUDE = 'Longitude\s*[:=]\s*(\d+)\s+(\d+.\d+)(\w)'
+
+	[xbt.split]
+	DEPTH = 2
+	TEMP = 3
+	SVEL = 4
+
+
+[ladcp]
+station = 'fr33(\d{3})'
+typeInstrument   = "LADCP WH150/WH150"
+instrumentNumber  = "24543/24085"
+acquisitionSoftware = "BBTALK"
+acquisitionVersion = 3.04
+processingSoftware = "MATLAB-VISBECK"
+processingVersion = "10.16.2"
+title_summary  = "IFM-GEOMAR/LDEO Matlab LADCP-Processing system adapted by FM/PR/JG"
+comment        = "Extract from .lad files"
+
+	[ladcp.header]
+	station = '[fF][rR]33(\d*)'
+	endHeader = 'Columns'
+	DATE = 'Date\s*=\s*(\d+)/(\d+)/(\d+)'
+	TIME = 'Start_Time\s*=\s*(\d+)[:hH](\d+):(\d+)'
+	LATITUDE = 'Latitude\s*[:=]\s*([-+]?\d+\.\d+)'
+	LONGITUDE = 'Longitude\s*[:=]\s*([-]?\d+.\d+)'
+
+	[ladcp.split]
+	DEPTH = 0
+	EWCT = 1
+	NSCT = 2
+
+[tsg]
+cruisePrefix   = "FR33"
+stationPrefixLength  = 3 
+separator = ","
+typeInstrument   = "SBE21"
+instrumentNumber  = "3199"
+acquisitionSoftware = "COLCOR"
+acquisitionVersion = ""
+processingSoftware = ""
+processingVersion = ""
+calDate        = "14/01/2019" 
+externalType   = "SBE3S"
+externalSn     = 4074
+externalCalDate = "16/01/2018"
+depth_intake   = 4
+title_summary  = "Thermosalinograph data acquired with Seabird SBE21 instrument and reduce with THECSAS/COLCOR"
+comment        = "Extract from .colcor files"
+
+	[tsg.header]
+	isHeader = '^#'
+	isData = 'PIFM,TSCOR'
+
+	[tsg.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)/(\d+)/(\d+)'
+	LATITUDE = '([NS]),(\d+),(\d+\.\d+)'
+	LONGITUDE = '([EW]),(\d+),(\d+\.\d+)'
+
+	[tsg.split]
+	SSJT = 18
+	SSTP = 19
+	SSPS = 21
+	
+[casino]
+separator = "	"
+acquisitionSoftware = "CASINO"
+acquisitionVersion = ""
+processingSoftware = ""
+processingVersion = ""
+title_summary  = "Raw data extract from CASINO software, sample interval 30 secondes"
+comment        = "Extract from .csv files"
+dateTimeFormat = '%Y/%m/%d %H:%M:%S'
+
+	[casino.header]
+	isHeader = '^#'
+	isData = 'ACQAUTO'
+
+	[casino.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)-(\d+)-(\d+)'
+	LATITUDE = '([NS]) (\d+)° (\d+\,\d+)'
+	LONGITUDE = '([EW]) (\d+)° (\d+\,\d+)'
+	
+       	[casino.split]
+	BATH = 115
+	SSTP = 94
+	SSJT = 93
+	SSPS = 96
+	
+[mto]
+separator = "	"
+acquisitionSoftware = "CASINO"
+acquisitionVersion = ""
+processingSoftware = ""
+processingVersion = ""
+title_summary  = "Raw data e55xtract from CASINO software, sample interval 30 secondes"
+comment        = "Extract from .csv files"
+
+	[mto.header]
+	isHeader = '^#'
+	isData = 'ACQAUTO'
+
+	[mto.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)-(\d+)-(\d+)'
+	LATITUDE = '([NS]) (\d+)° (\d+\,\d+)'
+	LONGITUDE = '([EW]) (\d+)° (\d+\,\d+)'
+	
+       	[mto.split]
+	BATH = 115
+	SSTP = 94
+	SSJT = 93
+	SSPS = 96
+	WMSP = 64
+	WDIR = 65
+	DRYT = 56
+	RELH = 58
+	ATMS = 59
+	RDNS = 60
+
+[snd]
+separator = "	"
+acquisitionSoftware = "CASINO"
+acquisitionVersion = ""
+processingSoftware = ""
+
+processingVersion = ""
+title_summary  = "Raw data extract from CASINO software, sample interval 30 secondes"
+comment        = "Extract from .csv files"
+
+	[snd.header]
+	isHeader = '^#'
+	isData = 'ACQAUTO'
+
+	[snd.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)-(\d+)-(\d+)'
+	LATITUDE = '([NS]) (\d+)° (\d+\,\d+)'
+	LONGITUDE = '([EW]) (\d+)° (\d+\,\d+)'
+	
+       	[snd.split]
+	BATH = 115
+	SOG = 105
+	COG = 106
+	SPEED = 107
+	HEADING = 108
+	SPEED_DRIFT = 109
+	HEADING_DRIFT = 110
+	PHINSB = 76
+	PHINST = 83
+		
+[fbox]
+separator = "	"
+acquisitionSoftware = "CASINO"
+acquisitionVersion = ""
+processingSoftware = ""
+processingVersion = ""
+title_summary  = "Raw data extract from CASINO software, sample interval 30 secondes"
+comment        = "Extract from .csv files"
+
+	[fbox.header]
+	isHeader = '^#'
+	isData = 'ACQAUTO'
+
+	[fbox.format]
+	TIME = '(\d+):(\d+):(\d+)'
+	DATE = '(\d+)-(\d+)-(\d+)'
+	LATITUDE = '([NS]) (\d+)° (\d+\,\d+)'
+	LONGITUDE = '([EW]) (\d+)° (\d+\,\d+)'
+	
+       	[fbox.split]
+	SSTP = 119
+	SSPS = 121
+	DOX2 = 123
+	TUR4 = 126
+	GREENALGAE = 127
+	BLUEALGAE = 128
+	DIATOMS = 129
+	CRYPTOPHYTA = 130
+	YELLOWSUB = 131
+	CPHL = 133
+	PCO2 = 140
