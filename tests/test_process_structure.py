@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
 
-from physical_parameter import Roscop
-from profile import Profile
-from trajectory import Trajectory
+from oceano2python.metadata.physical_parameter import Roscop
+from oceano2python.core.profile import Profile
+from oceano2python.core.trajectory import Trajectory
 
 
 class ProcessStructureTests(unittest.TestCase):

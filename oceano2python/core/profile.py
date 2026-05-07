@@ -14,13 +14,11 @@ import re
 import os
 from glob import glob
 from datetime import datetime
-import tools
-from physical_parameter import Roscop
+from oceano2python.metadata import tools
+from oceano2python.metadata.physical_parameter import Roscop
 from notanorm import SqliteDb 
-import ascii
-import odv
-import netcdf
-from parsing_utils import parse_coordinate_groups, parse_textual_datetime
+from oceano2python.writers import ascii, odv, netcdf
+from oceano2python.core.parsing_utils import parse_coordinate_groups, parse_textual_datetime
 
 # define SQL station table
 table_station = """

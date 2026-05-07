@@ -1,6 +1,6 @@
 import unittest
 
-from physical_parameter import Roscop
+from oceano2python.metadata.physical_parameter import Roscop
 
 '''
 Run test in single file

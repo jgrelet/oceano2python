@@ -1,6 +1,6 @@
 import unittest
 
-from parsing_utils import build_datetime_from_parts, parse_coordinate_groups
+from oceano2python.core.parsing_utils import build_datetime_from_parts, parse_coordinate_groups
 
 
 class ParsingUtilsTests(unittest.TestCase):

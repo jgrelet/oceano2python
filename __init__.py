@@ -1,3 +1,1 @@
-__version__ = '1.0.0'
-__date__ = '2022-06-21'
-__author__ = 'IRD'
+from oceano2python import __author__, __date__, __version__

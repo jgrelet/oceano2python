@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-import tools
+from oceano2python.metadata import tools
 
 
 class ToolsTests(unittest.TestCase):

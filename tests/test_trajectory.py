@@ -4,8 +4,8 @@ from types import SimpleNamespace
 
 import toml
 
-from physical_parameter import Roscop
-from trajectory import Trajectory
+from oceano2python.metadata.physical_parameter import Roscop
+from oceano2python.core.trajectory import Trajectory
 
 
 def load_runtime_config():

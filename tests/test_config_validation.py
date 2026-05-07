@@ -1,6 +1,6 @@
 import unittest
 
-from config_validation import validate_runtime_config
+from oceano2python.core.config_validation import validate_runtime_config
 
 
 class ConfigValidationTests(unittest.TestCase):

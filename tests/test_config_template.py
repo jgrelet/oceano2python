@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 
-from config_template import build_template, interactive_review_split_entries
+from oceano2python.cli.config_template import build_template, interactive_review_split_entries
 
 
 class ConfigTemplateTests(unittest.TestCase):

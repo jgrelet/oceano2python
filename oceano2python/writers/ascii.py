@@ -3,7 +3,7 @@
 
 import os
 import logging
-import tools
+from oceano2python.metadata import tools
 import numpy as np
 from datetime import datetime
     

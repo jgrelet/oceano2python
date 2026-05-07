@@ -4,8 +4,8 @@ from types import SimpleNamespace
 
 import toml
 
-from physical_parameter import Roscop
-from profile import Profile
+from oceano2python.metadata.physical_parameter import Roscop
+from oceano2python.core.profile import Profile
 
 
 def load_runtime_config():

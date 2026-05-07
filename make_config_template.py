@@ -1,4 +1,4 @@
-from config_template import main
+from oceano2python.cli.make_config_template import main
 
 
 if __name__ == "__main__":

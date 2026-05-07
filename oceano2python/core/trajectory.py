@@ -13,13 +13,11 @@ import numpy as np
 import re
 from glob import glob
 from datetime import datetime
-import tools
-from physical_parameter import Roscop
+from oceano2python.metadata import tools
+from oceano2python.metadata.physical_parameter import Roscop
 from notanorm import SqliteDb 
-import ascii
-import odv
-import netcdf
-from parsing_utils import build_datetime_from_parts, parse_coordinate_groups
+from oceano2python.writers import ascii, odv, netcdf
+from oceano2python.core.parsing_utils import build_datetime_from_parts, parse_coordinate_groups
 
 # define the data table
 # the ID is actually the rowid AUTOINCREMENT column.

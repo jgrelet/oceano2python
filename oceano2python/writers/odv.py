@@ -4,7 +4,7 @@
 import os
 import logging
 from re import S
-import tools
+from oceano2python.metadata import tools
 import numpy as np
 from datetime import datetime
 
