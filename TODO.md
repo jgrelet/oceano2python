@@ -36,6 +36,8 @@
 ## Priorite faible mais utile
 - Moderniser le packaging et l'outillage.
   Par exemple `pyproject.toml`, un linter moderne et une CI plus actuelle que `.travis.yml`.
+- Poursuivre la migration vers un packaging Python standard.
+  Ajouter un `pyproject.toml` minimal, declarer des points d'entree CLI explicites comme `oceano` et `oceano-template`, conserver temporairement les wrappers racine pour compatibilite, puis aligner progressivement la documentation et l'outillage sur ce mode d'installation.
 - Ajouter une tache `lint` dans `Taskfile.yml`.
 - Documenter les variantes de configuration dans `README.md`.
   Exemple : `config.toml` vs `FR33-config.toml`, et la difference entre `casino` et `casino-fr33`.
