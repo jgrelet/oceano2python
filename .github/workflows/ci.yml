@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-version: "3.10"
+          - os: windows-latest
+            python-version: "3.10"
+          - os: macos-latest
+            python-version: "3.10"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          activate-environment: oceano-ci
+          python-version: ${{ matrix.python-version }}
+          auto-activate-base: false
+          channels: conda-forge,defaults
+
+      - name: Install dependencies
+        shell: bash -el {0}
+        run: |
+          conda install -y numpy netCDF4 toml matplotlib xarray seawater pyinstaller tk
+          pip install julian notanorm
+
+      - name: Run unit tests
+        shell: bash -el {0}
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
+      - name: Run example workflows
+        shell: bash -el {0}
+        run: |
+          python oceano.py data/CTD/cnv/dfr2900?.cnv -i CTD -k PRES DEPTH ETDD TEMP PSAL DOX2 DENS SVEL FLU2 FLU3 TUR3 NAVG
+          python oceano.py data/XBT/*.EDF -i XBT -k DEPTH TEMP SVEL
+          python oceano.py data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT
+          python oceano.py data/CTD/btl/fr290*.btl -i BTL -k BOTL ETDD PRES DEPTH TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
+          python oceano.py data/RBR/fr29*.txt -i RBR -k PRES DEPTH TEMP PSAL DENS SVEL FLU2
+          python oceano.py data/MVP/mvp_*.m1 -i MVP -k PRES DEPTH TEMP PSAL DENS SVEL
+          python oceano.py data/TSG/COLCOR/*.COLCOR -i COLCOR -k SSJT SSTP SSPS
+          python oceano.py data/CASINO/201903*.csv -i CASINO -k LATITUDE LONGITUDE SSJT SSTP SSPS WMSP WDIR
+          python oceano.py data/TSG/SEASAVE/*.cnv -i TSG -k ETDD LATITUDE LONGITUDE SSJT SSTP SSPS DENS SVEL
