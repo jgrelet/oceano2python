@@ -7,18 +7,29 @@ import tools
 import numpy as np
 from datetime import datetime
     
+
+def metadata_header_parts(cfg, device):
+    device_cfg = cfg[device]
+    return [
+        cfg['cruise'].get('CYCLEMESURE', ''),
+        cfg['cruise'].get('PLATEFORME', ''),
+        cfg['cruise'].get('INSTITUTE', ''),
+        device_cfg.get('typeInstrument', ''),
+        str(device_cfg.get('instrumentNumber', '')),
+        cfg['cruise'].get('PI', ''),
+    ]
+
+
+def write_metadata_header_line(handle, cfg, device):
+    handle.write("  ".join(metadata_header_parts(cfg, device)).rstrip() + "\n")
+
+
 def writeHeaderProfile(hdrFile, cfg, device, fe):
     f = open(hdrFile, 'w')
     # first line, header ex: 
     # PIRATA-FR30  THALASSA  IRD  SBE911+  09P-1263  BOURLES
-    print("{}  {}  {}  {}  {}  {}".format(cfg['cruise']['CYCLEMESURE'], 
-        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE'],
-        cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['PI']))
-    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['CYCLEMESURE'], 
-        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE'],
-        cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['PI']))
+    print("  ".join(metadata_header_parts(cfg, device)))
+    write_metadata_header_line(f, cfg, device)
     # write next lines, start and end profile ex: 
     # 00001 18/02/2020 19:04:19 18/02/2020 22:41:07 11°28.85 N 023°00.59 W  4063  5083 fr30001
     # add PROFILE and END_PROFILE_TIME, BATH
@@ -80,10 +91,7 @@ def writeDataProfile(dataFile, cfg, device, fe):
     f = open(dataFile, 'w')
 
     # write header, first line
-    f.write("{}  {}  {}  {}  {}  {}\n".format(cfg['cruise']['CYCLEMESURE'], 
-        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE'],
-        cfg[device]['typeInstrument'], cfg[device]['instrumentNumber'],
-        cfg['cruise']['PI']))
+    write_metadata_header_line(f, cfg, device)
 
     # write header, second line with physical parameter liste, fill with N/A if necessary
     f.write("PROFILE  ")
@@ -150,15 +158,7 @@ def writeDecimalDataTrajectory(dataFile, cfg, device, fe):
     f = open(dataFile, 'w')
 
     # write header, first line
-    f.write("{}  {}  {}  ".format(cfg['cruise']['CYCLEMESURE'], 
-        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE']))
-    if 'typeInstrument' in cfg[device]:
-        f.write(f"{cfg[device]['typeInstrument']}")
-    if 'instrumentNumber' in cfg[device]:
-        f.write(f"{cfg[device]['instrumentNumber']}")
-    if 'PI' in cfg['cruise']:
-        f.write(f"{cfg['cruise']['PI']}")
-    f.write("\n")
+    write_metadata_header_line(f, cfg, device)
 
     # write header, second line with physical parameter liste, fill with N/A if necessary
     for k in fe.keys:
@@ -179,15 +179,7 @@ def writeHumanDataTrajectory(dataFile, cfg, device, fe):
     f = open(dataFile, 'w')
 
     # write header, first line
-    f.write("{}  {}  {}  ".format(cfg['cruise']['CYCLEMESURE'], 
-        cfg['cruise']['PLATEFORME'], cfg['cruise']['INSTITUTE']))
-    if 'typeInstrument' in cfg[device]:
-        f.write(f"{cfg[device]['typeInstrument']}")
-    if 'instrumentNumber' in cfg[device]:
-        f.write(f"{cfg[device]['instrumentNumber']}")
-    if 'PI' in cfg['cruise']:
-        f.write(f"{cfg['cruise']['PI']}")
-    f.write("\n")
+    write_metadata_header_line(f, cfg, device)
 
     # write header, second line with physical parameter liste, fill with N/A if necessary
     for k in fe.keys:
