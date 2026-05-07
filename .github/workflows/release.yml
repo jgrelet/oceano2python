@@ -23,9 +23,10 @@ jobs:
           - os: windows-latest
             asset_name: oceano-windows.zip
             artifact_name: oceano-windows
-          - os: macos-latest
-            asset_name: oceano-macos.tar.gz
-            artifact_name: oceano-macos
+          # Re-enable macOS when standalone binaries are needed there again.
+          # - os: macos-latest
+          #   asset_name: oceano-macos.tar.gz
+          #   artifact_name: oceano-macos
 
     steps:
       - name: Checkout repository
