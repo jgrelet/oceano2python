@@ -301,6 +301,7 @@ class Profile:
             sql = {}
             datetime_parts = None
             date_order = "mdy"
+            date_parts = None
 
             # by default, station or profile number is extract from the filename
             if station_regex != None and station_regex.search(file):
@@ -363,10 +364,12 @@ class Profile:
                             # key is DATE
                             if k == "DATE" and self.__regex[k].search(self.__header):
                                 if device.lower() == 'ladcp':
-                                    year, month, day = self.__regex[k].search(self.__header).groups()
+                                    date_parts = self.__regex[k].search(self.__header).groups()
+                                    year, month, day = date_parts
                                     date_order = "ymd"
                                 else:
-                                    month, day, year = self.__regex[k].search(self.__header).groups()
+                                    date_parts = self.__regex[k].search(self.__header).groups()
+                                    month, day, year = date_parts
                                     date_order = "mdy"
                                 #print(f"{day}/{month}/{year}")
                                 if self.__year is None:
@@ -421,7 +424,7 @@ class Profile:
                             sql['DATE_TIME'] = parse_textual_datetime(datetime_parts, dtf)
                         else:
                             sql['DATE_TIME'] = build_datetime_from_parts(
-                                (month, day, year), (hour, minute, second), date_order
+                                date_parts, (hour, minute, second), date_order
                             )
                         sql['DAYD'] = tools.dt2julian(sql['DATE_TIME'])  
                                 

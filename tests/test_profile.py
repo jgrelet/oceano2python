@@ -76,3 +76,15 @@ class ProfileTests(unittest.TestCase):
             self.assertGreater(fe["PRES"][0][0], 0)
         finally:
             fe.close()
+
+    def test_ladcp_profile(self):
+        keys = ["DEPTH", "EWCT", "NSCT"]
+        fe = self._run_profile("LADCP", "data/LADCP/fr29001.lad", keys)
+        try:
+            self.assertEqual(fe.n, 1)
+            self.assertEqual(fe["PROFILE"][0], 1)
+            self.assertGreater(fe["DEPTH"][0][0], 0)
+            self.assertAlmostEqual(fe["LATITUDE"][0], 12 + 29.9460 / 60, places=5)
+            self.assertAlmostEqual(fe["LONGITUDE"][0], -(23 + 20.7120 / 60), places=5)
+        finally:
+            fe.close()
