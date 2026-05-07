@@ -329,6 +329,19 @@ class Trajectory:
                 # end of readline in file
 
         self.update_arrays()
+
+    def write_outputs(self, cfg, device):
+        # write ASCII hdr and data files
+        if cfg['global']['ASCII']:
+            ascii.writeTrajectory(cfg, device, self)
+
+        # write the ODV file
+        if cfg['global']['odv']:
+            odv.writeTrajectory(cfg, device, self)
+
+        # write the NetCDF file
+        if cfg['global']['NETCDF']:
+            netcdf.writeTrajectory(cfg, device, self)
         
     def process(self, args, cfg, ti):
         '''
@@ -370,18 +383,7 @@ class Trajectory:
             self.set_regex(cfg, ti, 'format')
 
         self.read_files(cfg, ti)
-        
-        # write ASCII hdr and data files
-        if cfg['global']['ASCII']:
-            ascii.writeTrajectory(cfg, ti, self)
-
-        # write the ODV file
-        if cfg['global']['odv']:
-            odv.writeTrajectory(cfg, ti, self)
-
-        # write the NetCDF file
-        if cfg['global']['NETCDF']:
-            netcdf.writeTrajectory(cfg, ti, self)
+        self.write_outputs(cfg, ti)
 
 # for testing in standalone context
 # ---------------------------------

@@ -476,6 +476,19 @@ class Profile:
                 self.db.update("station", id = pk, end_date_time = tmp)
 
         self.update_arrays()
+
+    def write_outputs(self, cfg, device):
+        # write ASCII hdr and data files
+        if cfg['global']['ASCII']:
+            ascii.writeProfile(cfg, device, self)
+
+        # write the ODV file
+        if cfg['global']['odv']:
+            odv.writeProfile(cfg, device, self)
+
+        # write the NetCDF file
+        if cfg['global']['NETCDF']:
+            netcdf.writeProfile(cfg, device, self)
         
     def process(self, args, cfg, ti):
         '''
@@ -515,18 +528,7 @@ class Profile:
         self.set_regex(cfg, ti, 'header')
 
         self.read_files(cfg, ti)
-
-        # write ASCII hdr and data files
-        if cfg['global']['ASCII']:
-            ascii.writeProfile(cfg, ti, self)
-
-        # write the ODV file
-        if cfg['global']['odv']:
-            odv.writeProfile(cfg, ti, self)
-
-        # write the NetCDF file
-        if cfg['global']['NETCDF']:
-            netcdf.writeProfile(cfg, ti, self)
+        self.write_outputs(cfg, ti)
 
 
 # for testing in standalone context
