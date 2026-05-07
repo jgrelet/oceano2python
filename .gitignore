@@ -17,6 +17,9 @@
 !taskfile.yml
 !.travis.yml
 !environment*.yml
+!.github/
+!.github/workflows/
+!.github/workflows/*.yml
 *.stackdump
 *_tmp
 __pycache__/
