@@ -19,6 +19,7 @@ from notanorm import SqliteDb
 import ascii
 import odv
 import netcdf
+from parsing_utils import build_datetime_from_parts, parse_coordinate_groups
 
 # define the data table
 # the ID is actually the rowid AUTOINCREMENT column.
@@ -265,37 +266,25 @@ class Trajectory:
                             date_parts = self.__regex['DATE'].search(line).groups()
                             if 'dateTimeFormat' in cfg[device.lower()] and cfg[device.lower()]['dateTimeFormat'].startswith("%Y"):
                                 year, month, day = date_parts
-                                dateTime = f"{year}/{month}/{day} {hour}:{minute}:{second}"
+                                date_order = "ymd"
                             else:
                                 day, month, year = date_parts
-                                dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"
+                                date_order = "dmy"
                             if self.__year is None:
                                 self.__year = int(year)
-                            # set datetime object   
-                            if 'dateTimeFormat' in cfg[device.lower()]:
-                                dtf = cfg[device.lower()]['dateTimeFormat']  
-                            else:
-                                dtf = "%d/%m/%Y %H:%M:%S"                    
-                            date_time = dt.strptime(dateTime, dtf)
+                            date_time = build_datetime_from_parts(date_parts, (hour, minute, second), date_order)
                             sql['DAYD'] = tools.dt2julian(date_time)   
                         #print(dateTime)
                         if 'LATITUDE' in self.__regex and self.__regex['LATITUDE'].search(line):
-                            (lat_hemi, lat_deg, lat_min) = \
-                            self.__regex['LATITUDE'].search(line).groups() 
-                            #print(f"{lat_deg} {lat_min} {lat_hemi}")
-                            # transform to decimal using ternary operator
-                            lat_min = lat_min.replace(',', '.')
-                            latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
-                                    (float(lat_deg) + (float(lat_min) / 60.)) * -1
+                            latitude = parse_coordinate_groups(
+                                self.__regex['LATITUDE'].search(line).groups(), "N"
+                            )
                             sql['LATITUDE'] = latitude  
                             #sql['lat'] = tools.Dec2dmc(float(latitude),'N')
                         if 'LONGITUDE' in self.__regex and self.__regex['LONGITUDE'].search(line):
-                            (lon_hemi, lon_deg, lon_min) = \
-                            self.__regex['LONGITUDE'].search(line).groups() 
-                            #print(f"{lon_deg} {lon_min} {lon_hemi}")
-                            lon_min = lon_min.replace(',', '.')
-                            longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
-                                    (float(lon_deg) + (float(lon_min) / 60.)) * -1
+                            longitude = parse_coordinate_groups(
+                                self.__regex['LONGITUDE'].search(line).groups(), "E"
+                            )
                             sql['LONGITUDE'] = longitude  
                             #sql['lon'] = tools.Dec2dmc(float(longitude),'E')
 

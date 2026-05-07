@@ -20,6 +20,7 @@ from notanorm import SqliteDb
 import ascii
 import odv
 import netcdf
+from parsing_utils import parse_coordinate_groups, parse_textual_datetime, build_datetime_from_parts
 
 # define SQL station table
 table_station = """
@@ -298,6 +299,8 @@ class Profile:
             process_header = False
             process_data = False
             sql = {}
+            datetime_parts = None
+            date_order = "mdy"
 
             # by default, station or profile number is extract from the filename
             if station_regex != None and station_regex.search(file):
@@ -352,19 +355,19 @@ class Profile:
 
                             # key is DATETIME
                             if k == "DATETIME" and self.__regex[k].search(self.__header):
-                                month, day, year, hour, minute, second = \
-                                    self.__regex[k].search(self.__header).groups() 
+                                datetime_parts = self.__regex[k].search(self.__header).groups()
+                                month, day, year, hour, minute, second = datetime_parts
                                 if self.__year is None:
                                     self.__year = int(year)
 
                             # key is DATE
                             if k == "DATE" and self.__regex[k].search(self.__header):
                                 if device.lower() == 'ladcp':
-                                    year, month, day = \
-                                    self.__regex[k].search(self.__header).groups() 
+                                    year, month, day = self.__regex[k].search(self.__header).groups()
+                                    date_order = "ymd"
                                 else:
-                                    month, day, year = \
-                                    self.__regex[k].search(self.__header).groups() 
+                                    month, day, year = self.__regex[k].search(self.__header).groups()
+                                    date_order = "mdy"
                                 #print(f"{day}/{month}/{year}")
                                 if self.__year is None:
                                     self.__year = int(year)
@@ -377,32 +380,26 @@ class Profile:
                             # key is LATITUDE
                             if k == "LATITUDE" and self.__regex[k].search(self.__header):
                                 if device.lower() == 'ladcp':
-                                    [latitude] = self.__regex[k].search(self.__header).groups()                                  
+                                    latitude = parse_coordinate_groups(
+                                        self.__regex[k].search(self.__header).groups(), "N"
+                                    )
                                 else:
-                                    (lat_deg, lat_min, lat_hemi) = self.__regex[k].search(self.__header).groups() 
-
-                                    # format latitude to string
-                                    latitude_str = "%s%c%s %s" % (lat_deg, tools.DEGREE, lat_min, lat_hemi)
-
-                                    # transform to decimal using ternary operator
-                                    latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
-                                        (float(lat_deg) + (float(lat_min) / 60.)) * -1
+                                    latitude = parse_coordinate_groups(
+                                        self.__regex[k].search(self.__header).groups(), "N"
+                                    )
                                 sql['LATITUDE'] = latitude  
                                 sql['lat'] = tools.Dec2dmc(float(latitude),'N')
 
                             # key is LONGITUDE
                             if k == "LONGITUDE" and self.__regex[k].search(self.__header):
                                 if device.lower() == 'ladcp':
-                                    [longitude] = self.__regex[k].search(self.__header).groups()
+                                    longitude = parse_coordinate_groups(
+                                        self.__regex[k].search(self.__header).groups(), "E"
+                                    )
                                 else:
-                                    (lon_deg, lon_min, lon_hemi) = self.__regex[k].search(self.__header).groups() 
-
-                                    # format longitude to string
-                                    longitude_str = "%s%c%s %s" % (lon_deg, tools.DEGREE, lon_min, lon_hemi)
-
-                                    # transform to decimal using ternary operator
-                                    longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
-                                        (float(lon_deg) + (float(lon_min) / 60.)) * -1
+                                    longitude = parse_coordinate_groups(
+                                        self.__regex[k].search(self.__header).groups(), "E"
+                                    )
                                 sql['LONGITUDE'] = longitude  
                                 sql['lon'] = tools.Dec2dmc(float(longitude),'E')
 
@@ -416,13 +413,16 @@ class Profile:
                         process_data = True
 
                         # format date and time to  "May 09 2011 16:33:53"
-                        dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"  
-                        # set datetime object   
                         if 'dateTimeFormat' in cfg[device.lower()]:
-                            dtf = cfg[device.lower()]['dateTimeFormat']  
+                            dtf = cfg[device.lower()]['dateTimeFormat']
                         else:
-                            dtf = "%d/%m/%Y %H:%M:%S"                    
-                        sql['DATE_TIME'] = dt.strptime(dateTime, dtf)
+                            dtf = "%d/%m/%Y %H:%M:%S"
+                        if datetime_parts is not None:
+                            sql['DATE_TIME'] = parse_textual_datetime(datetime_parts, dtf)
+                        else:
+                            sql['DATE_TIME'] = build_datetime_from_parts(
+                                (month, day, year), (hour, minute, second), date_order
+                            )
                         sql['DAYD'] = tools.dt2julian(sql['DATE_TIME'])  
                                 
                         # insert or query return last cursor, get the value of the primary key

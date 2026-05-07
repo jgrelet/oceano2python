@@ -11,6 +11,7 @@ from trajectory import Trajectory
 from pathlib import Path
 from glob import glob
 from physical_parameter import Roscop
+from config_validation import validate_runtime_config
 import os.path as path
 from __init__ import __version__, __date__, __author__
 
@@ -133,6 +134,7 @@ if __name__ == "__main__":
     # get the type of data, eg PROFILE or TRAJECTORY
     type = search_dict(type_of_data, args.instrument)
     logging.debug(type)
+    validate_runtime_config(cfg, device, type, args.keys)
 
     # call the right object
     if type == 'PROFILE':
