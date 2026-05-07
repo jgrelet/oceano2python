@@ -4,6 +4,15 @@ from numpy import arange, complexfloating, dtype
 import os
 from datetime import datetime
 
+
+PROFILE_DIMENSIONS = {
+    "PROFILE": ("time",),
+    "TIME": ("time",),
+    "LATITUDE": ("latitude",),
+    "LONGITUDE": ("longitude",),
+    "BATH": ("time",),
+}
+
 # add global attributes
 def writeGlobalAttributes(nc, cfg, device, type):
 
@@ -58,8 +67,6 @@ def writeProfile(cfg, device, fe):
 
     print(f"writing netCDF file: {fileName}")  
 
-    if not os.path.exists(cfg['global']['NETCDF']):
-        os.makedirs(cfg['global']['NETCDF'])
     nc = Dataset(fileName, "w", format="NETCDF3_CLASSIC")
     logging.debug(' ' + nc.data_model)
     
@@ -93,14 +100,9 @@ def writeProfile(cfg, device, fe):
 
         # create the variable
         if any(key in item for item in fe.variables_1D):
-            try:
-                # create variable whit same dimension name, as TIME(time)
-                ncvars[key] = nc.createVariable(
-                    key, dtype(hash['types']).char, (key,), fill_value=fillvalue)
-            except:
-                # for BATH(time), it's a mess !
-                ncvars[key] = nc.createVariable(
-                    key, dtype(hash['types']).char, 'time', fill_value=fillvalue)
+            dims_1d = PROFILE_DIMENSIONS[key]
+            ncvars[key] = nc.createVariable(
+                key, dtype(hash['types']).char, dims_1d, fill_value=fillvalue)
         else:
             ncvars[key] = nc.createVariable(
                 key, dtype(hash['types']).char, dims_2D, fill_value=fillvalue)
