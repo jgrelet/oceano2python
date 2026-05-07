@@ -39,7 +39,16 @@ jobs:
         shell: bash -el {0}
         run: |
           conda install -y numpy netCDF4 toml matplotlib xarray seawater pyinstaller tk
-          pip install notanorm
+          python -m pip install --upgrade pip
+          python -m pip install notanorm
+
+      - name: Verify runtime environment
+        shell: bash -el {0}
+        run: |
+          which python
+          python --version
+          python -m pip --version
+          python -c "import notanorm; import netCDF4; print('notanorm ok')"
 
       - name: Run unit tests
         shell: bash -el {0}
