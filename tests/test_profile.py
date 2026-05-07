@@ -88,3 +88,15 @@ class ProfileTests(unittest.TestCase):
             self.assertAlmostEqual(fe["LONGITUDE"][0], -(23 + 20.7120 / 60), places=5)
         finally:
             fe.close()
+
+    def test_mvp_profile(self):
+        keys = ["PRES", "DEPTH", "TEMP", "PSAL", "DENS", "SVEL"]
+        fe = self._run_profile("MVP", "data/MVP/mvp_2022-04-27_142517.m1", keys)
+        try:
+            self.assertEqual(fe.n, 1)
+            self.assertEqual(fe["PROFILE"][0], 0)
+            self.assertGreater(fe["PRES"][0][0], 0)
+            self.assertAlmostEqual(fe["LATITUDE"][0], -(21 + 56.8770800 / 60), places=5)
+            self.assertAlmostEqual(fe["LONGITUDE"][0], 38 + 35.0310500 / 60, places=5)
+        finally:
+            fe.close()

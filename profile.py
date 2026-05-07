@@ -20,7 +20,7 @@ from notanorm import SqliteDb
 import ascii
 import odv
 import netcdf
-from parsing_utils import parse_coordinate_groups, parse_textual_datetime, build_datetime_from_parts
+from parsing_utils import parse_coordinate_groups, parse_textual_datetime
 
 # define SQL station table
 table_station = """
@@ -301,7 +301,6 @@ class Profile:
             sql = {}
             datetime_parts = None
             date_order = "mdy"
-            date_parts = None
 
             # by default, station or profile number is extract from the filename
             if station_regex != None and station_regex.search(file):
@@ -364,13 +363,9 @@ class Profile:
                             # key is DATE
                             if k == "DATE" and self.__regex[k].search(self.__header):
                                 if device.lower() == 'ladcp':
-                                    date_parts = self.__regex[k].search(self.__header).groups()
-                                    year, month, day = date_parts
-                                    date_order = "ymd"
+                                    year, month, day = self.__regex[k].search(self.__header).groups()
                                 else:
-                                    date_parts = self.__regex[k].search(self.__header).groups()
-                                    month, day, year = date_parts
-                                    date_order = "mdy"
+                                    month, day, year = self.__regex[k].search(self.__header).groups()
                                 #print(f"{day}/{month}/{year}")
                                 if self.__year is None:
                                     self.__year = int(year)
@@ -423,9 +418,8 @@ class Profile:
                         if datetime_parts is not None:
                             sql['DATE_TIME'] = parse_textual_datetime(datetime_parts, dtf)
                         else:
-                            sql['DATE_TIME'] = build_datetime_from_parts(
-                                date_parts, (hour, minute, second), date_order
-                            )
+                            dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"
+                            sql['DATE_TIME'] = dt.strptime(dateTime, dtf)
                         sql['DAYD'] = tools.dt2julian(sql['DATE_TIME'])  
                                 
                         # insert or query return last cursor, get the value of the primary key
