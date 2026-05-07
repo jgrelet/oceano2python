@@ -58,7 +58,7 @@ class Trajectory:
         self.__header = ''
         self.__data = {}
         self.__regex = {}
-        self.__year = []
+        self.__year = None
 
         # public attibutes:
         self.fname = fname
@@ -106,8 +106,9 @@ class Trajectory:
         ''' update table data and add new column from pm (physical parameter)'''
         # if LATITUDE and LONGITUDE are read as a variable, remove them from variables list
         keys = keysList.copy()
-        if 'LATITUDE' in keys: keys.remove('LATITUDE')
-        if 'LONGITUDE' in keys: keys.remove('LONGITUDE')
+        for reserved_key in ('DAYD', 'LATITUDE', 'LONGITUDE'):
+            if reserved_key in keys:
+                keys.remove(reserved_key)
         for pm in keys:
             logging.debug(f"\tUpdate table data with new column {pm}")
             addColumn = f"ALTER TABLE data ADD COLUMN {pm} REAL NOT NULL"
@@ -244,7 +245,7 @@ class Trajectory:
                             if k == "DATETIME" and self.__regex[k].search(self.__header):
                                 month, day, year, hour, minute, second = \
                                     self.__regex[k].search(self.__header).groups() 
-                                if not self.__year:
+                                if self.__year is None:
                                     self.__year = int(year)
                         process_data = True
                         continue
@@ -261,12 +262,16 @@ class Trajectory:
                             self.__regex['TIME'].search(line).groups() 
                             #print(f"{hour}:{minute}:{second}")
                         if 'DATE' in self.__regex and  self.__regex['DATE'].search(line):
-                            day, month, year = \
-                            self.__regex['DATE'].search(line).groups() 
-                            #print(f"{day}/{month}/{year}")
-                            # format date and time to  "May 09 2011 16:33:53"
-                            dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}" 
-                             # set datetime object   
+                            date_parts = self.__regex['DATE'].search(line).groups()
+                            if 'dateTimeFormat' in cfg[device.lower()] and cfg[device.lower()]['dateTimeFormat'].startswith("%Y"):
+                                year, month, day = date_parts
+                                dateTime = f"{year}/{month}/{day} {hour}:{minute}:{second}"
+                            else:
+                                day, month, year = date_parts
+                                dateTime = f"{day}/{month}/{year} {hour}:{minute}:{second}"
+                            if self.__year is None:
+                                self.__year = int(year)
+                            # set datetime object   
                             if 'dateTimeFormat' in cfg[device.lower()]:
                                 dtf = cfg[device.lower()]['dateTimeFormat']  
                             else:
@@ -279,6 +284,7 @@ class Trajectory:
                             self.__regex['LATITUDE'].search(line).groups() 
                             #print(f"{lat_deg} {lat_min} {lat_hemi}")
                             # transform to decimal using ternary operator
+                            lat_min = lat_min.replace(',', '.')
                             latitude = float(lat_deg) + (float(lat_min) / 60.) if lat_hemi == 'N' else \
                                     (float(lat_deg) + (float(lat_min) / 60.)) * -1
                             sql['LATITUDE'] = latitude  
@@ -287,6 +293,7 @@ class Trajectory:
                             (lon_hemi, lon_deg, lon_min) = \
                             self.__regex['LONGITUDE'].search(line).groups() 
                             #print(f"{lon_deg} {lon_min} {lon_hemi}")
+                            lon_min = lon_min.replace(',', '.')
                             longitude = float(lon_deg) + (float(lon_min) / 60.) if lon_hemi == 'E' else \
                                     (float(lon_deg) + (float(lon_min) / 60.)) * -1
                             sql['LONGITUDE'] = longitude  
@@ -304,15 +311,24 @@ class Trajectory:
                         # insert data from list p with indice hash[key]
                         for key in self.keys:
                             if key == 'ETDD':
-                                sql['DAYD'] = float(p[hash[key]].replace(',','.')) + \
-                                    tools.dt2julian(datetime(self.year, day=1, month=1)) - float(self.julianOrigin)
-                                sql['ETDD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                                if key in hash:
+                                    sql['DAYD'] = float(p[hash[key]].replace(',','.')) + \
+                                        tools.dt2julian(datetime(self.year, day=1, month=1)) - float(self.julianOrigin)
+                                    sql['ETDD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                                elif 'DAYD' in sql:
+                                    year_origin = tools.dt2julian(datetime(self.year, day=1, month=1))
+                                    sql['ETDD'] = sql['DAYD'] - year_origin - float(self.julianOrigin)
+                                else:
+                                    raise KeyError("ETDD requires either a split column or parsed DATE/TIME fields")
                             elif key == 'DAYD':
-                                sql['DAYD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
+                                if key in hash:
+                                    sql['DAYD'] = float(p[hash[key]].replace(',','.')) - float(self.julianOrigin)
                             elif key == 'LATITUDE':
-                                sql['LATITUDE'] = float(p[hash[key]].replace(',','.')) 
+                                if key in hash:
+                                    sql['LATITUDE'] = float(p[hash[key]].replace(',','.')) 
                             elif key == 'LONGITUDE':
-                                sql['LONGITUDE'] = float(p[hash[key]].replace(',','.')) 
+                                if key in hash:
+                                    sql['LONGITUDE'] = float(p[hash[key]].replace(',','.')) 
                             else:
                                 logging.debug(f"{key}, {hash[key]}, {p[hash[key]]}")
                                 sql[key] = float(p[hash[key]].replace(',','.')) 

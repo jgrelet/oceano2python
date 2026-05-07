@@ -79,7 +79,7 @@ class Profile:
         self.__header = ''
         self.__data = {}
         self.__regex = {}
-        self.__year = []
+        self.__year = None
 
         # public attibutes:
         self.fname = fname
@@ -354,7 +354,7 @@ class Profile:
                             if k == "DATETIME" and self.__regex[k].search(self.__header):
                                 month, day, year, hour, minute, second = \
                                     self.__regex[k].search(self.__header).groups() 
-                                if not self.__year:
+                                if self.__year is None:
                                     self.__year = int(year)
 
                             # key is DATE
@@ -366,7 +366,7 @@ class Profile:
                                     month, day, year = \
                                     self.__regex[k].search(self.__header).groups() 
                                 #print(f"{day}/{month}/{year}")
-                                if not self.__year:
+                                if self.__year is None:
                                     self.__year = int(year)
 
                             # key is TIME

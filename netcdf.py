@@ -10,15 +10,15 @@ def writeGlobalAttributes(nc, cfg, device, type):
     print("Writing global attributes")
     nc.data_type = f"OceanSITES {type} data"
     nc.Conventions = "CF-1.7"
-    if 'title' in cfg[device.lower()]:
+    if 'title' in cfg['global']:
         nc.title = cfg['global']['title']
-    if 'institution' in cfg[device.lower()]:
+    if 'institution' in cfg['global']:
         nc.institution = cfg['global']['institution']
-    if 'source' in cfg[device.lower()]:
+    if 'source' in cfg['global']:
         nc.source = cfg['global']['source']
-    if 'comment' in cfg[device.lower()]:
+    if 'comment' in cfg['global']:
         nc.comment = cfg['global']['comment']
-    if 'references' in cfg[device.lower()]:
+    if 'references' in cfg['global']:
         nc.references = cfg['global']['references']
     nc.cycle_mesure = cfg['cruise']['CYCLEMESURE']
     nc.time_coverage_start = cfg['cruise']['BEGINDATE']
@@ -81,7 +81,7 @@ def writeProfile(cfg, device, fe):
 
         print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
-        hash = fe.roscop[key]
+        hash = dict(fe.roscop[key])
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
         if '_FillValue' in hash:
@@ -171,7 +171,7 @@ def writeTrajectory(cfg, device, fe):
 
         print(f"Define variable : {key}")
         # for each variables get the attributes dictionary from Roscop
-        hash = fe.roscop[key]
+        hash = dict(fe.roscop[key])
         # _FillValue attribute must be set when variable is created
         # (using fill_value keyword to createVariable)
         if '_FillValue' in hash:
@@ -194,7 +194,7 @@ def writeTrajectory(cfg, device, fe):
 
     nc._enddef()
 
-    writeGlobalAttributes(nc, cfg, device, 'profile')
+    writeGlobalAttributes(nc, cfg, device, 'trajectory')
 
     # write variables with ncvars
     print(f"Writing variables")

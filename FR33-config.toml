@@ -238,6 +238,7 @@ comment        = "Extract from .colcor files"
 	
 [casino]
 separator = "	"
+typeInstrument   = "Meteo, Ferrybox"
 acquisitionSoftware = "CASINO"
 acquisitionVersion = ""
 processingSoftware = ""

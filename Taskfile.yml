@@ -1,0 +1,103 @@
+version: '3'
+
+vars:
+  PROJECT: oceano
+  MAIN: '{{.PROJECT}}.py'
+  PYTHON: python
+  TEST_PATH: tests
+  OPTIONS_CTD: data/CTD/cnv/dfr2900?.cnv -i CTD -k PRES DEPTH ETDD TEMP PSAL DOX2 DENS SVEL FLU2 FLU3 TUR3 NAVG
+  OPTIONS_XBT: data/XBT/*.EDF -i XBT -k DEPTH TEMP SVEL
+  OPTIONS_LADCP: data/LADCP/*.lad -i LADCP -k DEPTH EWCT NSCT
+  OPTIONS_BTL: data/CTD/btl/fr290*.btl -i BTL -k BOTL ETDD PRES DEPTH TE01 TE02 PSA1 PSA2 DO11 DO12 DO21 DO22 FLU2
+  OPTIONS_RBR: data/RBR/fr29*.txt -i RBR -k PRES DEPTH TEMP PSAL DENS SVEL FLU2
+  OPTIONS_MVP: data/MVP/mvp_*.m1 -i MVP -k PRES DEPTH TEMP PSAL DENS SVEL
+  OPTIONS_COLCOR: data/TSG/COLCOR/*.COLCOR -i COLCOR -k SSJT SSTP SSPS
+  OPTIONS_SEASAVE: data/TSG/SEASAVE/*.cnv -i TSG -k ETDD LATITUDE LONGITUDE SSJT SSTP SSPS DENS SVEL
+  OPTIONS_CASINO: data/CASINO/201903*.csv -i CASINO -k LATITUDE LONGITUDE SSJT SSTP SSPS WMSP WDIR
+  OPTIONS_CASINO_FR33: data/CASINO/202303*.csv -c FR33-config.toml -i CASINO -k LATITUDE LONGITUDE SSJT SSTP SSPS
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  clean-all:
+    desc: Remove Python cache files and build artifacts
+    cmds:
+      - task: clean-pyc
+      - task: clean-build
+
+  clean-pyc:
+    desc: Remove Python bytecode files
+    cmds:
+      - powershell -NoProfile -Command "Get-ChildItem -Recurse -Include *.pyc,*.pyo | Remove-Item -Force"
+
+  clean-build:
+    desc: Remove build directories
+    cmds:
+      - powershell -NoProfile -Command "Remove-Item -Recurse -Force build,dist,__pycache__ -ErrorAction SilentlyContinue"
+
+  test:
+    desc: Run the unit test suite
+    cmds:
+      - '{{.PYTHON}} -m unittest discover -s {{.TEST_PATH}} -p "test_*.py" -v'
+
+  all:
+    desc: Run all example workflows
+    deps: [ctd, xbt, ladcp, btl, rbr, mvp, colcor, casino, tsg]
+
+  ctd:
+    desc: Run the CTD example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_CTD}} {{.OPT}}'
+
+  xbt:
+    desc: Run the XBT example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_XBT}} {{.OPT}}'
+
+  ladcp:
+    desc: Run the LADCP example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_LADCP}} {{.OPT}}'
+
+  btl:
+    desc: Run the BTL example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_BTL}} {{.OPT}}'
+
+  rbr:
+    desc: Run the RBR example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_RBR}} {{.OPT}}'
+
+  mvp:
+    desc: Run the MVP example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_MVP}} {{.OPT}}'
+
+  colcor:
+    desc: Run the COLCOR example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_COLCOR}} {{.OPT}}'
+
+  tsg:
+    desc: Run the TSG example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_SEASAVE}} {{.OPT}}'
+
+  casino:
+    desc: Run the CASINO FR29 example workflow
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_CASINO}} {{.OPT}}'
+
+  casino-fr33:
+    desc: Run the CASINO FR33 example workflow with FR33-config.toml
+    cmds:
+      - '{{.PYTHON}} {{.MAIN}} {{.OPTIONS_CASINO_FR33}} {{.OPT}}'
+
+  build:
+    desc: Build the standalone executable with PyInstaller
+    cmds:
+      - pyinstaller -wF --clean {{.MAIN}}
